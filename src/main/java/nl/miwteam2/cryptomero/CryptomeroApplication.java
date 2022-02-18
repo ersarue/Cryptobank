@@ -1,0 +1,13 @@
+package nl.miwteam2.cryptomero;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CryptomeroApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(CryptomeroApplication.class, args);
+  }
+
+}
