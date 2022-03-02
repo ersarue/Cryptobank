@@ -1,15 +1,17 @@
 package nl.miwteam2.cryptomero.controller;
 
+import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/customer")
+//@RequestMapping(value = "/customer",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping("/customer")
+
+//@RequestMapping(value = "/customer")
 public class CustomerController {
 
     private CustomerService customerService;
@@ -20,9 +22,15 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/{id}") // http://localhost:8080/customer/1
-    public Customer findCustomerById(@PathVariable int id) {
+    public Customer findById(@PathVariable int id) {
         //return new Customer();
         return customerService.findById(id);
+    }
+
+    @PostMapping(value = "/register")
+    public void storeOne(@RequestBody Customer customer) {
+        System.out.println(customer);
+        customerService.storeOne(customer);
     }
 
 }
