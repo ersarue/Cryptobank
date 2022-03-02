@@ -3,7 +3,7 @@ package nl.miwteam2.cryptomero.domain;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class Customer extends UserAccount {
+public class CustomerDto {
 
     private String firstName;
     private String namePrefix;
@@ -18,17 +18,14 @@ public class Customer extends UserAccount {
     // in de constructor alleen primitieve variabelen
     // de rootrepo gebruikt setters om de verwijzingen naar andere objecten te setten
     //public Customer(String email, String password, String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
-    public Customer(String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
+    public CustomerDto(String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
 
-         this.firstName = firstName;
+        this.firstName = firstName;
         this.namePrefix = namePrefix;
         this.lastName = lastName;
         this.dob = dob;
         this.bsn = bsn;
         this.telephone = telephone;
-    }
-    public Customer(){
-        //todo constructor chain of verwijder
     }
 
     public String getFirstName() {
@@ -101,11 +98,6 @@ public class Customer extends UserAccount {
 
     public void setWallet(Map<Asset, Double> wallet) {
         this.wallet = wallet;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Klant met BSN %s", bsn);
     }
 
 }
