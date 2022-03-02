@@ -22,4 +22,10 @@ public class CustomerService {
         return rootRepository.findCustomerById(id);
     }
 
+    public void storeOne(Customer customer) {
+        //TODO void houden of id teruggeven als int?
+        customerDao.storeOne(customer);
+
+    }
+
 }
