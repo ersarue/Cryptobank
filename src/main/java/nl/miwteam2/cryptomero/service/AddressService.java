@@ -23,7 +23,6 @@ public class AddressService {
 
     @Autowired
     public AddressService(JdbcAddressDao dao) {
-        super();
         jdbcAddressDao = dao;
         logger.info("New AddressService");
     }

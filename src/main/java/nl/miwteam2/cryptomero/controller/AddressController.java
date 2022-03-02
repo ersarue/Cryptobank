@@ -24,7 +24,6 @@ public class AddressController {
 
     @Autowired
     public AddressController(AddressService service) {
-        super();
         addressService = service;
         logger.info("New AddressController");
     }

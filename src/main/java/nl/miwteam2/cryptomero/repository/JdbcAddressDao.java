@@ -24,7 +24,6 @@ public class JdbcAddressDao implements GenericDao<Address> {
     JdbcTemplate jdbcTemplate;
 
     public JdbcAddressDao(JdbcTemplate jdbcTemplate) {
-        super();
         this.jdbcTemplate = jdbcTemplate;
         logger.info("New JdbcAddressDao");
     }
