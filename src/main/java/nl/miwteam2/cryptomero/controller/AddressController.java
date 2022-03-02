@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Petra Coenen
- * @version 1.1
+ * @version 1.2
  */
 
 @RestController
@@ -30,8 +30,7 @@ public class AddressController {
 
     @PostMapping(value = "/register")
     public int storeAddress(@RequestBody Address address) {
-        addressService.storeAddress(address);
-        return address.getIdAddress();
+        return addressService.storeAddress(address);
     }
 
     @GetMapping(value = "/get/{id}")
