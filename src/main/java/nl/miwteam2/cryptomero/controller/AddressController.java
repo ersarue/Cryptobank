@@ -34,22 +34,14 @@ public class AddressController {
     }
 
     @GetMapping(value = "/get/{id}")
-    public Address getAddressById(@PathVariable int id) {
-        return addressService.getAddressById(id);
-    }
+    public Address getAddressById(@PathVariable int id) { return addressService.getAddressById(id); }
 
     @GetMapping (value = "/get/all")
-    public List<Address> getAllAddresses() {
-        return addressService.getAllAddresses();
-    }
+    public List<Address> getAllAddresses() { return addressService.getAllAddresses(); }
 
     @PutMapping(value = "/update")
-    public void updateAddress(@RequestBody Address address) {
-        addressService.updateAddress(address);
-    }
+    public void updateAddress(@RequestBody Address address) { addressService.updateAddress(address); }
 
     @DeleteMapping(value = "/delete/{id}")
-    public void deleteAddress(@PathVariable int id) {
-        addressService.deleteAddress(id);
-    }
+    public void deleteAddress(@PathVariable int id) { addressService.deleteAddress(id); }
 }
