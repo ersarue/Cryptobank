@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * @author Petra Coenen
- * @version 1.3
+ * @version 1.4
  */
 
 @Service
@@ -64,7 +64,7 @@ public class AddressService {
     public int deleteAddress(int id) { return jdbcAddressDao.deleteOne(id); }
 
     public boolean isValidFormat(String postalCode) {
-        return postalCode.matches("[1-9][0-9]{3}\\s?[a-zA-Z]{2}");
+        return postalCode.matches("[1-9][0-9]{3}[a-zA-Z]{2}");
     }
 
     public boolean isValidAddress(Address address) throws IOException, InterruptedException {
