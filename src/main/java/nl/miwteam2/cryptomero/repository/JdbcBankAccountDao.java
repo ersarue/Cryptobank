@@ -34,7 +34,9 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
     }
     @Override
     public BankAccount findById(int id) {
-       return null;
+
+        String sql = "SELECT * FROM bank_account WHERE id_account = ?;";
+        return this.jdbcTemplate.queryForObject(sql,new BankAccountRowMapper(),id);
     }
 
     @Override
