@@ -10,5 +10,4 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CryptomeroApplication {
 
   public static void main(String[] args) { SpringApplication.run(CryptomeroApplication.class, args); }
-
 }
