@@ -47,4 +47,11 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
         String sql = "SELECT * FROM customer;";
         return jdbcTemplate.query(sql,customerRowMapper, null);
     }
+
+    public int findAddressIdOfCustomer(Customer customer) {
+        String sql = "SELECT id_address FROM customer WHERE id_account = ?;";
+        return jdbcTemplate.queryForObject(sql, Integer.class, customer.getIdAccount());
+    }
+
+
 }
