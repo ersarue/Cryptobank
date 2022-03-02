@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Petra Coenen
- * @version 1.1
+ * @version 1.2
  */
 
 @Service
@@ -42,4 +42,8 @@ public class AddressService {
     public int updateAddress(Address address) { return jdbcAddressDao.updateOne(address); }
 
     public int deleteAddress(int id) { return jdbcAddressDao.deleteOne(id); }
+
+    public boolean isValidFormat(String postalCode) {
+        return postalCode.matches("[1-9][0-9]{3}\\s?[a-zA-Z]{2}");
+    }
 }
