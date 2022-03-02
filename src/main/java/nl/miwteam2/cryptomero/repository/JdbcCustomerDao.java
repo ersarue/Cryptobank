@@ -34,12 +34,12 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
 
     @Override
     public void storeOne(Customer customer) {
-        //String sql = "INSERT INTO customer(first_name,name_prefix,last_name,dob,bsn,telephone) VALUES (?,?,?,?,?,?);";
-        String sql = "INSERT INTO customer VALUES (?,?,?,?,?,?,?,?);";
+        //todo wat doe je met id_account? foreign key mag je niet aanpassen
+        String sql = "INSERT INTO customer(first_name, name_prefix, last_name, dob, bsn, telephone, id_address) VALUES (?,?,?,?,?,?,?);";
+        //String sql = "INSERT INTO customer VALUES (?,?,?,?,?,?,?,?);";
         jdbcTemplate.update(sql,customer.getFirstName(),customer.getNamePrefix(),customer.getLastName(),
                 customer.getDob(),customer.getBsn(),customer.getTelephone(),
-                //todo customer.getAddress().getIdAddress);
-                1); //en verwijder deze
+                customer.getAddress().getIdAddress());
     }
 
     @Override
