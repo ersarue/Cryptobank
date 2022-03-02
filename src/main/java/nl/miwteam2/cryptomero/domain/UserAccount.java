@@ -2,6 +2,7 @@ package nl.miwteam2.cryptomero.domain;
 
 /**
  * Model UserAccount
+ *
  * @author Ercan Ersaru, studentnr: 500893336 - MIW Cohort 26
  */
 public class UserAccount {
