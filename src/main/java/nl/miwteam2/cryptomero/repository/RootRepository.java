@@ -13,13 +13,16 @@ public class RootRepository {
     private JdbcUserAccountDao jdbcUserAccountDao;
     private JdbcAddressDao jdbcAddressDao;
     private JdbcCustomerDao jdbcCustomerDao;
+    private JdbcBankAccountDao jdbcBankAccountDao;
 
     @Autowired
 
-    public RootRepository(JdbcUserAccountDao jdbcUserAccountDao, JdbcAddressDao jdbcAddressDao, JdbcCustomerDao jdbcCustomerDao) {
+    public RootRepository(JdbcUserAccountDao jdbcUserAccountDao, JdbcAddressDao jdbcAddressDao,
+                          JdbcCustomerDao jdbcCustomerDao, JdbcBankAccountDao jdbcBankAccountDao) {
         this.jdbcUserAccountDao = jdbcUserAccountDao;
         this.jdbcAddressDao = jdbcAddressDao;
         this.jdbcCustomerDao = jdbcCustomerDao;
+        this.jdbcBankAccountDao = jdbcBankAccountDao;
     }
 
     public Customer findCustomerById(int id) {
@@ -35,4 +38,11 @@ public class RootRepository {
         customer.setAddress(address);
         return customer;
     }
+    public BankAccount findBankaccountById(int id) {
+        UserAccount userAccount = jdbcUserAccountDao.findById(id);
+        BankAccount bankAccount= jdbcBankAccountDao.findById(id);
+        bankAccount.setUserAccount(userAccount);
+        return bankAccount;
+    }
+
 }
