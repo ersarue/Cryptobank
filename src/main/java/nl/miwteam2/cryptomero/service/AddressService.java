@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Petra Coenen
- * @version 1.0
+ * @version 1.1
  */
 
 @Service
@@ -32,11 +32,15 @@ public class AddressService {
         jdbcAddressDao.storeOne(address);
     }
 
-    public Address getById(int id) {
+    public Address getAddressById(int id) {
         return jdbcAddressDao.findById(id);
     }
 
     public List<Address> getAllAddresses() {
         return jdbcAddressDao.getAll();
     }
+
+    public int updateAddress(Address address) { return jdbcAddressDao.updateOne(address); }
+
+    public int deleteAddress(int id) { return jdbcAddressDao.deleteOne(id); }
 }
