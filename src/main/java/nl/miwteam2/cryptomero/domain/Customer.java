@@ -20,16 +20,16 @@ public class Customer extends UserAccount {
     //public Customer(String email, String password, String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
     public Customer(String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
 
-         this.firstName = firstName;
+        this.firstName = firstName;
         this.namePrefix = namePrefix;
         this.lastName = lastName;
         this.dob = dob;
         this.bsn = bsn;
         this.telephone = telephone;
     }
-    public Customer(){
-        //todo constructor chain of verwijder
-    }
+//    public Customer(){
+//        //todo constructor chain of verwijder
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -95,13 +95,13 @@ public class Customer extends UserAccount {
         this.bankAccount = bankAccount;
     }
 
-    public Map<Asset, Double> getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Map<Asset, Double> wallet) {
-        this.wallet = wallet;
-    }
+//    public Map<Asset, Double> getWallet() {
+//        return wallet;
+//    }
+//
+//    public void setWallet(Map<Asset, Double> wallet) {
+//        this.wallet = wallet;
+//    }
 
     @Override
     public String toString() {
