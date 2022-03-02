@@ -20,9 +20,7 @@ public class Customer extends UserAccount {
     //public Customer(String email, String password, String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
     public Customer(String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
 
-        //todo super(email,password);
-
-        this.firstName = firstName;
+         this.firstName = firstName;
         this.namePrefix = namePrefix;
         this.lastName = lastName;
         this.dob = dob;
