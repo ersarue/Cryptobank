@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Petra Coenen
- * @version 1.2
+ * @version 1.3
  */
 
 @RestController
@@ -28,20 +28,18 @@ public class AddressController {
         logger.info("New AddressController");
     }
 
-    @PostMapping(value = "/register")
-    public int storeAddress(@RequestBody Address address) {
-        return addressService.storeAddress(address);
-    }
+    @PostMapping
+    public int storeAddress(@RequestBody Address address) { return addressService.storeAddress(address); }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping("/{id}")
     public Address getAddressById(@PathVariable int id) { return addressService.getAddressById(id); }
 
-    @GetMapping (value = "/get/all")
+    @GetMapping
     public List<Address> getAllAddresses() { return addressService.getAllAddresses(); }
 
-    @PutMapping(value = "/update")
+    @PutMapping
     public void updateAddress(@RequestBody Address address) { addressService.updateAddress(address); }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteAddress(@PathVariable int id) { addressService.deleteAddress(id); }
 }
