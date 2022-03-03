@@ -108,4 +108,38 @@ public class Customer extends UserAccount {
         return String.format("Klant met BSN %s", bsn);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Customer customer = (Customer) o;
+
+        if (!firstName.equals(customer.firstName)) return false;
+        if (namePrefix != null ? !namePrefix.equals(customer.namePrefix) : customer.namePrefix != null) return false;
+        if (!lastName.equals(customer.lastName)) return false;
+        if (!dob.equals(customer.dob)) return false;
+        if (!bsn.equals(customer.bsn)) return false;
+        if (!telephone.equals(customer.telephone)) return false;
+        if (address != null ? !address.equals(customer.address) : customer.address != null) return false;
+        if (bankAccount != null ? !bankAccount.equals(customer.bankAccount) : customer.bankAccount != null)
+            return false;
+        return wallet != null ? wallet.equals(customer.wallet) : customer.wallet == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + (namePrefix != null ? namePrefix.hashCode() : 0);
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + dob.hashCode();
+        result = 31 * result + bsn.hashCode();
+        result = 31 * result + telephone.hashCode();
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (bankAccount != null ? bankAccount.hashCode() : 0);
+        result = 31 * result + (wallet != null ? wallet.hashCode() : 0);
+        return result;
+    }
 }
