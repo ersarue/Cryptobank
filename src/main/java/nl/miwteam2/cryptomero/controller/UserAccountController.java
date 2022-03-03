@@ -33,7 +33,7 @@ public class UserAccountController {
 	return userAccountService.findById(id);
   }
   public UserAccount getUserById(@PathVariable int id){
-	return userAccountService.getById(id);
+	return userAccountService.findById(id);
   }
 
   @GetMapping(value = "/useraccounts")
