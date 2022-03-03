@@ -33,9 +33,9 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
   }
 
   // handmatig testen
-//  private void fillUserList() {
-//	userList.add(new UserAccount(0, "test@test.com", "test"));
-//  }
+  //  private void fillUserList() {
+  //	userList.add(new UserAccount(0, "test@test.com", "test"));
+  //  }
 
   @Override
   public UserAccount findById(int id) {
@@ -53,7 +53,6 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
   @Override
   public List<UserAccount> getAll() {
 	String sql = "SELECT * FROM user_account;";
-
 	return jdbcTemplate.query(sql, new JdbcUserAccountDao.UserAccountRowMapper(), null);
   }
 
