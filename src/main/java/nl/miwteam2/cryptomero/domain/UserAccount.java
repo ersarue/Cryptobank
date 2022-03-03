@@ -26,8 +26,11 @@ public class UserAccount {
 
   @Override
   public String toString() {
-	return "UserAccount{" + "idAccount=" + idAccount + ", email='" + email + '\'' + ", password='"
-			+ password + '\'' + '}';
+	return "UserAccount{" +
+			"idAccount=" + idAccount +
+			", email='" + email + '\'' +
+			", password='" + password + '\'' +
+			'}';
   }
 
   @Override

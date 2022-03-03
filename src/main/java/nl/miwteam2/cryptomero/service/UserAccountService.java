@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Service UserAccount
  *
@@ -18,15 +20,19 @@ public class UserAccountService {
   private static final Logger logger = LoggerFactory.getLogger(UserAccountService.class);
   private JdbcUserAccountDao jdbcUserAccountDao;
 
-//  @Autowired
+  //  @Autowired
   public UserAccountService() {
 	super();
-//	jdbcUserAccountDao = dao;
+	//	jdbcUserAccountDao = dao;
 	logger.info("New UserAccountService");
   }
 
-  public UserAccount getById(int id){
+  public UserAccount getById(int id) {
 	return jdbcUserAccountDao.findById(id);
   }
+
+  public List<UserAccount> getUserAccounts() { return jdbcUserAccountDao.getAll();}
+
+  public void storeOne(UserAccount userAccount) { jdbcUserAccountDao.storeOne(userAccount);}
 
 }

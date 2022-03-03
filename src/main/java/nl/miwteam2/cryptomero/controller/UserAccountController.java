@@ -4,9 +4,9 @@ import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Controller UserAccount
@@ -27,7 +27,17 @@ public class UserAccountController {
 
   @GetMapping(value = "/get_user/{id}")
   public UserAccount getUserById(@PathVariable int id){
-	return null;
+	return userAccountService.getById(id);
   }
+
+  @GetMapping(value = "/useraccounts")
+  public List<UserAccount> getUserAccounts(){return userAccountService.getUserAccounts();}
+
+  @PutMapping(value = "/store_user")
+  public int storeUser(@RequestBody UserAccount userAccount){
+	userAccountService.storeOne(userAccount);
+	return userAccount.getIdAccount();
+  }
+
 
 }
