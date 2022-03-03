@@ -45,4 +45,8 @@ public class RootRepository {
         return bankAccount;
     }
 
+    public UserAccount findUserAccountById(int id){
+        return jdbcUserAccountDao.findById(id);
+    }
+
 }
