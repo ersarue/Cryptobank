@@ -17,11 +17,23 @@ public class AssetService {
         this.jdbcAssetDao = jdbcAssetDao;
     }
 
+    public List<Asset> getAll() {
+        return jdbcAssetDao.getAll();
+    }
+
+    public Asset findByName(String name) {
+        return jdbcAssetDao.findByName(name);
+    }
+
     public void storeOne(Asset asset) {
         jdbcAssetDao.storeOne(asset);
     }
 
-    public List<Asset> getAll() {
-        return jdbcAssetDao.getAll();
+    public void updateOne(Asset asset) {
+        jdbcAssetDao.updateOne(asset);
+    }
+
+    public void deleteOne(String name) {
+        jdbcAssetDao.deleteOne(name);
     }
 }
