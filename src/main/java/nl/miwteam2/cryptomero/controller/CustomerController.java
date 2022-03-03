@@ -1,17 +1,14 @@
 package nl.miwteam2.cryptomero.controller;
 
-import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-//@RequestMapping(value = "/customer",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-@RequestMapping("/customer")
+import java.util.List;
 
-//@RequestMapping(value = "/customer")
+@RestController
+@RequestMapping("/customer")
 public class CustomerController {
 
     private CustomerService customerService;
@@ -21,16 +18,36 @@ public class CustomerController {
         this.customerService = service;
     }
 
-    @GetMapping(value = "/{id}") // http://localhost:8080/customer/1
+    @PostMapping
+    public int storeOne(@RequestBody Customer customer) {
+        System.out.println(customer); //todo
+        customerService.storeOne(customer);
+        return customer.getIdAccount();
+    }
+
+    @GetMapping("/{id}")
     public Customer findById(@PathVariable int id) {
         //return new Customer();
         return customerService.findById(id);
     }
 
-    @PostMapping(value = "/register")
-    public void storeOne(@RequestBody Customer customer) {
-        System.out.println(customer);
-        customerService.storeOne(customer);
+    @GetMapping
+    public List<Customer> getAll(){
+        //todo  return customerService.getAllCustomers();
+        return null;
     }
+
+    @PutMapping
+    public int updateOne(@RequestBody Customer customer){
+        //todo customerService.updateCustomer();
+        return customer.getIdAccount();
+    }
+
+    @DeleteMapping
+    public int deleteOne(@RequestBody Customer customer) {
+        //todo customerService.deleteCustomer();
+        return customer.getIdAccount();
+    }
+
 
 }
