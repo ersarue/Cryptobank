@@ -1,5 +1,6 @@
 package nl.miwteam2.cryptomero.repository;
 
+import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -46,6 +47,21 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
     public List<Customer> getAll() {
         String sql = "SELECT * FROM customer;";
         return jdbcTemplate.query(sql,customerRowMapper, null);
+    }
+
+    public void updateOne(Customer customer) {
+        String sql = "UPDATE customer" +
+                "SET first_name = ?, name_prefix = ?, last_name = ?, dob = ?, bsn = ?, telephone = ?, id_address = ?" +
+                "WHERE id_account = ?;";
+
+        jdbcTemplate.update(sql,customer.getFirstName(),customer.getNamePrefix(),customer.getLastName(),
+                customer.getDob(),customer.getBsn(),customer.getTelephone(),
+                customer.getAddress().getIdAddress(),customer.getIdAccount());
+    }
+
+    public void deleteOne(int id) {
+        String sql = "DELETE FROM customer WHERE id_account = ?;";
+        jdbcTemplate.update(sql);
     }
 
     public int findAddressIdOfCustomer(Customer customer) {
