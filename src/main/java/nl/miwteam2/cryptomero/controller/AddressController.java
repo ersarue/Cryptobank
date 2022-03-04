@@ -45,8 +45,14 @@ public class AddressController {
     @GetMapping
     public List<Address> getAllAddresses() { return addressService.getAllAddresses(); }
 
-    @PutMapping
-    public void updateAddress(@RequestBody Address address) { addressService.updateAddress(address); }
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateAddress(@PathVariable int id, @RequestBody Address address) {
+        // TODO: PathVariable juist verwerken (PutMapping kan niet zonder)
+        int updateStatus = addressService.updateAddress(address);
+        if (updateStatus == 1) {
+            return new ResponseEntity<>("Adres is bijgewerkt", HttpStatus.OK);
+        } return new ResponseEntity<>("Er bestaat geen adres met dit id", HttpStatus.NOT_FOUND);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteAddress(@PathVariable int id) { addressService.deleteAddress(id); }
