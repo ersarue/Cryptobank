@@ -13,7 +13,7 @@ public class Customer extends UserAccount {
     private String telephone;
     private Address address;
     private BankAccount bankAccount;
-    private Map<Asset,Double> wallet;
+    private Map<String,Double> wallet;
 
     // in de constructor alleen primitieve variabelen
     // de rootrepo gebruikt setters om de verwijzingen naar andere objecten te setten
@@ -95,13 +95,13 @@ public class Customer extends UserAccount {
         this.bankAccount = bankAccount;
     }
 
-//    public Map<Asset, Double> getWallet() {
-//        return wallet;
-//    }
-//
-//    public void setWallet(Map<Asset, Double> wallet) {
-//        this.wallet = wallet;
-//    }
+    public Map<String, Double> getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Map<String, Double> wallet) {
+        this.wallet = wallet;
+    }
 
     @Override
     public String toString() {

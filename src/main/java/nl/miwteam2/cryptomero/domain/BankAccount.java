@@ -1,6 +1,8 @@
 package nl.miwteam2.cryptomero.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Objects;
 
 /**
@@ -8,22 +10,30 @@ import java.util.Objects;
  * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
  */
 public class BankAccount {
-    private UserAccount userAccount;
+    @JsonBackReference private UserAccount userAccount;
     private String iban;
     private double balanceEur;
 
+    /** all args constructor
+     * @param userAccount from class UserAccount
+     */
     public BankAccount(UserAccount userAccount, String iban, double balanceEur) {
         this.userAccount = userAccount;
         this.iban = iban;
         this.balanceEur = balanceEur;
     }
+    /** constructor chaining
+     * geen parameteter voor userAccount
+     */
     public BankAccount(String iban, double balanceEur){
         this.userAccount=null;
         this.iban=iban;
         this.balanceEur=balanceEur;
     }
+    /** no args constructor
+     * is used during the store bankaccount
+     */
     public BankAccount(){
-
     }
     public UserAccount getUserAccount() {
         return userAccount;

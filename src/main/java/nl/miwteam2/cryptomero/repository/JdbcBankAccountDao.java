@@ -1,9 +1,11 @@
 package nl.miwteam2.cryptomero.repository;
 
+import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+/**
+ * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+ */
 @Repository
 public class JdbcBankAccountDao implements GenericDao<BankAccount> {
     private JdbcTemplate jdbcTemplate;
@@ -20,7 +25,6 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
         this.jdbcTemplate=jdbcTemplate;
 
     }
-
 
 
     private class BankAccountRowMapper implements RowMapper<BankAccount> {
@@ -35,17 +39,28 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
     }
     @Override
     public BankAccount findById(int id) {
-
         String sql = "SELECT * FROM bank_account WHERE id_account = ?;";
-        return this.jdbcTemplate.queryForObject(sql,new BankAccountRowMapper(),id);
+        try {
+            return this.jdbcTemplate.queryForObject(sql,new BankAccountRowMapper(),id);
+        } catch (EmptyResultDataAccessException e){
+            e.getMessage();
+            return null;
+        }
+
     }
 
     @Override
     public void storeOne(BankAccount bankAccount) {
         String sql = "INSERT INTO bank_account(id_account, iban, balance_eur) VALUES (?,?,?);";
-        //String sql = "INSERT INTO customer VALUES (?,?,?,?,?,?,?,?);";
         jdbcTemplate.update(sql,bankAccount.getUserAccount().getIdAccount(),bankAccount.getIban(),
                 bankAccount.getBalanceEur());
+    }
+    public int updateOne(BankAccount bankAccount) {
+        String sql = "UPDATE bank_account " +
+                "SET iban = ?, balance_eur = ? " +
+                "WHERE id_account = ?;";
+        return jdbcTemplate.update(sql, bankAccount.getIban(),bankAccount.getBalanceEur(),
+                bankAccount.getUserAccount().getIdAccount());
     }
 
     @Override
@@ -57,6 +72,10 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
         }else {
             return bankAccountList;
         }
+    }
+    public int deleteOne(int id) {
+        String sql = "DELETE FROM bank_account WHERE id_account = ?;";
+        return jdbcTemplate.update(sql, id);
     }
 
 
