@@ -59,7 +59,7 @@ public class AddressService {
     /**
     * Retrieves a customer address from the database.
     * @param  id    Id value of the address to be retrieved from the database.
-    * @return       The address corresponding to the given id value or 0 in case the given id matches no address.
+    * @return       ...
     */
     public Address getAddressById(int id) {
         return jdbcAddressDao.findById(id);
