@@ -26,5 +26,10 @@ public class BankAccountService {
     public BankAccount findById(int id) {
         return rootRepository.findBankaccountById(id);
     }
+    public void storeOne(BankAccount bankAccount) {
+        //TODO void houden of id teruggeven als int?
+        jdbcBankAccountDao.storeOne(bankAccount);
+
+    }
 
 }

@@ -12,7 +12,7 @@ public class BankAccount {
     private String iban;
     private double balanceEur;
 
-    private BankAccount(UserAccount userAccount, String iban, double balanceEur) {
+    public BankAccount(UserAccount userAccount, String iban, double balanceEur) {
         this.userAccount = userAccount;
         this.iban = iban;
         this.balanceEur = balanceEur;
@@ -21,6 +21,9 @@ public class BankAccount {
         this.userAccount=null;
         this.iban=iban;
         this.balanceEur=balanceEur;
+    }
+    public BankAccount(){
+
     }
     public UserAccount getUserAccount() {
         return userAccount;
