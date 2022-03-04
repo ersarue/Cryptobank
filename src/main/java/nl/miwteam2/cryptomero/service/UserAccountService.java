@@ -37,9 +37,9 @@ public class UserAccountService {
 	return rootRepository.findUserAccountById(id);
   }
 
-//  public List<UserAccount> getUserAccounts() {
-//	return jdbcUserAccountDao.getAll();
-//  }
+  public List<UserAccount> getUserAccounts() {
+	return userAccountDao.getAll();
+  }
 
   public void storeOne(UserAccount userAccount) {
 	userAccountDao.storeOne(userAccount);

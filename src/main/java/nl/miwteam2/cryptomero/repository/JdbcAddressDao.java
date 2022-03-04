@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @author Petra Coenen
- * @version 1.0
+ * @version 1.1
  */
 
 @Repository
@@ -24,16 +24,15 @@ public class JdbcAddressDao implements GenericDao<Address> {
     JdbcTemplate jdbcTemplate;
 
     public JdbcAddressDao(JdbcTemplate jdbcTemplate) {
-        super();
         this.jdbcTemplate = jdbcTemplate;
         logger.info("New JdbcAddressDao");
     }
 
     public void storeOne(Address address) {
-        String sql = "INSERT INTO address(street_name, house_no, house_add, postal_code, city) " +
+        String sql = "INSERT INTO address(street_name, house_no, house_add, postal_code, city)" +
                 "VALUES (?,?,?,?,?); ";
         jdbcTemplate.update(sql, address.getStreetName(), address.getHouseNo(),
-                address.getHouseAdd(), address.getPostalCode(), address.getCity() );
+                address.getHouseAdd(), address.getPostalCode(), address.getCity());
     }
 
     public Address findById(int id) {
@@ -46,7 +45,7 @@ public class JdbcAddressDao implements GenericDao<Address> {
         return jdbcTemplate.query(sql, new AddressRowMapper(), null);
     }
 
-    private class AddressRowMapper implements RowMapper<Address> {
+    private static class AddressRowMapper implements RowMapper<Address> {
         @Override
         public Address mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             return new Address(resultSet.getInt("id_address"), resultSet.getString("street_name"),
@@ -55,7 +54,17 @@ public class JdbcAddressDao implements GenericDao<Address> {
         }
     }
 
-    public void updateAddress(Address address) {}
+    public int updateOne(Address address) {
+        String sql = "UPDATE address " +
+                "SET street_name = ?, house_no = ?, house_add = ?, postal_code = ?, city = ? " +
+                "WHERE id_address = ?;";
+        return jdbcTemplate.update(sql, address.getStreetName(), address.getHouseNo(), address.getHouseAdd(),
+                address.getPostalCode(), address.getCity(), address.getIdAddress());
+    }
 
-    public void deleteAddress(int id) {}
+    public int deleteOne(int id) {
+        String sql = "DELETE FROM address WHERE id_address = ?;";
+        Object[] args = new Object[] {id};
+        return jdbcTemplate.update(sql, args);
+    }
 }
