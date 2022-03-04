@@ -33,7 +33,7 @@ public class RootRepository {
         Customer customer = jdbcCustomerDao.findById(id);
         UserAccount userAccount = jdbcUserAccountDao.findById(id);
         BankAccount bankAccount = jdbcBankAccountDao.findById(id);
-        Map<Asset, Double> wallet = jdbcWalletDao.findById(userAccount.getIdAccount());
+        Map<String, Double> wallet = jdbcWalletDao.findById(userAccount.getIdAccount());
 
         customer.setIdAccount(userAccount.getIdAccount());
         int addressId = jdbcCustomerDao.findAddressIdOfCustomer(customer);
