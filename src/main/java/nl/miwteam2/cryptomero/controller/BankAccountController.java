@@ -8,12 +8,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * class responsible for all end point requests
+ * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+ */
 @RestController
 @RequestMapping("/bankaccount")
 public class BankAccountController {
 
     private BankAccountService bankAccountService;
 
+    /** constructor
+     * @param bankAccountService injection
+     */
     public BankAccountController(BankAccountService bankAccountService){
         this.bankAccountService=bankAccountService;
     }
