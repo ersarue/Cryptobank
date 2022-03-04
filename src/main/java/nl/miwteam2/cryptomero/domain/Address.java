@@ -3,8 +3,9 @@ package nl.miwteam2.cryptomero.domain;
 import java.util.Objects;
 
 /**
+* Represents a customer address.
 * @author Petra Coenen
-* @version 1.0
+* @version 1.1
 */
 
 public class Address {
@@ -20,7 +21,7 @@ public class Address {
         this.streetName = streetName;
         this.houseNo = houseNo;
         this.houseAdd = houseAdd;
-        this.postalCode = postalCode;
+        setPostalCode(postalCode);
         this.city = city;
     }
 
@@ -45,7 +46,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
+        return "Adres{" +
                 "idAdres=" + idAddress +
                 ", straatnaam='" + streetName + '\'' +
                 ", huisnr=" + houseNo +
@@ -78,4 +79,6 @@ public class Address {
     public String getCity() {
         return city;
     }
+
+    public void setPostalCode(String postalCode) { this.postalCode = postalCode.replaceAll(" ", ""); }
 }
