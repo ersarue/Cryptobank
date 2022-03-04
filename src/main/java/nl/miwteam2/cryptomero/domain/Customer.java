@@ -95,13 +95,13 @@ public class Customer extends UserAccount {
         this.bankAccount = bankAccount;
     }
 
-//    public Map<Asset, Double> getWallet() {
-//        return wallet;
-//    }
-//
-//    public void setWallet(Map<Asset, Double> wallet) {
-//        this.wallet = wallet;
-//    }
+    public Map<Asset, Double> getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Map<Asset, Double> wallet) {
+        this.wallet = wallet;
+    }
 
     @Override
     public String toString() {
