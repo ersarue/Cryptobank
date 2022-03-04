@@ -1,6 +1,7 @@
 package nl.miwteam2.cryptomero.repository;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
+import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,7 +42,10 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
 
     @Override
     public void storeOne(BankAccount bankAccount) {
-
+        String sql = "INSERT INTO bank_account(id_account, iban, balance_eur) VALUES (?,?,?);";
+        //String sql = "INSERT INTO customer VALUES (?,?,?,?,?,?,?,?);";
+        jdbcTemplate.update(sql,bankAccount.getUserAccount().getIdAccount(),bankAccount.getIban(),
+                bankAccount.getBalanceEur());
     }
 
     @Override
