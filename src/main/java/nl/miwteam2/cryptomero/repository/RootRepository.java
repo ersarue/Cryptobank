@@ -7,6 +7,8 @@ import nl.miwteam2.cryptomero.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class RootRepository {
 
@@ -38,11 +40,28 @@ public class RootRepository {
         customer.setAddress(address);
         return customer;
     }
+    /**
+     * Find a bankaccount in the database.
+     * @param  id   this is the userid.
+     */
     public BankAccount findBankaccountById(int id) {
         UserAccount userAccount = jdbcUserAccountDao.findById(id);
         BankAccount bankAccount= jdbcBankAccountDao.findById(id);
         bankAccount.setUserAccount(userAccount);
         return bankAccount;
+    }
+    /**
+     * Find all bankaccounts in the database.
+     */
+    public List<BankAccount> getAll(){
+        List<UserAccount> userAccountList = jdbcUserAccountDao.getAll();
+        List<BankAccount> bankAccountList =jdbcBankAccountDao.getAll();
+        for (int i=0;i< bankAccountList.size();i++){
+            UserAccount userAccount = userAccountList.get(i);
+            BankAccount bankAccount = bankAccountList.get(i);
+            bankAccount.setUserAccount(userAccount);
+        }
+        return bankAccountList;
     }
 
     public UserAccount findUserAccountById(int id){

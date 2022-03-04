@@ -1,5 +1,6 @@
 package nl.miwteam2.cryptomero.service;
 
+import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.repository.GenericDao;
@@ -20,16 +21,19 @@ public class BankAccountService {
         this.rootRepository=rootRepository;
     }
     public List<BankAccount> getAllAccounts(){
-        return jdbcBankAccountDao.getAll();
+        return rootRepository.getAll();
     }
 
     public BankAccount findById(int id) {
         return rootRepository.findBankaccountById(id);
     }
     public void storeOne(BankAccount bankAccount) {
-        //TODO void houden of id teruggeven als int?
         jdbcBankAccountDao.storeOne(bankAccount);
 
     }
+    public int updateBankAccount(BankAccount bankAccount) { return jdbcBankAccountDao.updateOne(bankAccount); }
 
+    public void deleteOne(int id) {
+        jdbcBankAccountDao.deleteOne(id);
+    }
 }
