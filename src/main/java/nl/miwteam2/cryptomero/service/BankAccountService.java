@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+/**
+ * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+ */
 @Service
 public class BankAccountService {
     private JdbcBankAccountDao jdbcBankAccountDao;

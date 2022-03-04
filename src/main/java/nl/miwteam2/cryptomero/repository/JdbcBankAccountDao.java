@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+/**
+ * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+ */
 @Repository
 public class JdbcBankAccountDao implements GenericDao<BankAccount> {
     private JdbcTemplate jdbcTemplate;
@@ -21,7 +24,6 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
         this.jdbcTemplate=jdbcTemplate;
 
     }
-
 
 
     private class BankAccountRowMapper implements RowMapper<BankAccount> {

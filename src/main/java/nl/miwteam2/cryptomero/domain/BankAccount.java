@@ -14,18 +14,26 @@ public class BankAccount {
     private String iban;
     private double balanceEur;
 
+    /** all args constructor
+     * @param userAccount from class UserAccount
+     */
     public BankAccount(UserAccount userAccount, String iban, double balanceEur) {
         this.userAccount = userAccount;
         this.iban = iban;
         this.balanceEur = balanceEur;
     }
+    /** constructor chaining
+     * geen parameteter voor userAccount
+     */
     public BankAccount(String iban, double balanceEur){
         this.userAccount=null;
         this.iban=iban;
         this.balanceEur=balanceEur;
     }
+    /** no args constructor
+     * is used during the store bankaccount
+     */
     public BankAccount(){
-
     }
     public UserAccount getUserAccount() {
         return userAccount;
