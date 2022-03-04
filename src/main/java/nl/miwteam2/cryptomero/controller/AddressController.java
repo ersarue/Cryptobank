@@ -55,5 +55,10 @@ public class AddressController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAddress(@PathVariable int id) { addressService.deleteAddress(id); }
+    public ResponseEntity<String> deleteAddress(@PathVariable int id) {
+        int deleteStatus = addressService.deleteAddress(id);
+        if (deleteStatus == 1) {
+            return new ResponseEntity<>("Adres is verwijderd", HttpStatus.OK);
+        } return new ResponseEntity<>("Er bestaat geen adres met dit id", HttpStatus.NOT_FOUND);
+    }
 }
