@@ -6,8 +6,10 @@ import nl.miwteam2.cryptomero.repository.RootRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class CustomerService {
+public class CustomerService implements GenericService<Customer> {
 
     private GenericDao<Customer> customerDao;
     private RootRepository rootRepository;
@@ -18,14 +20,32 @@ public class CustomerService {
         this.customerDao = dao;
     }
 
+    @Override
     public Customer findById(int id) {
         return rootRepository.findCustomerById(id);
     }
 
-    public void storeOne(Customer customer) {
+    @Override
+    public int storeOne(Customer customer) {
         //TODO void houden of id teruggeven als int?
         customerDao.storeOne(customer);
-
+        return customer.getIdAccount();
     }
+
+    @Override
+    public List<Customer> getAll() {
+        return null;
+    }
+
+    @Override
+    public int updateOne(Customer customer) {
+        return 0;
+    }
+
+    @Override
+    public int deleteOne(int id) {
+        return 0;
+    }
+
 
 }
