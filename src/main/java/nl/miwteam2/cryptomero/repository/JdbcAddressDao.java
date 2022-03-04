@@ -3,6 +3,7 @@ package nl.miwteam2.cryptomero.repository;
 import nl.miwteam2.cryptomero.domain.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -37,7 +38,12 @@ public class JdbcAddressDao implements GenericDao<Address> {
 
     public Address findById(int id) {
         String sql = "SELECT * FROM address WHERE id_address = ?;";
-        return jdbcTemplate.queryForObject(sql, new AddressRowMapper(), id);
+        try {
+            return jdbcTemplate.queryForObject(sql, new AddressRowMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            e.getMessage();
+            return null;
+        }
     }
 
     public List<Address> getAll() {
