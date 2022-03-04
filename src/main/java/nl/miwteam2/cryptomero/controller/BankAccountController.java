@@ -4,7 +4,10 @@ import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.service.BankAccountService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -30,9 +33,13 @@ public class BankAccountController {
     }
 
     @GetMapping("{id}") // http://localhost:8080/bankaccount/1
-    public BankAccount findBankaccountById(@PathVariable int id) {
-        //return new BankAccount
-        return bankAccountService.findById(id);
+        public ResponseEntity<String> findBankaccountById(@PathVariable int id) {
+        BankAccount bankAccountById = bankAccountService.findById(id);
+        if (bankAccountById != null){
+            return new ResponseEntity<>("dit bankaccount bestaat", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("bankaccount met deze id niet gevonden", HttpStatus.NOT_FOUND);
+        }
     }
     @PostMapping()// http://localhost:8080/bankaccount
     public void storeOne(@RequestBody BankAccount bankAccount) {

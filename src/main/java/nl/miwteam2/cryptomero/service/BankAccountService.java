@@ -27,7 +27,7 @@ public class BankAccountService {
     }
 
     public BankAccount findById(int id) {
-        return rootRepository.findBankaccountById(id);
+        return jdbcBankAccountDao.findById(id);
     }
     public void storeOne(BankAccount bankAccount) {
         jdbcBankAccountDao.storeOne(bankAccount);

@@ -5,6 +5,7 @@ import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -39,7 +40,13 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
     @Override
     public BankAccount findById(int id) {
         String sql = "SELECT * FROM bank_account WHERE id_account = ?;";
-        return this.jdbcTemplate.queryForObject(sql,new BankAccountRowMapper(),id);
+        try {
+            return this.jdbcTemplate.queryForObject(sql,new BankAccountRowMapper(),id);
+        } catch (EmptyResultDataAccessException e){
+            e.getMessage();
+            return null;
+        }
+
     }
 
     @Override
