@@ -1,6 +1,8 @@
 package nl.miwteam2.cryptomero.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Objects;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Objects;
  * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
  */
 public class BankAccount {
-    private UserAccount userAccount;
+    @JsonBackReference private UserAccount userAccount;
     private String iban;
     private double balanceEur;
 
