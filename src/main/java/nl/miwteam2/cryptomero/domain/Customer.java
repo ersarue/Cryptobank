@@ -105,7 +105,7 @@ public class Customer extends UserAccount {
 
     @Override
     public String toString() {
-        return String.format("Klant met BSN %s", bsn);
+        return String.format("%s \n Klant met BSN %s", super.toString(), bsn);
     }
 
     @Override

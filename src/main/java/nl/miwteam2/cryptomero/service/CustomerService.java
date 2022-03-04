@@ -13,11 +13,15 @@ public class CustomerService implements GenericService<Customer> {
 
     private GenericDao<Customer> customerDao;
     private RootRepository rootRepository;
+    private AddressService addressService;
+    private UserAccountService userAccountService;
 
     @Autowired
-    public CustomerService(GenericDao<Customer> dao, RootRepository rootRepository) {
+    public CustomerService(GenericDao<Customer> dao, RootRepository rootRepository,AddressService addressService,UserAccountService userAccountService) {
         this.rootRepository = rootRepository;
         this.customerDao = dao;
+        this.addressService = addressService;
+        this.userAccountService = userAccountService;
     }
 
     @Override
@@ -28,6 +32,9 @@ public class CustomerService implements GenericService<Customer> {
     @Override
     public int storeOne(Customer customer) {
         //TODO void houden of id teruggeven als int?
+
+        userAccountService.storeOne(customer);
+        int value = addressService.storeAddress(customer.getAddress());
         customerDao.storeOne(customer);
         return customer.getIdAccount();
     }
