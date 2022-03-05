@@ -5,11 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -45,12 +47,28 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 
   @Override
   public void storeOne(UserAccount userAccount) {
-	String sql = "INSERT INTO user_account(id_account, email, password) VALUES (?,?,?);";
-	jdbcTemplate.update(sql, userAccount.getIdAccount(), userAccount.getEmail(),
-			userAccount.getPassword());
+	//Omitted because the store method has to return the generated key
   }
 
-  @Override
+  public int storeUserAccount(UserAccount userAccount) {
+      String sql = "INSERT INTO user_account(email, password) VALUES (?,?);";
+
+      KeyHolder keyHolder = new GeneratedKeyHolder();
+
+      jdbcTemplate.update(new PreparedStatementCreator() {
+          @Override
+          public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+              ps.setString(1, userAccount.getEmail());
+              ps.setString(2, userAccount.getPassword());
+              return ps;
+          }
+      }, keyHolder);
+
+      return keyHolder.getKey().intValue();
+  }
+
+    @Override
   public List<UserAccount> getAll() {
 	String sql = "SELECT * FROM user_account;";
 	return jdbcTemplate.query(sql, new JdbcUserAccountDao.UserAccountRowMapper(), null);

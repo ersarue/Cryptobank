@@ -80,5 +80,9 @@ public class Address {
         return city;
     }
 
+    public void setIdAddress(int idAddress) {
+        this.idAddress = idAddress;
+    }
+
     public void setPostalCode(String postalCode) { this.postalCode = postalCode.replaceAll(" ", ""); }
 }

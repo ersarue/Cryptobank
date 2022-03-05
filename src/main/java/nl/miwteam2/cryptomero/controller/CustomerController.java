@@ -20,9 +20,7 @@ public class CustomerController {
 
     @PostMapping
     public int storeOne(@RequestBody Customer customer) {
-        System.out.println(customer); //todo
-        customerService.storeOne(customer);
-        return customer.getIdAccount();
+        return customerService.storeOne(customer);
     }
 
     @GetMapping("/{id}")
@@ -33,7 +31,7 @@ public class CustomerController {
 
     @GetMapping
     public List<Customer> getAll(){
-        //todo  return customerService.getAllCustomers();
+        //Omitted until required
         return null;
     }
 

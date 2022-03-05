@@ -22,10 +22,10 @@ public class UserAccountService {
   private static final Logger logger = LoggerFactory.getLogger(UserAccountService.class);
   //  private JdbcUserAccountDao jdbcUserAccountDao;
   private RootRepository rootRepository;
-  private GenericDao<UserAccount> userAccountDao;
+  private JdbcUserAccountDao userAccountDao;
 
   @Autowired
-  public UserAccountService(RootRepository repository, GenericDao<UserAccount> dao) {
+  public UserAccountService(RootRepository repository, JdbcUserAccountDao dao) {
 	super();
 	rootRepository = repository;
 	userAccountDao = dao;
@@ -41,8 +41,8 @@ public class UserAccountService {
 	return userAccountDao.getAll();
   }
 
-  public void storeOne(UserAccount userAccount) {
-	userAccountDao.storeOne(userAccount);
+  public int storeOne(UserAccount userAccount) {
+	return userAccountDao.storeUserAccount(userAccount);
   }
 
 }

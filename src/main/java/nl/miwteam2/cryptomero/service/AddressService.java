@@ -50,8 +50,7 @@ public class AddressService {
             System.out.println(e.getMessage());
         }
         if (isValid) {
-            jdbcAddressDao.storeOne(address);
-            return address.getIdAddress();
+            return jdbcAddressDao.storeAddress(address);
         }
         else return 0;
     }

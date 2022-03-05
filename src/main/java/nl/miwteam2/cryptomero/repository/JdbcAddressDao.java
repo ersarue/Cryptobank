@@ -1,14 +1,17 @@
 package nl.miwteam2.cryptomero.repository;
 
 import nl.miwteam2.cryptomero.domain.Address;
+import nl.miwteam2.cryptomero.domain.UserAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -28,11 +31,31 @@ public class JdbcAddressDao implements GenericDao<Address> {
         logger.info("New JdbcAddressDao");
     }
 
+    @Override
     public void storeOne(Address address) {
+        //Omitted because the store method has to return the generated key
+    }
+
+    public int storeAddress(Address address) {
         String sql = "INSERT INTO address(street_name, house_no, house_add, postal_code, city)" +
                 "VALUES (?,?,?,?,?); ";
-        jdbcTemplate.update(sql, address.getStreetName(), address.getHouseNo(),
-                address.getHouseAdd(), address.getPostalCode(), address.getCity());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, address.getStreetName());
+                ps.setInt(2, address.getHouseNo());
+                ps.setString(3, address.getHouseAdd());
+                ps.setString(4, address.getPostalCode());
+                ps.setString(5, address.getCity());
+                return ps;
+            }
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
     }
 
     public Address findById(int id) {
