@@ -45,4 +45,8 @@ public class UserAccountService {
 	return userAccountDao.storeUserAccount(userAccount);
   }
 
+  public boolean isEmailAlreadyInUse(String email) {
+      return userAccountDao.isEmailAlreadyInUse(email);
+  }
+
 }

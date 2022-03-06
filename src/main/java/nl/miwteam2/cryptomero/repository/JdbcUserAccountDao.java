@@ -74,6 +74,10 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	return jdbcTemplate.query(sql, new JdbcUserAccountDao.UserAccountRowMapper(), null);
   }
 
+  public boolean isEmailAlreadyInUse(String email) {
+      String sql = "SELECT * FROM user_account WHERE email = ?;";
+      return !jdbcTemplate.query(sql, new UserAccountRowMapper(), email).isEmpty();
+  }
 
   private class UserAccountRowMapper implements RowMapper<UserAccount> {
 	@Override

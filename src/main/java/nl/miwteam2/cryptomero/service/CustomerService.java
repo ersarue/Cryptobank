@@ -47,8 +47,9 @@ public class CustomerService implements GenericService<Customer> {
     public Customer storeCustomer(Customer customer) throws Exception {
 
         //Check whether all fields are valid and throw exception otherwise
-        if (!isEveryFieldCompleted(customer)) throw new Exception("Not all fields completed");
+        if (!isEveryFieldOfValidLength(customer)) throw new Exception("Invalid field length");
         if (!isValidEmail(customer.getEmail())) throw new Exception("Invalid e-mail");
+        if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) throw new Exception("E-mail already in use");
         if (!isValidPassword(customer.getPassword())) throw new Exception("Invalid password");
         if (!isValidBsn(customer.getBsn())) throw new Exception("Invalid bsn");
 
@@ -66,7 +67,7 @@ public class CustomerService implements GenericService<Customer> {
         BankAccount bankAccount = new BankAccount("NL00CRME0123456789", 1000000.00);
         customer.setBankAccount(bankAccount);
 
-        //Set empty wallet
+        //Setup empty wallet
         Map<String, Double> wallet = new HashMap<>();
         customer.setWallet(wallet);
 
@@ -102,15 +103,26 @@ public class CustomerService implements GenericService<Customer> {
     }
 
     /**
-     * Check whether all required fields are not null and are not empty strings
+     * Check whether all required fields are not null and are not empty strings, and no fields are too long
      * @param customer      The customer to be stored
      * @return              Boolean representing whether this condition is met
      */
-    private boolean isEveryFieldCompleted(Customer customer) {
-        return customer.getEmail().length() > 0 && customer.getPassword().length() > 0 &&
-                customer.getFirstName().length() > 0 && customer.getLastName().length() > 0 &&
-                customer.getDob() != null && customer.getBsn().length() > 0 &&
-                customer.getTelephone().length() > 0 && customer.getAddress() != null;
+    private boolean isEveryFieldOfValidLength(Customer customer) {
+        final int MAX_LENGTH_EMAIL = 30;
+        final int MAX_LENGTH_PASSWORD = 64;
+        final int MAX_LENGTH_FIRST_NAME = 45;
+        final int MAX_LENGTH_NAME_PREFIX = 15;
+        final int MAX_LENGTH_LAST_NAME = 45;
+        final int MAX_LENGTH_TELEPHONE = 30;
+
+        return customer.getEmail().length() > 0 && customer.getEmail().length() <= MAX_LENGTH_EMAIL &&
+                customer.getPassword().length() > 0 && customer.getPassword().length() <= MAX_LENGTH_PASSWORD &&
+                customer.getFirstName().length() > 0 &&  customer.getFirstName().length() <= MAX_LENGTH_FIRST_NAME &&
+                (customer.getNamePrefix() == null || customer.getNamePrefix().length() < MAX_LENGTH_NAME_PREFIX) &&
+                customer.getLastName().length() > 0 && customer.getLastName().length() <= MAX_LENGTH_LAST_NAME &&
+                customer.getDob() != null &&
+                customer.getTelephone().length() > 0 && customer.getTelephone().length() <= MAX_LENGTH_TELEPHONE &&
+                customer.getAddress() != null;
     }
 
     /**
@@ -128,7 +140,7 @@ public class CustomerService implements GenericService<Customer> {
      * @return              Boolean representing whether this password meets the requirements
      */
     private boolean isValidPassword(String password) {
-        //TODO eisen aan wachtwoord formuleren
+        //TODO eventuele eisen aan wachtwoord hier formuleren
         return true;
     }
 
