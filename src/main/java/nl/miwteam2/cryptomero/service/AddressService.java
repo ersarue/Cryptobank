@@ -16,12 +16,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Petra Coenen
- * @version 1.6
+ * @version 1.7
  */
 
 @Service
@@ -40,21 +41,22 @@ public class AddressService {
     /**
     * Stores a customer address in the database.
     * @param  address   The address to be stored.
-    * @return           The auto-generated id from the database if the address is stored successfully, 0 otherwise.
+    * @return           The auto-generated id from the database if the address is stored successfully, 0 if the address
+    *                   does not exist in The Netherlands and -1 if values for one or more required fields are missing.
     */
     public int storeAddress(Address address) {
-        boolean isValid = false;
-        try { // Check if postal code and house number combination match street name and city
-            isValid = isValidAddress(address);
-        } catch (IOException | InterruptedException e) {
-            System.out.println(e.getMessage());
+        if (checkRequiredFields(address).isEmpty()) {
+            boolean isValid = false;
+            try { // Check if postal code and house number combination match street name and city
+                isValid = isValidAddress(address);
+            } catch (IOException | InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+            if (isValid) {
+                return jdbcAddressDao.storeOne(address);
+            } else return 0;
+        } else return -1;
         }
-        if (isValid) {
-            jdbcAddressDao.storeOne(address);
-            return address.getIdAddress();
-        }
-        else return 0;
-    }
 
     /**
     * Retrieves a customer address from the database.
@@ -67,7 +69,8 @@ public class AddressService {
 
     /**
     * Retrieves all customer addresses stored in the database.
-    * @return        A list of all the customer addresses currently in the database.
+    * @return       A list of all the customer addresses currently in the database; an empty list if there are
+    *               no addresses in the database.
     */
     public List<Address> getAllAddresses() {
         return jdbcAddressDao.getAll();
@@ -86,6 +89,26 @@ public class AddressService {
     * @return           1 in case the address is deleted successfully, 0 otherwise.
     */
     public int deleteAddress(int id) { return jdbcAddressDao.deleteOne(id); }
+
+    /**
+    * Checks if a customer address contains values for all of the required fields. In case of missing values, it returns
+    * the names of the empty fields.
+    * @param  address   The address to be checked.
+    * @return           A list with the names of the empty fields; an empty list in case there are no missing values.
+    */
+    public List<String> checkRequiredFields(Address address) {
+        List<String> omittedDataList = new ArrayList<>();
+        if (address.getStreetName() == null) {
+            omittedDataList.add("straatnaam");
+        } if (address.getHouseNo() == 0) {
+            omittedDataList.add("huisnummer");
+        } if (address.getPostalCode() == null) {
+            omittedDataList.add("postcode");
+        } if (address.getCity() == null) {
+            omittedDataList.add("woonplaats");
+        }
+        return omittedDataList;
+    }
 
     /**
     * Checks if a String conforms to the Dutch postal code format ('1234AB').

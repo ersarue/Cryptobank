@@ -6,19 +6,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Petra Coenen
- * @version 1.1
+ * @version 1.2
  */
 
 @Repository
-public class JdbcAddressDao implements GenericDao<Address> {
+public class JdbcAddressDao {
 
     private final Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
 
@@ -29,11 +33,20 @@ public class JdbcAddressDao implements GenericDao<Address> {
         logger.info("New JdbcAddressDao");
     }
 
-    public void storeOne(Address address) {
+    public int storeOne(Address address) {
         String sql = "INSERT INTO address(street_name, house_no, house_add, postal_code, city)" +
                 "VALUES (?,?,?,?,?); ";
-        jdbcTemplate.update(sql, address.getStreetName(), address.getHouseNo(),
-                address.getHouseAdd(), address.getPostalCode(), address.getCity());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] { "id_address" });
+            ps.setString(1, address.getStreetName());
+            ps.setInt(2, address.getHouseNo());
+            ps.setString(3,address.getHouseAdd());
+            ps.setString(4, address.getPostalCode());
+            ps.setString(5, address.getCity());
+            return ps;
+        }, keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
     public Address findById(int id) {
