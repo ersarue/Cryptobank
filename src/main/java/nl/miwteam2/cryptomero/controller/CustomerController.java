@@ -3,6 +3,8 @@ package nl.miwteam2.cryptomero.controller;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,14 +21,22 @@ public class CustomerController {
     }
 
     @PostMapping
-    public int storeOne(@RequestBody Customer customer) {
-        return customerService.storeOne(customer);
+    public ResponseEntity<?> storeCustomer(@RequestBody Customer customer) {
+        try {
+            return new ResponseEntity<>(customerService.storeCustomer(customer), HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
-    public Customer findById(@PathVariable int id) {
-        //return new Customer();
-        return customerService.findById(id);
+    public ResponseEntity<?> findById(@PathVariable int id) {
+        try {
+            return new ResponseEntity<>(customerService.findById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping
@@ -37,15 +47,13 @@ public class CustomerController {
 
     @PutMapping
     public int updateOne(@RequestBody Customer customer){
-        //todo customerService.updateCustomer();
-        return customer.getIdAccount();
+        //Omitted until required
+        return 0;
     }
 
     @DeleteMapping
     public int deleteOne(@RequestBody Customer customer) {
-        //todo customerService.deleteCustomer();
-        return customer.getIdAccount();
+        //Omitted until required
+        return 0;
     }
-
-
 }
