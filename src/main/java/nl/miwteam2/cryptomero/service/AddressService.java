@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * @author Petra Coenen
- * @version 1.7
+ * @version 1.8
  */
 
 @Service
@@ -41,22 +41,26 @@ public class AddressService {
     /**
     * Stores a customer address in the database.
     * @param  address   The address to be stored.
-    * @return           The auto-generated id from the database if the address is stored successfully, 0 if the address
-    *                   does not exist in The Netherlands and -1 if values for one or more required fields are missing.
+    * @return           The auto-generated id from the database if the address is stored successfully or if the address
+    *                   already exists in the database, 0 if the address does not exist in The Netherlands and -1 if
+    *                   values for one or more required fields are missing.
     */
     public int storeAddress(Address address) {
-        if (checkRequiredFields(address).isEmpty()) {
-            boolean isValid = false;
-            try { // Check if postal code and house number combination match street name and city
-                isValid = isValidAddress(address);
-            } catch (IOException | InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
-            if (isValid) {
-                return jdbcAddressDao.storeOne(address);
-            } else return 0;
-        } else return -1;
-        }
+//        TODO: Refactor from monster into princess (PC)
+        if (checkForUniqueAddress(address) == -2) { // Check if address already exists in database
+            if (checkRequiredFields(address).isEmpty()) { // Check if all required values are given
+                boolean isValid = false;
+                try { // Check if postal code and house number combination match street name and city
+                    isValid = isValidAddress(address);
+                } catch (IOException | InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+                if (isValid) {
+                    return jdbcAddressDao.storeOne(address);
+                } else return 0; // Return 0 if address does not exist
+            } else return -1; // Return -1 if required values are missing
+        } else return checkForUniqueAddress(address); // If address already exists in database, return corresponding id
+    }
 
     /**
     * Retrieves a customer address from the database.
@@ -108,6 +112,25 @@ public class AddressService {
             omittedDataList.add("woonplaats");
         }
         return omittedDataList;
+    }
+
+    /**
+    * Checks if a customer address already exists in the database.
+    * @param  address  The address to be checked.
+    * @return          The auto-generated id of the address if it already exists in the database; -2 if it
+    *                  does not yet exist in the database.
+    */
+    public int checkForUniqueAddress(Address address) {
+        Address match = jdbcAddressDao.getAll().stream()
+                .filter(item -> address.getPostalCode().equals(item.getPostalCode()))
+                .filter(item -> address.getHouseNo() == item.getHouseNo())
+                .filter(item -> address.getHouseAdd() == null ||
+                        address.getHouseAdd().equals(item.getHouseAdd()))
+                .findAny()
+                .orElse(null);
+        return match != null
+                ?   match.getIdAddress()
+                :   -2;
     }
 
     /**
