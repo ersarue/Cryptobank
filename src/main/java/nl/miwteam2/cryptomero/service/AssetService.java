@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Samuël Geurts & Stijn Klijn
+ */
+
 @Service
 public class AssetService {
 

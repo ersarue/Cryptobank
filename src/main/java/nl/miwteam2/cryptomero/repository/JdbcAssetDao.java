@@ -10,6 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @author Samuël Geurts & Stijn Klijn
+ */
+
 @Repository
 public class JdbcAssetDao implements GenericDao<Asset> {
 

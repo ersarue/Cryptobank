@@ -1,6 +1,5 @@
 package nl.miwteam2.cryptomero.repository;
 
-import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+
+
+/**
+ * @author Samuël Geurts & Stijn Klijn
+ */
 
 @Repository
 public class JdbcCustomerDao implements GenericDao<Customer>{
@@ -30,7 +34,6 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
     public Customer findById(int id) {
         String sql = "SELECT * FROM customer WHERE id_account = ?;";
         return this.jdbcTemplate.queryForObject(sql,customerRowMapper,id);
-        //todo vind oplossing voor situatie als id niet bestaat en null terug geeft
     }
 
     @Override
@@ -66,6 +69,4 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
         String sql = "SELECT id_address FROM customer WHERE id_account = ?;";
         return jdbcTemplate.queryForObject(sql, Integer.class, customer.getIdAccount());
     }
-
-
 }

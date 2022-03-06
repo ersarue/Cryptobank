@@ -3,6 +3,10 @@ package nl.miwteam2.cryptomero.domain;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * @author Samuël Geurts & Stijn Klijn
+ */
+
 public class Customer extends UserAccount {
 
     private String firstName;

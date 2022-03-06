@@ -2,6 +2,10 @@ package nl.miwteam2.cryptomero.domain;
 
 import java.util.Objects;
 
+/**
+ * @author Samuël Geurts & Stijn Klijn
+ */
+
 public class Asset {
 
      private String assetName;
