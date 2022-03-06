@@ -2,11 +2,11 @@ package nl.miwteam2.cryptomero.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Petra Coenen
- * @version 1.0
+ * @version 1.1
  */
 
 class AddressTest {
@@ -14,11 +14,11 @@ class AddressTest {
     @Test
     void testPostalCodeTrim() {
         Address testAddress1 = new Address(2, "Kerklaan", 3, "2142 NE", "Haarlem");
-        Address testAddress2 = new Address(4, "Lindeweg", 34, "3928 KS ", "Tiel");
         Address testAddress3 = new Address(6, "Marepad", 5, "A"," 8394 KG", "Lisse");
+        Address testAddress4 = new Address(9, "Eikenweg", 89,null, "Lisse");
 
-        assertEquals("2142NE", testAddress1.getPostalCode());
-        assertEquals("3928KS", testAddress2.getPostalCode());
-        assertEquals("8394KG", testAddress3.getPostalCode());
+        assertThat(testAddress1.getPostalCode()).isNotNull().isEqualTo("2142NE");
+        assertThat(testAddress3.getPostalCode()).isNotNull().isEqualTo("8394KG");
+        assertThat(testAddress4.getPostalCode()).isNull();
     }
 }
