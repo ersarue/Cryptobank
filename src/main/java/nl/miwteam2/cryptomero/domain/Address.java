@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
 * Represents a customer address.
 * @author Petra Coenen
-* @version 1.1
+* @version 1.2
 */
 
 public class Address {
@@ -84,5 +84,9 @@ public class Address {
         this.idAddress = idAddress;
     }
 
-    public void setPostalCode(String postalCode) { this.postalCode = postalCode.replaceAll(" ", ""); }
+    public void setPostalCode(String postalCode) {
+        if (postalCode != null) {
+            this.postalCode = postalCode.replaceAll(" ", "");
+        }
+    }
 }

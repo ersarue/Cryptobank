@@ -1,9 +1,9 @@
 package nl.miwteam2.cryptomero.repository;
 
 import nl.miwteam2.cryptomero.domain.Address;
-import nl.miwteam2.cryptomero.domain.UserAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,16 +11,18 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+
 import java.sql.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Petra Coenen
- * @version 1.1
+ * @version 1.2
  */
 
 @Repository
-public class JdbcAddressDao implements GenericDao<Address> {
+public class JdbcAddressDao {
 
     private final Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
 
@@ -31,17 +33,10 @@ public class JdbcAddressDao implements GenericDao<Address> {
         logger.info("New JdbcAddressDao");
     }
 
-    @Override
-    public void storeOne(Address address) {
-        //Omitted because the store method has to return the generated key
-    }
-
-    public int storeAddress(Address address) {
+    public int storeOne(Address address) {
         String sql = "INSERT INTO address(street_name, house_no, house_add, postal_code, city)" +
                 "VALUES (?,?,?,?,?); ";
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -54,13 +49,17 @@ public class JdbcAddressDao implements GenericDao<Address> {
                 return ps;
             }
         }, keyHolder);
-
-        return keyHolder.getKey().intValue();
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
     public Address findById(int id) {
         String sql = "SELECT * FROM address WHERE id_address = ?;";
-        return jdbcTemplate.queryForObject(sql, new AddressRowMapper(), id);
+        try {
+            return jdbcTemplate.queryForObject(sql, new AddressRowMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            e.getMessage();
+            return null;
+        }
     }
 
     public List<Address> getAll() {

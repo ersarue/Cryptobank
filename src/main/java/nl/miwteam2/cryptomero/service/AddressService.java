@@ -16,12 +16,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Petra Coenen
- * @version 1.6
+ * @version 1.8
  */
 
 @Service
@@ -40,19 +41,25 @@ public class AddressService {
     /**
     * Stores a customer address in the database.
     * @param  address   The address to be stored.
-    * @return           The auto-generated id from the database if the address is stored successfully, 0 otherwise.
+    * @return           The auto-generated id from the database if the address is stored successfully or if the address
+    *                   already exists in the database, 0 if the address does not exist in The Netherlands and -1 if
+    *                   values for one or more required fields are missing.
     */
     public int storeAddress(Address address) {
-        boolean isValid = false;
-        try { // Check if postal code and house number combination match street name and city
-            isValid = isValidAddress(address);
-        } catch (IOException | InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
-        if (isValid) {
-            return jdbcAddressDao.storeAddress(address);
-        }
-        else return 0;
+//        TODO: Refactor from monster into princess (PC)
+        if (checkForUniqueAddress(address) == -2) { // Check if address already exists in database
+            if (checkRequiredFields(address).isEmpty()) { // Check if all required values are given
+                boolean isValid = false;
+                try { // Check if postal code and house number combination match street name and city
+                    isValid = isValidAddress(address);
+                } catch (IOException | InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+                if (isValid) {
+                    return jdbcAddressDao.storeOne(address);
+                } else return 0; // Return 0 if address does not exist
+            } else return -1; // Return -1 if required values are missing
+        } else return checkForUniqueAddress(address); // If address already exists in database, return corresponding id
     }
 
     /**
@@ -66,7 +73,8 @@ public class AddressService {
 
     /**
     * Retrieves all customer addresses stored in the database.
-    * @return        A list of all the customer addresses currently in the database.
+    * @return       A list of all the customer addresses currently in the database; an empty list if there are
+    *               no addresses in the database.
     */
     public List<Address> getAllAddresses() {
         return jdbcAddressDao.getAll();
@@ -85,6 +93,45 @@ public class AddressService {
     * @return           1 in case the address is deleted successfully, 0 otherwise.
     */
     public int deleteAddress(int id) { return jdbcAddressDao.deleteOne(id); }
+
+    /**
+    * Checks if a customer address contains values for all of the required fields. In case of missing values, it returns
+    * the names of the empty fields.
+    * @param  address   The address to be checked.
+    * @return           A list with the names of the empty fields; an empty list in case there are no missing values.
+    */
+    public List<String> checkRequiredFields(Address address) {
+        List<String> omittedDataList = new ArrayList<>();
+        if (address.getStreetName() == null) {
+            omittedDataList.add("straatnaam");
+        } if (address.getHouseNo() == 0) {
+            omittedDataList.add("huisnummer");
+        } if (address.getPostalCode() == null) {
+            omittedDataList.add("postcode");
+        } if (address.getCity() == null) {
+            omittedDataList.add("woonplaats");
+        }
+        return omittedDataList;
+    }
+
+    /**
+    * Checks if a customer address already exists in the database.
+    * @param  address  The address to be checked.
+    * @return          The auto-generated id of the address if it already exists in the database; -2 if it
+    *                  does not yet exist in the database.
+    */
+    public int checkForUniqueAddress(Address address) {
+        Address match = jdbcAddressDao.getAll().stream()
+                .filter(item -> address.getPostalCode().equals(item.getPostalCode()))
+                .filter(item -> address.getHouseNo() == item.getHouseNo())
+                .filter(item -> address.getHouseAdd() == null ||
+                        address.getHouseAdd().equals(item.getHouseAdd()))
+                .findAny()
+                .orElse(null);
+        return match != null
+                ?   match.getIdAddress()
+                :   -2;
+    }
 
     /**
     * Checks if a String conforms to the Dutch postal code format ('1234AB').
