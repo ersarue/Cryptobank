@@ -25,21 +25,25 @@ public class BankAccountService {
         this.jdbcBankAccountDao=jdbcBankAccountDao;
         this.rootRepository=rootRepository;
     }
-    public List<BankAccount> getAllAccounts(){
+    public List<BankAccount> getAll(){
         return rootRepository.getAll();
     }
 
     public BankAccount findById(int id) {
-        return jdbcBankAccountDao.findById(id);
+        return rootRepository.findBankaccountById(id);
     }
-    public void storeOne(BankAccount bankAccount) {
+    public BankAccount storeOne(BankAccount bankAccount) {
         jdbcBankAccountDao.storeOne(bankAccount);
-
+        return bankAccount;
     }
-    public int updateBankAccount(BankAccount bankAccount) { return jdbcBankAccountDao.updateOne(bankAccount); }
+    public BankAccount updateOne(BankAccount bankAccount) {
+        jdbcBankAccountDao.updateOne(bankAccount);
+        return bankAccount;
+    }
 
-    public void deleteOne(int id) {
-        jdbcBankAccountDao.deleteOne(id);
+    public int deleteOne(int id) {
+        return jdbcBankAccountDao.deleteOne(id);
+
     }
 
     /**

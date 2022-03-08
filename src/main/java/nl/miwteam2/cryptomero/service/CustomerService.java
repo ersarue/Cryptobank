@@ -2,13 +2,10 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
-import nl.miwteam2.cryptomero.repository.GenericDao;
-import nl.miwteam2.cryptomero.repository.RootRepository;
+import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,26 +20,18 @@ public class CustomerService implements GenericService<Customer> {
     private static final String VALID = "Valid";
     private static final double INITIAL_BALANCE = 1000000;
 
-    private GenericDao<Customer> customerDao;
-    private RootRepository rootRepository;
+    private CustomerRepository customerRepository;
     private AddressService addressService;
     private BankAccountService bankAccountService;
     private UserAccountService userAccountService;
 
     @Autowired
-    public CustomerService(GenericDao<Customer> dao, RootRepository rootRepository,AddressService addressService,
+    public CustomerService(CustomerRepository customerRepository,AddressService addressService,
             BankAccountService bankAccountService,UserAccountService userAccountService) {
-        this.rootRepository = rootRepository;
-        this.customerDao = dao;
+        this.customerRepository = customerRepository;
         this.addressService = addressService;
         this.bankAccountService = bankAccountService;
         this.userAccountService = userAccountService;
-    }
-
-    @Override
-    public int storeOne(Customer customer) {
-        //Omitted because the store method has to return a Customer
-        return 0;
     }
 
     /**
@@ -51,7 +40,8 @@ public class CustomerService implements GenericService<Customer> {
      * @return              The stored customer if storage was successful
      * @throws Exception    If the customer cannot be stored
      */
-    public Customer storeCustomer(Customer customer) throws Exception {
+    @Override
+    public Customer storeOne(Customer customer) throws Exception {
 
         //Check whether all fields are valid, otherwise throw exception
         String validityString = checkFieldValidity(customer);
@@ -65,7 +55,7 @@ public class CustomerService implements GenericService<Customer> {
         //Store customer in the database and receive the auto-generated key
         int userId = userAccountService.storeOne(customer);
         customer.setIdAccount(userId);
-        customerDao.storeOne(customer);
+        customerRepository.storeOne(customer);
 
         //Generate and store new bank account
         BankAccount bankAccount = new BankAccount(customer, bankAccountService.generateIban(), INITIAL_BALANCE);
@@ -86,7 +76,7 @@ public class CustomerService implements GenericService<Customer> {
      */
     @Override
     public Customer findById(int id) {
-        return rootRepository.findCustomerById(id);
+        return customerRepository.findById(id);
     }
 
     @Override
@@ -96,15 +86,15 @@ public class CustomerService implements GenericService<Customer> {
     }
 
     @Override
-    public int updateOne(Customer customer) {
+    public Customer updateOne(Customer customer) {
         //Omitted until required
-        return 0;
+        return null;
     }
 
     @Override
-    public int deleteOne(int id) {
+    public Customer deleteOne(int id) {
         //Omitted until required
-        return 0;
+        return null;
     }
 
     /**

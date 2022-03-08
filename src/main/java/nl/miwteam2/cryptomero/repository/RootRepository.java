@@ -32,33 +32,6 @@ public class RootRepository {
     }
 
     /**
-     * Retrieve a customer from the database
-     * @param id            Id of the customer to be retrieved
-     * @return              The retrieved customer
-     */
-    public Customer findCustomerById(int id) {
-
-        //Retrieve Customer, UserAccount, BankAccount and wallet for the given id
-        Customer customer = jdbcCustomerDao.findById(id);
-        UserAccount userAccount = jdbcUserAccountDao.findById(id);
-        BankAccount bankAccount = jdbcBankAccountDao.findById(id);
-        Map<String, Double> wallet = jdbcWalletDao.findById(userAccount.getIdAccount());
-
-        //Retrieve address of this customer
-        customer.setIdAccount(userAccount.getIdAccount());
-        int addressId = jdbcCustomerDao.findAddressIdOfCustomer(customer);
-        Address address = jdbcAddressDao.findById(addressId);
-
-        //Set all customer fields appropriately
-        customer.setEmail(userAccount.getEmail());
-        customer.setPassword(userAccount.getPassword());
-        customer.setAddress(address);
-        customer.setBankAccount(bankAccount);
-        customer.setWallet(wallet);
-
-        return customer;
-    }
-    /**
      * Find a bankaccount in the database.
      * @param  id   this is the userid.
      */
@@ -85,5 +58,6 @@ public class RootRepository {
     public UserAccount findUserAccountById(int id){
         return jdbcUserAccountDao.findById(id);
     }
+
 
 }
