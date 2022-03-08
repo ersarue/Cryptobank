@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
-public class CustomerController {
+public class CustomerController implements GenericController<Customer>{
 
     private CustomerService customerService;
 
@@ -50,14 +50,14 @@ public class CustomerController {
     }
 
     @PutMapping
-    public int updateOne(@RequestBody Customer customer){
+    public ResponseEntity<?> updateOne(@RequestBody Customer customer){
         //Omitted until required
-        return 0;
+        return null;
     }
 
     @DeleteMapping
-    public int deleteOne(@RequestBody Customer customer) {
+    public ResponseEntity<?> deleteOne(@RequestBody int id) {
         //Omitted until required
-        return 0;
+        return null;
     }
 }
