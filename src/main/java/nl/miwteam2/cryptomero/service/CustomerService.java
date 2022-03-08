@@ -32,19 +32,14 @@ public class CustomerService implements GenericService<Customer> {
         this.userAccountService = userAccountService;
     }
 
-    @Override
-    public int storeOne(Customer customer) {
-        //Omitted because the store method has to return a Customer
-        return 0;
-    }
-
     /**
      * Stores a new customer in the database
      * @param customer      The customer to be stored
      * @return              The stored customer if storage was successful
      * @throws Exception    If the customer cannot be stored
      */
-    public Customer storeCustomer(Customer customer) throws Exception {
+    @Override
+    public Customer storeOne(Customer customer) throws Exception {
 
         //Check whether all fields are valid and throw exception otherwise
         if (!isEveryFieldOfValidLength(customer)) throw new Exception("Invalid field length");

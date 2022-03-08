@@ -25,9 +25,9 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> storeCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
         try {
-            return new ResponseEntity<>(customerService.storeCustomer(customer), HttpStatus.CREATED);
+            return new ResponseEntity<>(customerService.storeOne(customer), HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

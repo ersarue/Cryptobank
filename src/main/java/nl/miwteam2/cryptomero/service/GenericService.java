@@ -7,8 +7,8 @@ import java.util.List;
 public interface GenericService<E> {
 
     public E findById(int id);
-    public int storeOne(E e);
+    public E storeOne(E e) throws Exception;
     public List<E> getAll();
-    public int updateOne(E e);
-    public int deleteOne(int id);
+    public E updateOne(E e);
+    public E deleteOne(int id);
 }
