@@ -19,16 +19,21 @@ import java.util.Map;
 @Service
 public class CustomerService implements GenericService<Customer> {
 
+    private static final double INITIAL_BALANCE = 1000000;
+
     private GenericDao<Customer> customerDao;
     private RootRepository rootRepository;
     private AddressService addressService;
+    private BankAccountService bankAccountService;
     private UserAccountService userAccountService;
 
     @Autowired
-    public CustomerService(GenericDao<Customer> dao, RootRepository rootRepository,AddressService addressService,UserAccountService userAccountService) {
+    public CustomerService(GenericDao<Customer> dao, RootRepository rootRepository,AddressService addressService,
+            BankAccountService bankAccountService,UserAccountService userAccountService) {
         this.rootRepository = rootRepository;
         this.customerDao = dao;
         this.addressService = addressService;
+        this.bankAccountService = bankAccountService;
         this.userAccountService = userAccountService;
     }
 
@@ -63,9 +68,10 @@ public class CustomerService implements GenericService<Customer> {
         customer.setIdAccount(userId);
         customerDao.storeOne(customer);
 
-        //TODO: Bank account genereren? En ook teruggeven aan de frontend
-        BankAccount bankAccount = new BankAccount("NL00CRME0123456789", 1000000.00);
+        //Generate and store new bank account
+        BankAccount bankAccount = new BankAccount(customer, bankAccountService.generateIban(), INITIAL_BALANCE);
         customer.setBankAccount(bankAccount);
+        bankAccountService.storeOne(bankAccount);
 
         //Setup empty wallet
         Map<String, Double> wallet = new HashMap<>();
