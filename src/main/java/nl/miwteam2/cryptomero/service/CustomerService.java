@@ -92,15 +92,15 @@ public class CustomerService implements GenericService<Customer> {
     }
 
     @Override
-    public int updateOne(Customer customer) {
+    public Customer updateOne(Customer customer) {
         //Omitted until required
-        return 0;
+        return null;
     }
 
     @Override
-    public int deleteOne(int id) {
+    public Customer deleteOne(int id) {
         //Omitted until required
-        return 0;
+        return null;
     }
 
     /**
