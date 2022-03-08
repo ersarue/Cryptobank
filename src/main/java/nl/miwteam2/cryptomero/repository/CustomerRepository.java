@@ -29,7 +29,11 @@ public class CustomerRepository {
         this.jdbcWalletDao = jdbcWalletDao;
         this.jdbcBankAccountDao = jdbcBankAccountDao;
     }
-
+    /**
+     * Retrieve a customer from the database
+     * @param id            Id of the customer to be retrieved
+     * @return              The retrieved customer
+     */
     public Customer findById(int id) {
 
         //Retrieve Customer, UserAccount, BankAccount and wallet for the given id
