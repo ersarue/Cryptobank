@@ -15,10 +15,7 @@ import java.net.http.HttpResponse;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HexFormat;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Samuël Geurts & Stijn Klijn
@@ -119,7 +116,7 @@ public class CustomerService implements GenericService<Customer> {
         if (!isValidEmail(customer.getEmail())) return "Invalid e-mail";
         if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) return "E-mail already in use";
         if (!isValidPassword(customer.getPassword())) return "Invalid password";
-        if (numberOfBreaches!=0) return "Number of password breaches" + numberOfBreaches;
+        if (numberOfBreaches!=0) return "This password has been seen " + numberOfBreaches + " times before";
         if (!isValidDob(customer.getDob())) return "Invalid dob";
         if (!isValidBsn(customer.getBsn())) return "Invalid bsn";
         return VALID;
@@ -180,7 +177,7 @@ public class CustomerService implements GenericService<Customer> {
         MessageDigest msdDigest = MessageDigest.getInstance("SHA-1");
         msdDigest.update(string.getBytes());
         byte[] digest = msdDigest.digest();
-        return HexFormat.of().formatHex(digest);
+        return HexFormat.of().formatHex(digest).toUpperCase();
     }
 
     /**
@@ -198,10 +195,10 @@ public class CustomerService implements GenericService<Customer> {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         //transforms respons-body to map
-        Map<String,Integer> numberOfBreachesPerPassword = new HashMap<>();
+        Map<String,Integer> numberOfBreachesPerPassword = new TreeMap<>();
         String[] arrayOfStr = response.body().split("\n");
         for (String string: arrayOfStr) {
-            String sha1part = string.substring(0,string.length()-5);
+            String sha1part = string.substring(0,string.indexOf(":"));
             Integer numberOfBreaches = Integer.parseInt(string.substring(string.indexOf(":")+1).replace("\r",""));
             numberOfBreachesPerPassword.put(sha1.substring(0, 5) + sha1part,numberOfBreaches);
         }
