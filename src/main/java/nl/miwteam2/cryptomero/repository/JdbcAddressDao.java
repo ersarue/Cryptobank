@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 
 @Repository
-public class JdbcAddressDao {
+public class JdbcAddressDao implements GenericDao<Address> {
 
     private final Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
 

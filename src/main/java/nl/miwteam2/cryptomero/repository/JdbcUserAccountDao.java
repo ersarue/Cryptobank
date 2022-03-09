@@ -47,7 +47,7 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 //  }
 
   @Override
-  public void storeOne(UserAccount userAccount) {
+  public int storeOne(UserAccount userAccount) {
 	String sql = "INSERT INTO user_account(email, password) VALUES (?,?);";
 	KeyHolder keyHolder = new GeneratedKeyHolder();
 	jdbcTemplate.update(new PreparedStatementCreator() {
@@ -59,7 +59,7 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 		return ps;
 	  }
 	}, keyHolder);
-	keyHolder.getKey().intValue();
+	return keyHolder.getKey().intValue();
   }
 
   public int updateOne(UserAccount userAccount){

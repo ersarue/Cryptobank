@@ -9,12 +9,22 @@ public class JdbcSessionDao implements GenericDao{
     }
 
     @Override
-    public void storeOne(Object o) {
-
+    public int storeOne(Object o) {
+        return 0;
     }
 
     @Override
     public List getAll() {
         return null;
+    }
+
+    @Override
+    public int updateOne(Object o) {
+        return 0;
+    }
+
+    @Override
+    public int deleteOne(int id) {
+        return 0;
     }
 }
