@@ -16,6 +16,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Samuël Geurts & Stijn Klijn
@@ -212,7 +214,21 @@ public class CustomerService implements GenericService<Customer> {
      */
     private boolean isValidPassword(String password) {
         //TODO eventuele eisen aan wachtwoord hier formuleren
-        return true;
+        return isRepetitive(password);
+    }
+
+    /**
+     * Checks whether a password contains sequences of more than two identical characters (e.g. 'aaa'), sequences
+     * of the same character group (e.g.'baba') or sequences of more than two natural numbers (e.g. '123')
+     * @param password      The password to be checked
+     * @return              True if the password contains one or more sequences; false if it does not
+     */
+    public boolean isRepetitive(String password) {
+        Pattern patChar = Pattern.compile("(.)\\1\\1");
+        Pattern patGroup = Pattern.compile("(..)(.*?)\\1");
+        Pattern patNum = Pattern.compile("\\d{3,}");
+        // Use Pattern.matcher() and find() because we don't necessarily want to match the entire string
+        return patChar.matcher(password).find() | patGroup.matcher(password).find() | patNum.matcher(password).find();
     }
 
     /**
