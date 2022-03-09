@@ -23,28 +23,24 @@ import java.util.List;
 @Repository
 public class JdbcUserAccountDao implements GenericDao<UserAccount> {
   private static final Logger logger = LoggerFactory.getLogger(JdbcUserAccountDao.class);
-  private List<UserAccount> userList;
   JdbcTemplate jdbcTemplate;
 
   @Autowired
   public JdbcUserAccountDao(JdbcTemplate jdbcTemplate) {
 	this.jdbcTemplate = jdbcTemplate;
-	//	userList = new ArrayList<>();
-	//	fillUserList();
 	logger.info("New JdbcUserAccountDao");
   }
-
 
   @Override
   public UserAccount findById(int id) {
 	String sql = "SELECT * FROM user_account WHERE id_account = ?;";
-	return jdbcTemplate.queryForObject(sql, new JdbcUserAccountDao.UserAccountRowMapper(), id);
+	return jdbcTemplate.queryForObject(sql, new UserAccountRowMapper(), id);
   }
 
-//  @Override
-//  public void storeOne(UserAccount userAccount) {
-//	//Omitted because the store method has to return the generated key
-//  }
+  public UserAccount findByEmail(String email){
+	String sql = "SELECT * FROM user_account WHERE email = ?;";
+	return jdbcTemplate.queryForObject(sql, new UserAccountRowMapper(), email);
+  }
 
   @Override
   public int storeOne(UserAccount userAccount) {
@@ -62,17 +58,19 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	return keyHolder.getKey().intValue();
   }
 
+  @Override
+  public List<UserAccount> getAll() {
+	String sql = "SELECT * FROM user_account;";
+	return jdbcTemplate.query(sql, new UserAccountRowMapper(), null);
+  }
+
+  @Override
   public int updateOne(UserAccount userAccount){
 	String sql = "UPDATE user_account SET email = ?, password = ? WHERE id_account = ?;";
 	return jdbcTemplate.update(sql, userAccount.getEmail(), userAccount.getPassword());
   }
 
   @Override
-  public List<UserAccount> getAll() {
-	String sql = "SELECT * FROM user_account;";
-	return jdbcTemplate.query(sql, new JdbcUserAccountDao.UserAccountRowMapper(), null);
-  }
-
   public int deleteOne(int id){
 	String sql = "DELETE FROM user_account WHERE id_account = ?;";
 	return jdbcTemplate.update(sql, id);
@@ -83,7 +81,7 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	return !jdbcTemplate.query(sql, new UserAccountRowMapper(), email).isEmpty();
   }
 
-  private class UserAccountRowMapper implements RowMapper<UserAccount> {
+  private static class UserAccountRowMapper implements RowMapper<UserAccount> {
 	@Override
 	public UserAccount mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
 	  return new UserAccount(resultSet.getInt("id_account"),

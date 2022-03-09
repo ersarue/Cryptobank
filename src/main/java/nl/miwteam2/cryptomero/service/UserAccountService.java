@@ -40,14 +40,18 @@ public class UserAccountService {
 	return rootRepository.findUserAccountById(id);
   }
 
-  public List<UserAccount> getAll() {
-	return userAccountDao.getAll();
+  public UserAccount findByEmail(String email){
+	return rootRepository.findUserAccountByEmail(email);
   }
 
   public UserAccount storeOne(UserAccount userAccount) {
 	userAccountDao.storeOne(userAccount);
 	userAccount.setPassword(hashPassword(userAccount.getPassword()));
 	return userAccount;
+  }
+
+  public List<UserAccount> getAll() {
+	return userAccountDao.getAll();
   }
 
   public UserAccount updateOne(UserAccount userAccount){

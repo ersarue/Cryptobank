@@ -39,6 +39,15 @@ public class UserAccountController implements GenericController<UserAccount> {
 	}
   }
 
+//  @GetMapping("/{email")
+//  public ResponseEntity<> findByEmail(@PathVariable String email){
+//	try {
+//	  return new ResponseEntity<>(userAccountService.findByEmail(email), HttpStatus.OK);
+//	} catch (Exception exception){
+//	  return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+//	}
+//  }
+
   @PostMapping
   public ResponseEntity<?> storeOne(@RequestBody UserAccount userAccount) {
 	try {

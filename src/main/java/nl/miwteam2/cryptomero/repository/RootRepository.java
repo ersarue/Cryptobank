@@ -59,5 +59,9 @@ public class RootRepository {
         return jdbcUserAccountDao.findById(id);
     }
 
+    public UserAccount findUserAccountByEmail(String email){
+        return jdbcUserAccountDao.findByEmail(email);
+    }
+
 
 }
