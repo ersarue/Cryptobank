@@ -6,8 +6,17 @@ import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -143,6 +152,58 @@ public class CustomerService implements GenericService<Customer> {
      */
     private boolean isValidEmail(String email) {
         return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+    }
+
+    /**
+     * Check whether password is part of haveibeenpwned.com password datatset
+     * @param password      The password to be checked
+     * @return              Boolean representing whether this password is breached
+     */
+    private boolean numberOfPasswordBreaches(String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
+
+        MessageDigest msdDigest = MessageDigest.getInstance("SHA-1");
+        msdDigest.update(password.getBytes());
+        byte[] digest = msdDigest.digest();
+        String output = HexFormat.of().formatHex(digest);
+
+        String first5Chars = output.substring(0,5);
+        String minus5FirstChars = output.substring(5,40);
+
+        System.out.println(output);
+        System.out.println(first5Chars);
+        System.out.println(minus5FirstChars);
+
+        String url = String.format("https://api.pwnedpasswords.com/range/%s",first5Chars);
+
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+        HttpClient client = HttpClient.newHttpClient();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        //creates String array
+        String[] arrayOfStr = response.body().split("\n");
+
+        System.out.println("----");
+        System.out.println(arrayOfStr[0]);
+        System.out.println(arrayOfStr[1]);
+        System.out.println(arrayOfStr[2]);
+        System.out.println(arrayOfStr[3]);
+        System.out.println(arrayOfStr[4]);
+        System.out.println(arrayOfStr[5]);
+
+        boolean compare = false;
+
+        System.out.println("----");
+        System.out.println(arrayOfStr[118].substring(0,35).toLowerCase());
+
+        for(String string:arrayOfStr) {
+            if (string.substring(0,35).toLowerCase().equals(minus5FirstChars)){
+                compare = true;
+                System.out.println("breached password");
+            }
+        }
+        System.out.println(compare);
+
+    return compare;
     }
 
     /**
