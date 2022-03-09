@@ -39,7 +39,7 @@ public class UserAccountController implements GenericController<UserAccount> {
 	}
   }
 
-  @GetMapping("/{email")
+  @GetMapping("/{email}")
   public ResponseEntity<?> findByEmail(@PathVariable String email) {
 	try {
 	  return new ResponseEntity<>(userAccountService.findByEmail(email), HttpStatus.OK);

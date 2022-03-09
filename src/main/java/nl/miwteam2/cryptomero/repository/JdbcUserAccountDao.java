@@ -44,7 +44,7 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 
   @Override
   public int storeOne(UserAccount userAccount) {
-	String sql = "INSERT INTO user_account(email, password) VALUES (?,?);";
+	String sql = "INSERT INTO user_account(email, password, salt) VALUES (?,?,?);";
 	KeyHolder keyHolder = new GeneratedKeyHolder();
 	jdbcTemplate.update(new PreparedStatementCreator() {
 	  @Override
@@ -52,6 +52,7 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 		PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		ps.setString(1, userAccount.getEmail());
 		ps.setString(2, userAccount.getPassword());
+		ps.setString(3, userAccount.getSalt());
 		return ps;
 	  }
 	}, keyHolder);
@@ -86,8 +87,8 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	public UserAccount mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
 	  return new UserAccount(resultSet.getInt("id_account"),
 			  resultSet.getString("email"),
-			  resultSet.getString("password"));
+			  resultSet.getString("password"),
+			  resultSet.getString("salt"));
 	}
   }
-
 }
