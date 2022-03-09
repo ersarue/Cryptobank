@@ -16,7 +16,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -214,7 +213,7 @@ public class CustomerService implements GenericService<Customer> {
      */
     private boolean isValidPassword(String password) {
         //TODO eventuele eisen aan wachtwoord hier formuleren
-        return isRepetitive(password);
+        return !isRepetitive(password);
     }
 
     /**
