@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping(value = "/useraccount")
 public class UserAccountController implements GenericController<UserAccount> {
   private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
-  private UserAccountService userAccountService;
+  private final UserAccountService userAccountService;
 
   @Autowired
   public UserAccountController(UserAccountService service) {
@@ -71,10 +71,6 @@ public class UserAccountController implements GenericController<UserAccount> {
 	}
   }
 
-  //  @DeleteMapping("/{id}")
-  //  public void deleteUserAccount(@PathVariable int id) {userAccountService.deleteOne(id);}
-
-  // TODO ResponseEntity geeft error
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteOne(@PathVariable int id) {
 	try {
