@@ -2,6 +2,7 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,7 @@ class CustomerServiceTest {
         customerToStore.setEmail("example@domain.com");
         customerToStore.setPassword("validPassword");
         customerToStore.setAddress(validAddress);
+        Mockito.when(userAccountService.storeOne(customerToStore)).thenReturn(new UserAccount(1, "example@domain.com", "validPassword"));
     }
 
     @Test
