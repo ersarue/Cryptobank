@@ -1,4 +1,5 @@
 CREATE SCHEMA cryptomero;
+
 USE cryptomero;
 
 CREATE TABLE `user_account`
@@ -6,9 +7,9 @@ CREATE TABLE `user_account`
     `id_account` INT          NOT NULL AUTO_INCREMENT,
     `email`      VARCHAR(30)  NOT NULL,
     `password`   VARCHAR(100) NOT NULL,
+    `salt`       VARCHAR(100) NOT NULL,
     PRIMARY KEY (`id_account`)
 );
-
 
 CREATE TABLE `address`
 (
@@ -32,8 +33,6 @@ CREATE TABLE `customer`
     `id_account` INT NOT NULL,
     `id_address` INT NOT NULL,
     PRIMARY KEY(`id_account`),
-    INDEX `verzinNaam1_idx` (`id_account` ASC) VISIBLE,
-    INDEX `verzinNaam2_idx` (`id_address` ASC) VISIBLE,
     CONSTRAINT `verzinNaam1`
     FOREIGN KEY (`id_account`)
     REFERENCES `cryptomero`.`user_account`(`id_account`)
@@ -43,16 +42,14 @@ CREATE TABLE `customer`
     FOREIGN KEY (`id_address`)
     REFERENCES `cryptomero`.`address`(`id_address`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-
+    ON UPDATE NO ACTION);
 
 CREATE TABLE `asset`
 (
     `asset_name` VARCHAR(45) NOT NULL,
     `asset_abbr` VARCHAR(10) NOT NULL,
     PRIMARY KEY(`asset_name`)
-)
-
+);
 
 CREATE TABLE `bank_account`
 (
@@ -60,14 +57,12 @@ CREATE TABLE `bank_account`
     `iban` VARCHAR(18) NOT NULL,
     `balance_eur` DECIMAL(13,4) NOT NULL,
     PRIMARY KEY(`id_account`),
-    INDEX `verzinNaam3_idx`(`id_account` ASC) VISIBLE,
     CONSTRAINT `verzinNaam3`
     FOREIGN KEY(`id_account`)
     REFERENCES `cryptomero`.`customer`(`id_account`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
-)
-
+);
 
 CREATE TABLE `wallet`
 (
@@ -75,8 +70,6 @@ CREATE TABLE `wallet`
     `asset_name` VARCHAR(45) NOT NULL,
     `amount` DECIMAL(13,4) NOT NULL,
     PRIMARY KEY(`id_account`,`asset_name`),
-    INDEX `verzinNaam5_idx`(`asset_name` ASC) VISIBLE,
-    INDEX `verzinNaam4_idx`(`id_account` ASC) VISIBLE,
     CONSTRAINT `verzinNaam4`
     FOREIGN KEY(`id_account`)
     REFERENCES `cryptomero`.`customer`(`id_account`)
@@ -86,8 +79,7 @@ CREATE TABLE `wallet`
     FOREIGN KEY (`asset_name`)
     REFERENCES `cryptomero`.`asset`(`asset_name`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-
+    ON UPDATE NO ACTION);
 
 CREATE TABLE `session`
 (
@@ -95,12 +87,8 @@ CREATE TABLE `session`
     `token` VARCHAR(100) NOT NULL,
     `exp_time` DATETIME NOT NULL,
     PRIMARY KEY(`id_account`),
-    INDEX `verzinNaam6_idx`(`id_account` ASC) VISIBLE,
     CONSTRAINT `verzinNaam6`
     FOREIGN KEY(`id_account`)
     REFERENCES `cryptomero`.`user_account`(`id_account`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
-
-
+    ON UPDATE NO ACTION);

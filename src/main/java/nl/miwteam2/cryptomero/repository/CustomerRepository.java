@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Samuël Geurts & Stijn Klijn
+ */
+
 @Repository
 public class CustomerRepository implements GenericDao<Customer>{
 
