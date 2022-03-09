@@ -112,11 +112,14 @@ public class CustomerService implements GenericService<Customer> {
      * @param customer      The customer to be stored
      * @return              String representing whether all fields are valid or which error occurred.
      */
-    private String checkFieldValidity(Customer customer) {
+    private String checkFieldValidity(Customer customer) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        int numberOfBreaches = numberOfPasswordBreaches(customer.getPassword());
+
         if (!isEveryFieldOfValidLength(customer)) return "Invalid field length";
         if (!isValidEmail(customer.getEmail())) return "Invalid e-mail";
         if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) return "E-mail already in use";
         if (!isValidPassword(customer.getPassword())) return "Invalid password";
+        if (numberOfBreaches!=0) return "Number of password breaches" + numberOfBreaches;
         if (!isValidDob(customer.getDob())) return "Invalid dob";
         if (!isValidBsn(customer.getBsn())) return "Invalid bsn";
         return VALID;
@@ -159,51 +162,50 @@ public class CustomerService implements GenericService<Customer> {
      * @param password      The password to be checked
      * @return              Boolean representing whether this password is breached
      */
-    private boolean numberOfPasswordBreaches(String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
-
+    private int numberOfPasswordBreaches(String password) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        String sha1 = stringToSHa1Hex(password);
+        Map<String,Integer> hashedPasswordlist = getHashedPasswordlist(sha1);
+        if (hashedPasswordlist.containsKey(sha1)){
+            return hashedPasswordlist.get(sha1);
+        } else {
+            return 0;
+        }
+    }
+    /**
+     * turns a String into a Sha-1 hex string
+     * @param string       The string to be hashed (a password in this case)
+     * @return             The hashed string in hex format
+     */
+    private String stringToSHa1Hex(String string) throws NoSuchAlgorithmException {
         MessageDigest msdDigest = MessageDigest.getInstance("SHA-1");
-        msdDigest.update(password.getBytes());
+        msdDigest.update(string.getBytes());
         byte[] digest = msdDigest.digest();
-        String output = HexFormat.of().formatHex(digest);
+        return HexFormat.of().formatHex(digest);
+    }
 
-        String first5Chars = output.substring(0,5);
-        String minus5FirstChars = output.substring(5,40);
-
-        System.out.println(output);
-        System.out.println(first5Chars);
-        System.out.println(minus5FirstChars);
-
-        String url = String.format("https://api.pwnedpasswords.com/range/%s",first5Chars);
-
+    /**
+     * Does a get request at pwnedpasswords.com. The first 5 characters of he hashed password are given within the
+     * request. All known hashcodes with the same first 5 characters are returned in the respons body included the
+     * number of breaches.
+     * @param sha1       The sha-1 string to be checked
+     * @return           A map containing sha-1 Strings as keys and the occurrence number as values;
+     */
+    private Map<String, Integer> getHashedPasswordlist(String sha1) throws IOException, InterruptedException {
+        //performs https request
+        String url = String.format("https://api.pwnedpasswords.com/range/%s", sha1.substring(0, 5));
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        //creates String array
+        //transforms respons-body to map
+        Map<String,Integer> numberOfBreachesPerPassword = new HashMap<>();
         String[] arrayOfStr = response.body().split("\n");
-
-        System.out.println("----");
-        System.out.println(arrayOfStr[0]);
-        System.out.println(arrayOfStr[1]);
-        System.out.println(arrayOfStr[2]);
-        System.out.println(arrayOfStr[3]);
-        System.out.println(arrayOfStr[4]);
-        System.out.println(arrayOfStr[5]);
-
-        boolean compare = false;
-
-        System.out.println("----");
-        System.out.println(arrayOfStr[118].substring(0,35).toLowerCase());
-
-        for(String string:arrayOfStr) {
-            if (string.substring(0,35).toLowerCase().equals(minus5FirstChars)){
-                compare = true;
-                System.out.println("breached password");
-            }
+        for (String string: arrayOfStr) {
+            String sha1part = string.substring(0,string.length()-5);
+            Integer numberOfBreaches = Integer.parseInt(string.substring(string.indexOf(":")+1).replace("\r",""));
+            numberOfBreachesPerPassword.put(sha1.substring(0, 5) + sha1part,numberOfBreaches);
         }
-        System.out.println(compare);
-
-    return compare;
+        return numberOfBreachesPerPassword;
     }
 
     /**
