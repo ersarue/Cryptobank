@@ -51,7 +51,7 @@ public class UserAccountService {
     }
 
     public UserAccount storeOne(UserAccount userAccount) {
-        String salt = saltMaker.getSalt();
+        String salt = saltMaker.generateSalt();
         userAccount.setSalt(salt);
         userAccount.setPassword(hashService.hash(userAccount.getPassword(), salt));
         int idAccount = userAccountDao.storeOne(userAccount);

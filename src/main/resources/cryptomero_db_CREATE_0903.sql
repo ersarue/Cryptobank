@@ -23,8 +23,8 @@ USE `cryptomero` ;
 CREATE TABLE IF NOT EXISTS `cryptomero`.`user_account` (
   `id_account` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(30) UNIQUE NOT NULL,
-  `password` VARCHAR(100) NOT NULL,
-  `salt` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(128) NOT NULL,
+  `salt` VARCHAR(8) NOT NULL,
   PRIMARY KEY (`id_account`))
 ENGINE = InnoDB;
 
