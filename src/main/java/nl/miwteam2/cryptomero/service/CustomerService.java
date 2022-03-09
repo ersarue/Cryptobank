@@ -2,6 +2,7 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,8 @@ public class CustomerService implements GenericService<Customer> {
         if (addressId == 0) throw new Exception("Invalid address");
 
         //Store customer in the database and receive the auto-generated key
-        int userId = userAccountService.storeOne(customer);
-        customer.setIdAccount(userId);
+        UserAccount userAccount = userAccountService.storeOne(customer);
+        customer.setIdAccount(userAccount.getIdAccount());
         customerRepository.storeOne(customer);
 
         //Generate and store new bank account
