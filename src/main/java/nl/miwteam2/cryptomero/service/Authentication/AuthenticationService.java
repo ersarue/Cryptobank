@@ -7,8 +7,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.service.UserAccountService;
-import nl.miwteam2.cryptomero.service.Authentication.HashService;
-import nl.miwteam2.cryptomero.service.authentication.MapDatabase;
 import org.springframework.stereotype.Service;
 
 /**

@@ -2,20 +2,13 @@ package nl.miwteam2.cryptomero.service.Authentication;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import nl.miwteam2.cryptomero.domain.UserAccount;
-import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
-import nl.miwteam2.cryptomero.service.authentication.MapDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author MinkTK
