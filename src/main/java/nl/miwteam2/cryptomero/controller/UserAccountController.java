@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping(value = "/useraccount")
 public class UserAccountController implements GenericController<UserAccount> {
   private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
-  private UserAccountService userAccountService;
+  private final UserAccountService userAccountService;
 
   @Autowired
   public UserAccountController(UserAccountService service) {
@@ -34,7 +34,16 @@ public class UserAccountController implements GenericController<UserAccount> {
   public ResponseEntity<?> findById(@PathVariable int id) {
 	try {
 	  return new ResponseEntity<>(userAccountService.findById(id), HttpStatus.OK);
-	} catch (Exception exception){
+	} catch (Exception exception) {
+	  return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+  }
+
+  @GetMapping("/{email}")
+  public ResponseEntity<?> findByEmail(@PathVariable String email) {
+	try {
+	  return new ResponseEntity<>(userAccountService.findByEmail(email), HttpStatus.OK);
+	} catch (Exception exception) {
 	  return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	}
   }
@@ -63,16 +72,9 @@ public class UserAccountController implements GenericController<UserAccount> {
   }
 
   @DeleteMapping("/{id}")
-    public void deleteUserAccount(@PathVariable int id) {
-  	userAccountService.deleteOne(id);
-    }
-
-	// TODO ResponseEntity geeft error
-//  @DeleteMapping("/{id}")
-  public ResponseEntity<String> deleteOne(@PathVariable int id) {
+  public ResponseEntity<?> deleteOne(@PathVariable int id) {
 	try {
-	  return null;
-//	  return new ResponseEntity<>(userAccountService.deleteOne(id), HttpStatus.OK);
+	  return new ResponseEntity<>(userAccountService.deleteOne(id), HttpStatus.OK);
 	} catch (Exception exception) {
 	  return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	}
