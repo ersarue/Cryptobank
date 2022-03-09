@@ -41,21 +41,26 @@ class JdbcCustomerDaoTest {
 
     @Test
     void storeOne() {
+        //TODO
     }
 
     @Test
     void getAll() {
+        //TODO
     }
 
     @Test
     void updateOne() {
+        //TODO
     }
 
     @Test
     void deleteOne() {
+        //TODO
     }
 
     @Test
     void findAddressIdOfCustomer() {
+        //TODO
     }
 }

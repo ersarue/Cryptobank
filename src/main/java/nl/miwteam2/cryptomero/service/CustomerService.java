@@ -16,7 +16,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -213,8 +212,9 @@ public class CustomerService implements GenericService<Customer> {
      * @return              Boolean representing whether this password meets the requirements
      */
     private boolean isValidPassword(String password) {
-        //TODO eventuele eisen aan wachtwoord hier formuleren
-        return isRepetitive(password);
+        final int MIN_LENGTH = 8;
+        final int MAX_LENGTH = 64;
+        return password.length() >= MIN_LENGTH && password.length() <= MAX_LENGTH && !isRepetitive(password);
     }
 
     /**
@@ -247,7 +247,6 @@ public class CustomerService implements GenericService<Customer> {
      * @return              Boolean representing whether this condition is met
      */
     private boolean isValidBsn(String bsn) {
-        //TODO: Als dit via een externe API kan heeft dat de voorkeur, maar die kan ik vooralsnog niet vinden
         final int MIN_LENGTH = 8;
         final int MAX_LENGTH = 9;
         final int[] FACTORS = {9, 8, 7, 6, 5, 4, 3, 2, -1};
