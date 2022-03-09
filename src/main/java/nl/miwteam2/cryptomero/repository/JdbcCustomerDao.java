@@ -37,9 +37,9 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
     }
 
     @Override
-    public void storeOne(Customer customer) {
+    public int storeOne(Customer customer) {
         String sql = "INSERT INTO customer VALUES (?,?,?,?,?,?,?,?);";
-        jdbcTemplate.update(sql,customer.getFirstName(),customer.getNamePrefix(),customer.getLastName(),
+        return jdbcTemplate.update(sql,customer.getFirstName(),customer.getNamePrefix(),customer.getLastName(),
                 customer.getDob(),customer.getBsn(),customer.getTelephone(), customer.getIdAccount(),
                 customer.getAddress().getIdAddress());
     }
@@ -50,19 +50,19 @@ public class JdbcCustomerDao implements GenericDao<Customer>{
         return jdbcTemplate.query(sql,customerRowMapper, null);
     }
 
-    public void updateOne(Customer customer) {
+    public int updateOne(Customer customer) {
         String sql = "UPDATE customer" +
                 "SET first_name = ?, name_prefix = ?, last_name = ?, dob = ?, bsn = ?, telephone = ?, id_address = ?" +
                 "WHERE id_account = ?;";
 
-        jdbcTemplate.update(sql,customer.getFirstName(),customer.getNamePrefix(),customer.getLastName(),
+        return jdbcTemplate.update(sql,customer.getFirstName(),customer.getNamePrefix(),customer.getLastName(),
                 customer.getDob(),customer.getBsn(),customer.getTelephone(),
                 customer.getAddress().getIdAddress(),customer.getIdAccount());
     }
 
-    public void deleteOne(int id) {
+    public int deleteOne(int id) {
         String sql = "DELETE FROM customer WHERE id_account = ?;";
-        jdbcTemplate.update(sql);
+        return jdbcTemplate.update(sql);
     }
 
     public int findAddressIdOfCustomer(Customer customer) {

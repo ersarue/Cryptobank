@@ -34,10 +34,6 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	logger.info("New JdbcUserAccountDao");
   }
 
-  // handmatig testen
-  //  private void fillUserList() {
-  //	userList.add(new UserAccount(0, "test@test.com", "test"));
-  //  }
 
   @Override
   public UserAccount findById(int id) {
@@ -45,38 +41,46 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	return jdbcTemplate.queryForObject(sql, new JdbcUserAccountDao.UserAccountRowMapper(), id);
   }
 
+//  @Override
+//  public void storeOne(UserAccount userAccount) {
+//	//Omitted because the store method has to return the generated key
+//  }
+
   @Override
-  public void storeOne(UserAccount userAccount) {
-	//Omitted because the store method has to return the generated key
+  public int storeOne(UserAccount userAccount) {
+	String sql = "INSERT INTO user_account(email, password) VALUES (?,?);";
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+	jdbcTemplate.update(new PreparedStatementCreator() {
+	  @Override
+	  public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		ps.setString(1, userAccount.getEmail());
+		ps.setString(2, userAccount.getPassword());
+		return ps;
+	  }
+	}, keyHolder);
+	return keyHolder.getKey().intValue();
   }
 
-  public int storeUserAccount(UserAccount userAccount) {
-      String sql = "INSERT INTO user_account(email, password) VALUES (?,?);";
-
-      KeyHolder keyHolder = new GeneratedKeyHolder();
-
-      jdbcTemplate.update(new PreparedStatementCreator() {
-          @Override
-          public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-              ps.setString(1, userAccount.getEmail());
-              ps.setString(2, userAccount.getPassword());
-              return ps;
-          }
-      }, keyHolder);
-
-      return keyHolder.getKey().intValue();
+  public int updateOne(UserAccount userAccount){
+	String sql = "UPDATE user_account SET email = ?, password = ? WHERE id_account = ?;";
+	return jdbcTemplate.update(sql, userAccount.getEmail(), userAccount.getPassword());
   }
 
-    @Override
+  @Override
   public List<UserAccount> getAll() {
 	String sql = "SELECT * FROM user_account;";
 	return jdbcTemplate.query(sql, new JdbcUserAccountDao.UserAccountRowMapper(), null);
   }
 
+  public int deleteOne(int id){
+	String sql = "DELETE FROM user_account WHERE id_account = ?;";
+	return jdbcTemplate.update(sql, id);
+  }
+
   public boolean isEmailAlreadyInUse(String email) {
-      String sql = "SELECT * FROM user_account WHERE email = ?;";
-      return !jdbcTemplate.query(sql, new UserAccountRowMapper(), email).isEmpty();
+	String sql = "SELECT * FROM user_account WHERE email = ?;";
+	return !jdbcTemplate.query(sql, new UserAccountRowMapper(), email).isEmpty();
   }
 
   private class UserAccountRowMapper implements RowMapper<UserAccount> {

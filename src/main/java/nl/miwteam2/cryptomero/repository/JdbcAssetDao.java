@@ -42,19 +42,25 @@ public class JdbcAssetDao implements GenericDao<Asset> {
     }
 
     @Override
-    public void storeOne(Asset asset) {
+    public int storeOne(Asset asset) {
         String sql = "INSERT INTO asset VALUES(?, ?);";
-        jdbcTemplate.update(sql, asset.getAssetName(), asset.getAssetAbbr());
+        return jdbcTemplate.update(sql, asset.getAssetName(), asset.getAssetAbbr());
     }
 
-    public void updateOne(Asset asset) {
+    public int updateOne(Asset asset) {
         String sql = "UPDATE asset SET asset_abbr = ? WHERE asset_name = ?;";
-        jdbcTemplate.update(sql, asset.getAssetAbbr(), asset.getAssetName());
+        return jdbcTemplate.update(sql, asset.getAssetAbbr(), asset.getAssetName());
     }
 
-    public void deleteOne(String name) {
+    //todo give Asset an id for consistency?
+    @Override
+    public int deleteOne(int id) {
+        return 0;
+    }
+
+    public int deleteOne(String name) {
         String sql = "DELETE FROM asset WHERE asset_name = ?;";
-        jdbcTemplate.update(sql, name);
+        return jdbcTemplate.update(sql, name);
     }
 
     private class AssetRowMapper implements RowMapper<Asset> {

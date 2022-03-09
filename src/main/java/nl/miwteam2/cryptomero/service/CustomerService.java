@@ -2,9 +2,11 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.Map;
 @Service
 public class CustomerService implements GenericService<Customer> {
 
+    private static final String VALID = "Valid";
     private static final double INITIAL_BALANCE = 1000000;
 
     private CustomerRepository customerRepository;
@@ -41,12 +44,9 @@ public class CustomerService implements GenericService<Customer> {
     @Override
     public Customer storeOne(Customer customer) throws Exception {
 
-        //Check whether all fields are valid and throw exception otherwise
-        if (!isEveryFieldOfValidLength(customer)) throw new Exception("Invalid field length");
-        if (!isValidEmail(customer.getEmail())) throw new Exception("Invalid e-mail");
-        if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) throw new Exception("E-mail already in use");
-        if (!isValidPassword(customer.getPassword())) throw new Exception("Invalid password");
-        if (!isValidBsn(customer.getBsn())) throw new Exception("Invalid bsn");
+        //Check whether all fields are valid, otherwise throw exception
+        String validityString = checkFieldValidity(customer);
+        if (!validityString.equals(VALID)) throw new Exception(validityString);
 
         //Attempt to store customer address and throw exception if address is invalid
         int addressId = addressService.storeAddress(customer.getAddress());
@@ -54,8 +54,8 @@ public class CustomerService implements GenericService<Customer> {
         if (addressId == 0) throw new Exception("Invalid address");
 
         //Store customer in the database and receive the auto-generated key
-        int userId = userAccountService.storeOne(customer);
-        customer.setIdAccount(userId);
+        UserAccount userAccount = userAccountService.storeOne(customer);
+        customer.setIdAccount(userAccount.getIdAccount());
         customerRepository.storeOne(customer);
 
         //Generate and store new bank account
@@ -96,6 +96,21 @@ public class CustomerService implements GenericService<Customer> {
     public Customer deleteOne(int id) {
         //Omitted until required
         return null;
+    }
+
+    /**
+     * Check whether all fields are valid
+     * @param customer      The customer to be stored
+     * @return              String representing whether all fields are valid or which error occurred.
+     */
+    private String checkFieldValidity(Customer customer) {
+        if (!isEveryFieldOfValidLength(customer)) return "Invalid field length";
+        if (!isValidEmail(customer.getEmail())) return "Invalid e-mail";
+        if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) return "E-mail already in use";
+        if (!isValidPassword(customer.getPassword())) return "Invalid password";
+        if (!isValidDob(customer.getDob())) return "Invalid dob";
+        if (!isValidBsn(customer.getBsn())) return "Invalid bsn";
+        return VALID;
     }
 
     /**
@@ -141,6 +156,16 @@ public class CustomerService implements GenericService<Customer> {
     }
 
     /**
+     * Check whether date of birth conforms to requirements
+     * @param date          The date of birth to be checked
+     * @return              Boolean representing whether this dob meets the requirements
+     */
+    private boolean isValidDob(LocalDate date) {
+        final int MIN_AGE = 18;
+        return !LocalDate.now().minusYears(MIN_AGE).isBefore(date);
+    }
+
+    /**
      * Check whether bsn conforms to "11-proef"
      * @param bsn           The bsn to be checked
      * @return              Boolean representing whether this condition is met
@@ -151,18 +176,12 @@ public class CustomerService implements GenericService<Customer> {
         final int MAX_LENGTH = 9;
         final int[] FACTORS = {9, 8, 7, 6, 5, 4, 3, 2, -1};
         final int DIVISOR = 11;
-        if (bsn.length() < MIN_LENGTH || bsn.length() > MAX_LENGTH) {
-            //bsn too short or too long
-            return false;
-        }
-        if (!bsn.matches("\\d+")) {
-            //bsn not consisting of only numbers
-            return false;
-        }
-        if (bsn.length() == 8) {
-            //prepend 0 to ensure bsn consists of 9 numbers
-            bsn = "0" + bsn;
-        }
+
+        if (bsn.length() < MIN_LENGTH || bsn.length() > MAX_LENGTH) return false; //bsn too short or too long
+        if (!bsn.matches("\\d+")) return false; //bsn not consisting of only numbers
+
+        if (bsn.length() == 8) bsn = "0" + bsn; //prepend 0 to ensure bsn consists of 9 numbers
+
         //Apply "11-proef"
         int sum = 0;
         for (int i = 0; i < bsn.length(); i++) {
