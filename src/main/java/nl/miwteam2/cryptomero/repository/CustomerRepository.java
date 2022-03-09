@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class CustomerRepository {
+public class CustomerRepository implements GenericDao<Customer>{
 
     private JdbcUserAccountDao jdbcUserAccountDao;
     private JdbcAddressDao jdbcAddressDao;
@@ -57,20 +57,20 @@ public class CustomerRepository {
         return customer;
     }
 
-    public void storeOne(Customer customer) {
-        jdbcCustomerDao.storeOne(customer);
+    public int storeOne(Customer customer) {
+        return jdbcCustomerDao.storeOne(customer);
     }
 
     public List<Customer> getAll() {
         return jdbcCustomerDao.getAll();
     }
 
-    public void updateOne(Customer customer) {
-        jdbcCustomerDao.updateOne(customer);
+    public int updateOne(Customer customer) {
+        return jdbcCustomerDao.updateOne(customer);
     }
 
-    public void deleteOne(int id) {
-        jdbcCustomerDao.deleteOne(id);
+    public int deleteOne(int id) {
+        return jdbcCustomerDao.deleteOne(id);
     }
 
     public int findAddressIdOfCustomer(Customer customer) {

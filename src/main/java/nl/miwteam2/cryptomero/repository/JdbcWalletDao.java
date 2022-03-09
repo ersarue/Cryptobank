@@ -31,13 +31,23 @@ public class JdbcWalletDao implements GenericDao<Map<String, Double>> {
     }
 
     @Override
-    public void storeOne(Map<String, Double> assetDoubleMap) {
-
+    public int storeOne(Map<String, Double> assetDoubleMap) {
+        return 0;
     }
 
     @Override
     public List<Map<String, Double>> getAll() {
         return null;
+    }
+
+    @Override
+    public int updateOne(Map<String, Double> stringDoubleMap) {
+        return 0;
+    }
+
+    @Override
+    public int deleteOne(int id) {
+        return 0;
     }
 
     private class WalletRowMapper implements RowMapper<Object[]> {
