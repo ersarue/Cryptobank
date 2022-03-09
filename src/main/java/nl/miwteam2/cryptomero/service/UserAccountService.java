@@ -59,8 +59,8 @@ public class UserAccountService {
 	return userAccount;
   }
 
-  public void deleteOne(int id) {
-	userAccountDao.deleteOne(id);
+  public int deleteOne(int id) {
+	return userAccountDao.deleteOne(id);
   }
 
   public boolean isEmailAlreadyInUse(String email) {
