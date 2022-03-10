@@ -11,11 +11,13 @@ class AuthenticationServiceTest {
     void setUp() {
     }
 
-    @Test
-    void authenticateLogin() {
-    }
-
-    @Test
-    void authenticateJWT() {
-    }
+//    @Test
+//    void authenticateLogin() {
+//        fail();
+//    }
+//
+//    @Test
+//    void authenticateJWT() {
+//        fail();
+//    }
 }
