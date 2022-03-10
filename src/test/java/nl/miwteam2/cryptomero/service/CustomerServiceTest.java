@@ -2,11 +2,14 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -55,6 +58,7 @@ class CustomerServiceTest {
         customerToStore.setEmail("example@domain.com");
         customerToStore.setPassword("validPassword");
         customerToStore.setAddress(validAddress);
+        Mockito.when(userAccountService.storeOne(customerToStore)).thenReturn(new UserAccount(1, "example@domain.com", "validPassword"));
     }
 
     @Test
@@ -133,5 +137,18 @@ class CustomerServiceTest {
         expected.setIdAccount(1);
         Customer actual = serviceUnderTest.findById(1);
         assertThat(actual).isNotNull().isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"aaaaaaaa", "kdjsfuv444", "jjjaaAnnN", "worstworst", "2BeOrNot2Be", "12345678", "Yo123",
+                            "1212"})
+    void testRepetitivePasswords(String password) {
+        assertThat(serviceUnderTest.isRepetitive(password)).isNotNull().isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "jfiKCidf", "kdjsfuv44", "WachtMot", "hallo", "zomerVakantie12"})
+    void testNonRepetitivePasswords(String password) {
+        assertThat(serviceUnderTest.isRepetitive(password)).isNotNull().isFalse();
     }
 }
