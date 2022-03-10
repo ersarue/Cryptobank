@@ -5,7 +5,7 @@ USE cryptomero;
 CREATE TABLE `user_account`
 (
     `id_account` INT          NOT NULL AUTO_INCREMENT,
-    `email`      VARCHAR(30)  NOT NULL,
+    `email`      VARCHAR(254)  NOT NULL,
     `password`   VARCHAR(100) NOT NULL,
     `salt`       VARCHAR(100) NOT NULL,
     PRIMARY KEY (`id_account`)
