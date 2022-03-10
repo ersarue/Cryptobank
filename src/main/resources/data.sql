@@ -1,5 +1,5 @@
 -- tabel user_account
-INSERT INTO `cryptomero`.`user_account` (`id_account`, `email`, `password`, `salt`) VALUES ('1', 'example@domain.com', '3d9597c957f77b88d78ecc2bedf25acf44acfa591d88559f5c79072eea3fdcb1', '857bb017');
+INSERT INTO `cryptomero`.`user_account` (`id_account`, `email`, `password`, `salt`) VALUES ('1', 'example@domain.com', '99b321944e4a8be84e17f5069a2b21d120b3d185e059db039464a9499cb74c0f', 'cbcd2a4f');
 
 -- tabel adres
 INSERT INTO `cryptomero`.`address` (`id_address`, `street_name`, `house_no`, `house_add`, `postal_code`, `city`) VALUES ('1', 'Street', '100', 'A', '1000AA', 'City');
