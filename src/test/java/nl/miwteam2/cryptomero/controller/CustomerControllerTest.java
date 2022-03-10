@@ -49,7 +49,7 @@ class CustomerControllerTest {
             System.out.println(contents.toString());
             System.out.println("--------------------------------------------^^^-----------------------4");
 
-            assertThat(contents).startsWith("{\"klantnummer\":3").contains("Venendaal").endsWith("}");
+            assertThat(contents).startsWith("{\"idAccount\"").contains("Stijn").endsWith("}");
         } catch (Exception e) {
             System.out.printf("Test mislukt.");
         }
