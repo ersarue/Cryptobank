@@ -5,17 +5,11 @@ import nl.miwteam2.cryptomero.repository.JdbcUserAccountDao;
 import nl.miwteam2.cryptomero.repository.RootRepository;
 import nl.miwteam2.cryptomero.service.Authentication.HashService;
 import nl.miwteam2.cryptomero.service.Authentication.SaltMaker;
-import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 /**
@@ -53,7 +47,7 @@ public class UserAccountService {
     public UserAccount storeOne(UserAccount userAccount) {
         String salt = saltMaker.generateSalt();
         userAccount.setSalt(salt);
-        userAccount.setPassword(hashService.hash(userAccount.getPassword(), salt));
+        userAccount.setPassword(hashService.hashPassword(userAccount.getPassword(), salt));
         int idAccount = userAccountDao.storeOne(userAccount);
         userAccount.setIdAccount(idAccount);
         return userAccount;
