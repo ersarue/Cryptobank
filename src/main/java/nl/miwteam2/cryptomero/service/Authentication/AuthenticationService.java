@@ -33,8 +33,8 @@ public class AuthenticationService {
         // MTK now going twice into database because else cannot handle unknown user/emailadres - todo find cleaner solution
         if (userAccountService.isEmailAlreadyInUse(userAccount.getEmail())) {
             UserAccount userDb = userAccountService.findByEmail(userAccount.getEmail());
-            String dbPasswordHash = hashService.hash(userDb.getPassword(), userDb.getSalt());
-            String inputPasswordHash = hashService.hash(userAccount.getPassword(), userDb.getSalt());
+            String dbPasswordHash = hashService.hashPassword(userDb.getPassword(), userDb.getSalt());
+            String inputPasswordHash = hashService.hashPassword(userAccount.getPassword(), userDb.getSalt());
             System.out.println(dbPasswordHash);
             System.out.println(inputPasswordHash);
             return dbPasswordHash.equals(inputPasswordHash);
