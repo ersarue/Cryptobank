@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
 * Represents a customer address.
 * @author Petra Coenen
-* @version 1.2
+* @version 1.3
 */
 
 public class Address {
@@ -25,8 +25,16 @@ public class Address {
         this.city = city;
     }
 
+    public Address(String streetName, int houseNo, String houseAdd, String postalCode, String city) {
+        this(0, streetName, houseNo, houseAdd, postalCode, city);
+    }
+
     public Address(int idAddress, String streetName, int houseNo, String postalCode, String city) {
         this(idAddress, streetName, houseNo, null, postalCode, city);
+    }
+
+    public Address(String streetName, int houseNo, String postalCode, String city) {
+        this(0, streetName, houseNo, null, postalCode, city);
     }
 
     public Address() { }
