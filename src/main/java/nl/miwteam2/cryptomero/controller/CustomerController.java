@@ -34,6 +34,13 @@ public class CustomerController implements GenericController<Customer>{
         }
     }
 
+//    @PostMapping
+//    public Customer storeOne(@RequestBody Customer customer) throws Exception {
+//
+//        customerService.storeOne(customer);
+//        return customer;
+//    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
         try {
