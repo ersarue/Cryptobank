@@ -1,5 +1,6 @@
 package nl.miwteam2.cryptomero.controller;
 
+import com.auth0.jwt.exceptions.JWTCreationException;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
 import nl.miwteam2.cryptomero.service.Authentication.LoginService;
@@ -36,10 +37,11 @@ public class LoginController {
     // using a POST method for authentication for security reasons
     // token is now returned as a string todo return as header?
     public ResponseEntity<String> loginUser(@RequestBody UserAccount userAccount) {
-        String token = loginService.login(userAccount);
-        if (token != null) {
-            return new ResponseEntity<>(token, HttpStatus.OK);
-        } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        try {
+            return new ResponseEntity<>(loginService.login(userAccount), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     // MTK test methode voor authentication purpose - to be continued
@@ -49,7 +51,6 @@ public class LoginController {
             return new ResponseEntity<>("ingelogd", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("niet ingelogd", HttpStatus.UNAUTHORIZED);
-
         }
     }
 

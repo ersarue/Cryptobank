@@ -45,8 +45,6 @@ public class AuthenticationService {
             UserAccount userDb = userAccountService.findByEmail(userAccount.getEmail());
             String dbPasswordHash = userDb.getPassword();
             String inputPasswordHash = hashService.hash(userAccount.getPassword(), userDb.getSalt());
-            System.out.println(dbPasswordHash);
-            System.out.println(inputPasswordHash);
             return dbPasswordHash.equals(inputPasswordHash);
         }
         else { return false; }
