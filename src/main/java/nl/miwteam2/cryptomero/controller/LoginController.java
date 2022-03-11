@@ -59,10 +59,9 @@ public class LoginController {
 
 
 
-//    // MTK test methode voor authentication purpose - to be continued
+    // MTK test methode for authentication purpose - to be continued
     @GetMapping
-    public ResponseEntity<String> statusLogin(@RequestHeader ("Authorization") String jwt) throws Exception {
-        System.out.println(jwt);
+    public ResponseEntity<String> statusLogin(@RequestHeader ("Authorization") String jwt) {
         if (authenticationService.authenticateToken(jwt)) {
             return new ResponseEntity<>("ingelogd", HttpStatus.OK);
         } else {
