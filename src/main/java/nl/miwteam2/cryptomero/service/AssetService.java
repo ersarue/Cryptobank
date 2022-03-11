@@ -28,20 +28,21 @@ public class AssetService {
     private static final String API_KEY = "cb014412-0aa2-406c-972e-2c8c2841a732";
 
     private JdbcAssetDao jdbcAssetDao;
+    private Map<String, Double> rates;
 
     @Autowired
     public AssetService(JdbcAssetDao jdbcAssetDao) throws IOException, InterruptedException {
         this.jdbcAssetDao = jdbcAssetDao;
-        //TODO dit in de constructor laten of eruit halen?
-        updateAssetRates();
+        this.rates = new HashMap<>();
+        //TODO onderstaande in de constructor laten of eruit halen?
+        updateRates();
     }
 
-    public void updateAssetRates() throws IOException, InterruptedException {
+    public void updateRates() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = createGetRequest(URL);
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(processJsonResponse(response));
-
+        processJsonResponse(response);
     }
 
     public HttpRequest createGetRequest(String url) {
@@ -52,13 +53,15 @@ public class AssetService {
                 .build();
     }
 
-    public Map<String, Double> processJsonResponse(HttpResponse<String> response) throws JsonProcessingException {
-        Map<String, Double> rates = new HashMap<>();
+    public void processJsonResponse(HttpResponse<String> response) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(response.body()).path("data");
         for (JsonNode coin : data) {
             rates.put(coin.get("name").toString(), coin.path("quote").path("EUR").get("price").doubleValue());
         }
+    }
+
+    public Map<String, Double> getRates() {
         return rates;
     }
 
