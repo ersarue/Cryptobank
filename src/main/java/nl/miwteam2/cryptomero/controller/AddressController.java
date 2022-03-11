@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @author Petra Coenen
- * @version 1.4
+ * @version 1.5
  */
 
 @RestController
@@ -35,11 +35,11 @@ public class AddressController {
     public ResponseEntity<String> storeAddress(@RequestBody Address address) {
         int storeStatus = addressService.storeAddress(address);
         if (storeStatus == 0) {
-            return new ResponseEntity<String>("Geen bestaand adres in Nederland", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Geen bestaand adres in Nederland", HttpStatus.BAD_REQUEST);
         } else if (storeStatus == -1) {
             List<String> missingDataList = addressService.checkRequiredFields(address);
-            return new ResponseEntity<String>("De volgende velden missen: " + String.join(", ",missingDataList), HttpStatus.BAD_REQUEST);
-        } else return new ResponseEntity<String>("Adres opgeslagen", HttpStatus.CREATED);
+            return new ResponseEntity<>("De volgende velden missen: " + String.join(", ", missingDataList), HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>("Adres opgeslagen", HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

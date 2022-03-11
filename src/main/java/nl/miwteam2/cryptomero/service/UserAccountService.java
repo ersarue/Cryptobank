@@ -1,9 +1,10 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.UserAccount;
-import nl.miwteam2.cryptomero.repository.GenericDao;
 import nl.miwteam2.cryptomero.repository.JdbcUserAccountDao;
 import nl.miwteam2.cryptomero.repository.RootRepository;
+import nl.miwteam2.cryptomero.service.Authentication.HashService;
+import nl.miwteam2.cryptomero.service.Authentication.SaltMaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,34 +20,53 @@ import java.util.List;
 
 @Service
 public class UserAccountService {
-  private static final Logger logger = LoggerFactory.getLogger(UserAccountService.class);
-  //  private JdbcUserAccountDao jdbcUserAccountDao;
-  private RootRepository rootRepository;
-  private JdbcUserAccountDao userAccountDao;
+    private static final Logger logger = LoggerFactory.getLogger(UserAccountService.class);
+    private HashService hashService;
+    private SaltMaker saltMaker;
+    private RootRepository rootRepository;
+    private JdbcUserAccountDao userAccountDao;
 
-  @Autowired
-  public UserAccountService(RootRepository repository, JdbcUserAccountDao dao) {
-	super();
-	rootRepository = repository;
-	userAccountDao = dao;
-	//	jdbcUserAccountDao = dao;
-	logger.info("New UserAccountService");
-  }
+    @Autowired
+    public UserAccountService(HashService hash, SaltMaker salt, RootRepository repository, JdbcUserAccountDao dao) {
+        super();
+        hashService = hash;
+        saltMaker = salt;
+        rootRepository = repository;
+        userAccountDao = dao;
+        logger.info("New UserAccountService");
+    }
 
-  public UserAccount findById(int id) {
-	return rootRepository.findUserAccountById(id);
-  }
+    public UserAccount findById(int id) {
+        return rootRepository.findUserAccountById(id);
+    }
 
-  public List<UserAccount> getUserAccounts() {
-	return userAccountDao.getAll();
-  }
+    public UserAccount findByEmail(String email) {
+        return rootRepository.findUserAccountByEmail(email);
+    }
 
-  public int storeOne(UserAccount userAccount) {
-	return userAccountDao.storeUserAccount(userAccount);
-  }
+    public UserAccount storeOne(UserAccount userAccount) {
+        String salt = saltMaker.generateSalt();
+        userAccount.setSalt(salt);
+        userAccount.setPassword(hashService.hashPassword(userAccount.getPassword(), salt));
+        int idAccount = userAccountDao.storeOne(userAccount);
+        userAccount.setIdAccount(idAccount);
+        return userAccount;
+    }
 
-  public boolean isEmailAlreadyInUse(String email) {
-      return userAccountDao.isEmailAlreadyInUse(email);
-  }
+    public List<UserAccount> getAll() {
+        return userAccountDao.getAll();
+    }
 
+    public UserAccount updateOne(UserAccount userAccount) {
+        userAccountDao.updateOne((userAccount));
+        return userAccount;
+    }
+
+    public int deleteOne(int id) {
+        return userAccountDao.deleteOne(id);
+    }
+
+    public boolean isEmailAlreadyInUse(String email) {
+        return userAccountDao.isEmailAlreadyInUse(email);
+    }
 }

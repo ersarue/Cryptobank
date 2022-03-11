@@ -50,9 +50,9 @@ public class JdbcBankAccountDao implements GenericDao<BankAccount> {
     }
 
     @Override
-    public void storeOne(BankAccount bankAccount) {
+    public int storeOne(BankAccount bankAccount) {
         String sql = "INSERT INTO bank_account(id_account, iban, balance_eur) VALUES (?,?,?);";
-        jdbcTemplate.update(sql,bankAccount.getUserAccount().getIdAccount(),bankAccount.getIban(),
+        return jdbcTemplate.update(sql,bankAccount.getUserAccount().getIdAccount(),bankAccount.getIban(),
                 bankAccount.getBalanceEur());
     }
     public int updateOne(BankAccount bankAccount) {

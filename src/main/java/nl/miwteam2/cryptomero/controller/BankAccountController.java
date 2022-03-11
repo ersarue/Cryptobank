@@ -28,29 +28,43 @@ public class BankAccountController {
         this.bankAccountService=bankAccountService;
     }
     @GetMapping// http://localhost:8080/bankaccount
-    public List<BankAccount> showAccounts(){
-        return bankAccountService.getAllAccounts();
+    public List<BankAccount> getAll(){
+        return bankAccountService.getAll();
     }
 
     @GetMapping("{id}") // http://localhost:8080/bankaccount/1
-        public ResponseEntity<String> findBankaccountById(@PathVariable int id) {
-        BankAccount bankAccountById = bankAccountService.findById(id);
-        if (bankAccountById != null){
-            return new ResponseEntity<>("dit bankaccount bestaat", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("bankaccount met deze id niet gevonden", HttpStatus.NOT_FOUND);
+        public ResponseEntity<?> findById(@PathVariable int id) {
+        try {
+            return new ResponseEntity<>(bankAccountService.findById(id), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping()// http://localhost:8080/bankaccount
-    public void storeOne(@RequestBody BankAccount bankAccount) {
-        bankAccountService.storeOne(bankAccount);
+    public ResponseEntity<?> storeOne(@RequestBody BankAccount bankAccount) {
+        try {
+            return new ResponseEntity<>(bankAccountService.storeOne(bankAccount), HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping// http://localhost:8080/bankaccount
+    public ResponseEntity<?> updateOne(@RequestBody BankAccount bankAccount) {
+        try {
+            return new ResponseEntity<>(bankAccountService.updateOne(bankAccount), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PutMapping// http://localhost:8080/bankaccount
-    public void updateBankAccount(@RequestBody BankAccount bankAccount) { bankAccountService.updateBankAccount(bankAccount); }
-
     @DeleteMapping("/{id}")// http://localhost:8080/bankaccount/1
-    public void deleteOne(@PathVariable int id) {
-        bankAccountService.deleteOne(id);
+    public ResponseEntity<?> deleteOne(@PathVariable int id) {
+        try {
+            return new ResponseEntity<>(bankAccountService.deleteOne(id),HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

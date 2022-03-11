@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
-public class CustomerController {
+public class CustomerController implements GenericController<Customer>{
 
     private CustomerService customerService;
 
@@ -25,14 +25,21 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> storeCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
         try {
-            return new ResponseEntity<>(customerService.storeCustomer(customer), HttpStatus.CREATED);
+            return new ResponseEntity<>(customerService.storeOne(customer), HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PostMapping
+//    public Customer storeOne(@RequestBody Customer customer) throws Exception {
+//
+//        customerService.storeOne(customer);
+//        return customer;
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
@@ -50,14 +57,14 @@ public class CustomerController {
     }
 
     @PutMapping
-    public int updateOne(@RequestBody Customer customer){
+    public ResponseEntity<?> updateOne(@RequestBody Customer customer){
         //Omitted until required
-        return 0;
+        return null;
     }
 
     @DeleteMapping
-    public int deleteOne(@RequestBody Customer customer) {
+    public ResponseEntity<?> deleteOne(@RequestBody int id) {
         //Omitted until required
-        return 0;
+        return null;
     }
 }

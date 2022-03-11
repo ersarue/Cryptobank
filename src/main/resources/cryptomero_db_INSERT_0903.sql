@@ -2,10 +2,7 @@
 INSERT INTO `cryptomero`.`user_account` (`id_account`, `email`, `password`, `salt`) VALUES ('1', 'example@domain.com', '99b321944e4a8be84e17f5069a2b21d120b3d185e059db039464a9499cb74c0f', 'cbcd2a4f');
 
 -- tabel adres
-INSERT INTO `cryptomero`.`address` (`id_address`, `street_name`, `house_no`, `house_add`, `postal_code`, `city`)
-VALUES  ('1', 'Street', '100', 'A', '1000AA', 'City'),
-        ('2', 'Street', '99', 'D', '1000CC', 'Duckstad');
-
+INSERT INTO `cryptomero`.`address` (`id_address`, `street_name`, `house_no`, `house_add`, `postal_code`, `city`) VALUES ('1', 'Street', '100', 'A', '1000AA', 'City');
 
 -- tabel customer
 INSERT INTO `cryptomero`.`customer` (`first_name`, `name_prefix`, `last_name`, `dob`, `bsn`, `telephone`, `id_account`, `id_address`) VALUES ('firstName', 'namePrefix', 'lastName', '2000-01-01', '182358197', '0612345678', '1', '1');

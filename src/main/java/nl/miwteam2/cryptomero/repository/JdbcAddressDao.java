@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -18,11 +17,11 @@ import java.util.Objects;
 
 /**
  * @author Petra Coenen
- * @version 1.2
+ * @version 1.3
  */
 
 @Repository
-public class JdbcAddressDao {
+public class JdbcAddressDao implements GenericDao<Address> {
 
     private final Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
 
@@ -37,17 +36,14 @@ public class JdbcAddressDao {
         String sql = "INSERT INTO address(street_name, house_no, house_add, postal_code, city)" +
                 "VALUES (?,?,?,?,?); ";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, address.getStreetName());
-                ps.setInt(2, address.getHouseNo());
-                ps.setString(3, address.getHouseAdd());
-                ps.setString(4, address.getPostalCode());
-                ps.setString(5, address.getCity());
-                return ps;
-            }
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, address.getStreetName());
+            ps.setInt(2, address.getHouseNo());
+            ps.setString(3, address.getHouseAdd());
+            ps.setString(4, address.getPostalCode());
+            ps.setString(5, address.getCity());
+            return ps;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }

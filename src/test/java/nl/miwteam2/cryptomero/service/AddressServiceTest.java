@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Contains unit tests for methods in the AddressService class.
  * @author Petra Coenen
- * @version 1.2
+ * @version 1.3
  */
 
 class AddressServiceTest {
@@ -28,6 +28,7 @@ class AddressServiceTest {
     private JdbcAddressDao daoMock = Mockito.mock(JdbcAddressDao.class);
 
     private Address addressZutphen = new Address(14, "Kerklaan", 3, "A", "1234AB", "Zutphen");
+    private Address addressHaarlem = new Address(4, "Schachgelstraat", 5, "ZW", "3898CJ", "Haarlem");
     private Address addressTiel = new Address(6, "Mareplein", 45, "3489DH", "Tiel");
     private List<Address> allAddresses = new ArrayList<>();
 
@@ -66,13 +67,59 @@ class AddressServiceTest {
     }
 
     @Test
+    void testCheckRequiredFields() {
+        // Test address that has values for all required fields
+        List<String> expected = new ArrayList<>();
+        List<String> actual = serviceUnderTest.checkRequiredFields(addressTiel);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+
+        // Test address with one empty required field (street name)
+        Address addressDordrecht = new Address(null, 39, "4834HD", "Dordrecht");
+        expected = new ArrayList<>();
+        Collections.addAll(expected, "straatnaam");
+        actual = serviceUnderTest.checkRequiredFields(addressDordrecht);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+
+        // Test address with two empty required fields (street name and city)
+        Address addressCoenplein = new Address("Coenplein", 2, null, null);
+        expected = new ArrayList<>();
+        Collections.addAll(expected, "postcode", "woonplaats");
+        actual = serviceUnderTest.checkRequiredFields(addressCoenplein);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+
+        // Test address with all required fields empty
+        Address emptyAddress = new Address(null, 0, null, null);
+        expected = new ArrayList<>();
+        Collections.addAll(expected, "straatnaam", "huisnummer", "postcode", "woonplaats");
+        actual = serviceUnderTest.checkRequiredFields(emptyAddress);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
     void testCheckForUniqueAddress() {
-        Address address1 = new Address(14, "Kerklaan", 3, "A", "1234AB", "Zutphen");
-        Address address2 = new Address(6, "Mareplein", 45, "3489DH", "Tiel");
-        Address address3 = new Address(3, "Dorpsstraat", 7, "3759JF", "Doorn");
-        assertThat(serviceUnderTest.checkForUniqueAddress(address1)).isNotNull().isEqualTo(14);
-        assertThat(serviceUnderTest.checkForUniqueAddress(address2)).isNotNull().isEqualTo(6);
-        assertThat(serviceUnderTest.checkForUniqueAddress(address3)).isNotNull().isEqualTo(-2);
+        Address addressZutphen = new Address(14, "Kerklaan", 3, "A", "1234AB", "Zutphen");
+        Address addressTiel = new Address(6, "Mareplein", 45, "3489DH", "Tiel");
+        Address addressDoorn = new Address(3, "Dorpsstraat", 7, "3759JF", "Doorn");
+        // Test addresses that already exist in the database (= not unique)
+        assertThat(serviceUnderTest.checkForUniqueAddress(addressZutphen)).isNotNull().isEqualTo(14);
+        assertThat(serviceUnderTest.checkForUniqueAddress(addressTiel)).isNotNull().isEqualTo(6);
+        // Test address that does not yet exist in the database (= unique)
+        assertThat(serviceUnderTest.checkForUniqueAddress(addressDoorn)).isNotNull().isEqualTo(-2);
+    }
+
+    @Test
+    void testGetHouseString() {
+        String expected = "3A";
+        String actual = serviceUnderTest.getHouseString(addressZutphen);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+
+        expected = "5ZW";
+        actual = serviceUnderTest.getHouseString(addressHaarlem);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+
+        expected = "45";
+        actual = serviceUnderTest.getHouseString(addressTiel);
+        assertThat(actual).isNotNull().isEqualTo(expected);
     }
 
     @DisplayName("testValidPostalCodeFormats")
