@@ -10,17 +10,10 @@ public class Asset {
 
      private String assetName;
      private String assetAbbr;
-     private double rate;
 
      public Asset(String assetName, String assetAbbr) {
           this.assetName = assetName;
           this.assetAbbr = assetAbbr;
-          this.rate = getCurrentRate();
-     }
-
-     private double getCurrentRate() {
-          //TODO implementeren
-          return 0.0;
      }
 
      public String getAssetName() {
@@ -37,11 +30,6 @@ public class Asset {
 
      public void setAssetAbbr(String assetAbbr) {
           this.assetAbbr = assetAbbr;
-     }
-
-     public double getRate() {
-          this.rate = getCurrentRate();
-          return rate;
      }
 
      @Override
