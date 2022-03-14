@@ -3,7 +3,10 @@ package nl.miwteam2.cryptomero.service.Authentication;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
+import nl.miwteam2.cryptomero.service.CustomerService;
+import nl.miwteam2.cryptomero.service.UserAccountService;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,7 @@ import java.util.Date;
 
 /**
  * @author MinkTK
- * @version 1.2
+ * @version 1.3
  */
 
 @Service
@@ -22,11 +25,15 @@ public class LoginService {
     private static final long SESSION_LENGTH = 600000;                  // max Session Length is now set to 10 minutes
     private final AuthenticationService authenticationService;
     private final SecretService secretService;
+    private final CustomerService customerService;
+    private final UserAccountService userAccountService;
 
     @Autowired
-    public LoginService(AuthenticationService authenticationService, SecretService secretService) {
+    public LoginService(AuthenticationService authenticationService, SecretService secretService, CustomerService customerService, UserAccountService userAccountService) {
         this.authenticationService = authenticationService;
         this.secretService = secretService;
+        this.customerService = customerService;
+        this.userAccountService = userAccountService;
     }
 
 //    MTK: Cryptomero decided to implement a JSON Web Token (JWT) as an access token to minimize connection to the database.
@@ -87,5 +94,9 @@ public class LoginService {
         jwtBuilder.withIssuer("auth0");
         jwtBuilder.withClaim("exp", setExpiryDate());
         return jwtBuilder.sign(algorithm);
+    }
+
+    public Customer getAuthenticatedCustomer(String userName) {
+        return customerService.findById(userAccountService.findByEmail(userName).getIdAccount());
     }
 }
