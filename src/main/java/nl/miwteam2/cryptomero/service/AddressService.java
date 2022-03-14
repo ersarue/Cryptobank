@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * @author Petra Coenen
- * @version 1.8
+ * @version 1.9
  */
 
 @Service
@@ -65,7 +65,7 @@ public class AddressService {
     /**
     * Retrieves a customer address from the database.
     * @param  id    Id value of the address to be retrieved from the database.
-    * @return       ...
+    * @return       The address with the corresponding id value, if exists. Null if no such address exists in the database.
     */
     public Address getAddressById(int id) {
         return jdbcAddressDao.findById(id);

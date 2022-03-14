@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 @Service
 public class CustomerService implements GenericService<Customer> {
 
-    private static final String VALID = "Valid";
     private static final double INITIAL_BALANCE = 1000000;
 
     private CustomerRepository customerRepository;
@@ -52,13 +51,16 @@ public class CustomerService implements GenericService<Customer> {
     public Customer storeOne(Customer customer) throws Exception {
 
         //Check whether all fields are valid, otherwise throw exception
-        String validityString = checkFieldValidity(customer);
-        if (!validityString.equals(VALID)) throw new Exception(validityString);
+        List<String> errors = checkFieldValidity(customer);
+        if (!errors.isEmpty()) throw new Exception(String.join("\n", errors));
 
         //Attempt to store customer address and throw exception if address is invalid
         int addressId = addressService.storeAddress(customer.getAddress());
         customer.getAddress().setIdAddress(addressId);
-        if (addressId == 0) throw new Exception("Invalid address");
+        if (addressId == 0) {
+            errors.add("Invalid address");
+            throw new Exception(String.join("\n", errors));
+        }
 
         //Store customer in the database and receive the auto-generated key
         UserAccount userAccount = userAccountService.storeOne(customer);
@@ -108,27 +110,48 @@ public class CustomerService implements GenericService<Customer> {
     /**
      * Check whether all fields are valid
      * @param customer      The customer to be stored
-     * @return              String representing whether all fields are valid or which error occurred.
+     * @return              String representing whether all fields are valid or which errors occurred.
      */
-    private String checkFieldValidity(Customer customer) throws NoSuchAlgorithmException, IOException, InterruptedException {
+    private List<String> checkFieldValidity(Customer customer) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        List<String> errors = new ArrayList<>();
+        List<String> missingFields = checkMissingFields(customer);
+        List<String> overflowingFields = checkOverflowingFields(customer);
         int numberOfBreaches = numberOfPasswordBreaches(customer.getPassword());
 
-        if (!isEveryFieldOfValidLength(customer)) return "Invalid field length";
-        if (!isValidEmail(customer.getEmail())) return "Invalid e-mail";
-        if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) return "E-mail already in use";
-        if (!isValidPassword(customer.getPassword())) return "Invalid password";
-        if (numberOfBreaches!=0) return "This password has been seen " + numberOfBreaches + " times before";
-        if (!isValidDob(customer.getDob())) return "Invalid dob";
-        if (!isValidBsn(customer.getBsn())) return "Invalid bsn";
-        return VALID;
+        if (!missingFields.isEmpty()) errors.add("Missing fields: " + String.join(", ", missingFields));
+        if (!overflowingFields.isEmpty()) errors.add("Overflowing fields: " + String.join(", ", overflowingFields));
+        if (!isValidEmail(customer.getEmail())) errors.add("Invalid e-mail");
+        if (userAccountService.isEmailAlreadyInUse(customer.getEmail())) errors.add("E-mail already in use");
+        if (!isValidPassword(customer.getPassword())) errors.add("Invalid password");
+        if (numberOfBreaches!=0) errors.add("This password has been seen " + numberOfBreaches + " times before");
+        if (!isValidDob(customer.getDob())) errors.add("Invalid date of birth (customer too young)");
+        if (!isValidBsn(customer.getBsn())) errors.add("Invalid bsn");
+        return errors;
     }
 
     /**
-     * Check whether all required fields are not null and are not empty strings, and no fields are too long
+     * Check whether all required fields are not null and are not empty strings
      * @param customer      The customer to be stored
-     * @return              Boolean representing whether this condition is met
+     * @return              List with the fields that are missing
      */
-    private boolean isEveryFieldOfValidLength(Customer customer) {
+    private List<String> checkMissingFields(Customer customer) {
+        List<String> missingFields = new ArrayList<>();
+        if (customer.getEmail().isEmpty()) missingFields.add("e-mail");
+        if (customer.getPassword().isEmpty()) missingFields.add("password");
+        if (customer.getFirstName().isEmpty()) missingFields.add("first name");
+        if (customer.getLastName().isEmpty()) missingFields.add("last name");
+        if (customer.getDob() == null) missingFields.add("date of birth");
+        if (customer.getTelephone().isEmpty()) missingFields.add("telephone");
+        if (customer.getAddress() == null) missingFields.add("address");
+        return missingFields;
+    }
+
+    /**
+     * Check whether no fields are overflowing
+     * @param customer      The customer to be stored
+     * @return              List with the fields that are overflowing
+     */
+    private List<String> checkOverflowingFields(Customer customer) {
         final int MAX_LENGTH_EMAIL = 30;
         final int MAX_LENGTH_PASSWORD = 64;
         final int MAX_LENGTH_FIRST_NAME = 45;
@@ -136,14 +159,14 @@ public class CustomerService implements GenericService<Customer> {
         final int MAX_LENGTH_LAST_NAME = 45;
         final int MAX_LENGTH_TELEPHONE = 30;
 
-        return customer.getEmail().length() > 0 && customer.getEmail().length() <= MAX_LENGTH_EMAIL &&
-                customer.getPassword().length() > 0 && customer.getPassword().length() <= MAX_LENGTH_PASSWORD &&
-                customer.getFirstName().length() > 0 &&  customer.getFirstName().length() <= MAX_LENGTH_FIRST_NAME &&
-                (customer.getNamePrefix() == null || customer.getNamePrefix().length() < MAX_LENGTH_NAME_PREFIX) &&
-                customer.getLastName().length() > 0 && customer.getLastName().length() <= MAX_LENGTH_LAST_NAME &&
-                customer.getDob() != null &&
-                customer.getTelephone().length() > 0 && customer.getTelephone().length() <= MAX_LENGTH_TELEPHONE &&
-                customer.getAddress() != null;
+        List<String> overflowingFields = new ArrayList<>();
+        if (customer.getEmail().length() > MAX_LENGTH_EMAIL) overflowingFields.add("e-mail");
+        if (customer.getPassword().length() > MAX_LENGTH_PASSWORD) overflowingFields.add("password");
+        if (customer.getFirstName().length() > MAX_LENGTH_FIRST_NAME) overflowingFields.add("first name");
+        if (customer.getNamePrefix().length() > MAX_LENGTH_NAME_PREFIX) overflowingFields.add("name prefix");
+        if (customer.getLastName().length() > MAX_LENGTH_LAST_NAME) overflowingFields.add("last name");
+        if (customer.getTelephone().length() > MAX_LENGTH_TELEPHONE) overflowingFields.add("telephone");
+        return overflowingFields;
     }
 
     /**

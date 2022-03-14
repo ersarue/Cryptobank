@@ -85,7 +85,7 @@ class CustomerServiceTest {
             exception = e;
         }
         assertThat(exception).isNotNull();
-        assertThat(exception.getMessage()).isEqualTo("Invalid field length");
+        assertThat(exception.getMessage()).isEqualTo("Missing fields: first name");
     }
 
     @Test
@@ -114,7 +114,7 @@ class CustomerServiceTest {
             exception = e;
         }
         assertThat(exception).isNotNull();
-        assertThat(exception.getMessage()).isEqualTo("Invalid dob");
+        assertThat(exception.getMessage()).isEqualTo("Invalid date of birth (customer too young)");
     }
 
     @Test
