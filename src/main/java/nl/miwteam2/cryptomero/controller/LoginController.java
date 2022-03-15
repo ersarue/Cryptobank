@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/users")
 public class LoginController {
 
     private final LoginService loginService;
@@ -49,7 +48,7 @@ public class LoginController {
     }
 
 //    MTK: ROUTE with credentials in REQUEST BODY
-    @PostMapping("/authenticate")
+    @PostMapping("/users/authenticate")
     public ResponseEntity<?> login(@RequestBody UserAccount userAccount) {
         logger.info("new login with body attempt");
         try {
