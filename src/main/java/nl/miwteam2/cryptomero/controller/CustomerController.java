@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/users")
 public class CustomerController implements GenericController<Customer>{
 
     private CustomerService customerService;
@@ -24,7 +24,7 @@ public class CustomerController implements GenericController<Customer>{
         this.customerService = service;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
         try {
             return new ResponseEntity<>(customerService.storeOne(customer), HttpStatus.CREATED);
