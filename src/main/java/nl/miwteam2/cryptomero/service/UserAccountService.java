@@ -45,9 +45,7 @@ public class UserAccountService {
     }
 
     public UserAccount storeOne(UserAccount userAccount) {
-        String salt = saltMaker.generateSalt();
-        userAccount.setSalt(salt);
-        userAccount.setPassword(hashService.hashPassword(userAccount.getPassword(), salt));
+        getPasswordHashed(userAccount);
         int idAccount = userAccountDao.storeOne(userAccount);
         userAccount.setIdAccount(idAccount);
         return userAccount;
@@ -58,6 +56,7 @@ public class UserAccountService {
     }
 
     public UserAccount updateOne(UserAccount userAccount) {
+        getPasswordHashed(userAccount);
         userAccountDao.updateOne((userAccount));
         return userAccount;
     }
@@ -68,5 +67,11 @@ public class UserAccountService {
 
     public boolean isEmailAlreadyInUse(String email) {
         return userAccountDao.isEmailAlreadyInUse(email);
+    }
+
+    public void getPasswordHashed(UserAccount userAccount){
+        String salt = saltMaker.generateSalt();
+        userAccount.setSalt(salt);
+        userAccount.setPassword(hashService.hashPassword(userAccount.getPassword(), salt));
     }
 }
