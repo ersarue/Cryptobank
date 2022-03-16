@@ -38,7 +38,7 @@ const sendLoginRequest = async (emailInput, passwordInput) => {
     try {
         const response = await fetch(`http://localhost:8080/users/authenticate`, config);
         const result = await response.json();
-        // console.log(result);
+        console.log(result);
     } catch (e) {
         console.log(e);
         // Empty the form fields
