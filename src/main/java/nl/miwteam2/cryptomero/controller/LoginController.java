@@ -1,6 +1,6 @@
 package nl.miwteam2.cryptomero.controller;
 
-import nl.miwteam2.cryptomero.domain.Customer;
+import com.google.gson.Gson;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
 import nl.miwteam2.cryptomero.service.Authentication.LoginService;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author MinkTK
- * @version 1.3
+ * @version 1.4
  */
 
 @CrossOrigin
@@ -26,6 +26,7 @@ public class LoginController {
     private final LoginService loginService;
     private final AuthenticationService authenticationService;
     private final CustomerService customerService;
+    private final Gson gson = new Gson();
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -49,21 +50,17 @@ public class LoginController {
         }
     }
 
-//    MTK: ROUTE with credentials in REQUEST BODY
+    // ROUTE with token in RESPONSE BODY
     @PostMapping("/authenticate")
     public ResponseEntity<?> login(@RequestBody UserAccount userAccount) {
-        logger.info("new login with body attempt");
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("accessToken", loginService.login(userAccount));
-            Customer currentCustomer = loginService.getAuthenticatedCustomer(userAccount.getEmail());
-            return new ResponseEntity<>(currentCustomer, headers, HttpStatus.OK);
+            String token = loginService.login(userAccount);
+            return new ResponseEntity<>(gson.toJson(token), headers, HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(gson.toJson(exception.getMessage()), HttpStatus.UNAUTHORIZED);
         }
     }
-
-
 
     // MTK test methode for authentication purpose - to be continued
     @GetMapping
@@ -74,5 +71,4 @@ public class LoginController {
             return new ResponseEntity<>("niet ingelogd", HttpStatus.UNAUTHORIZED);
         }
     }
-
 }
