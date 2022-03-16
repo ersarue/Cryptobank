@@ -33,6 +33,17 @@ public class LoginController {
         this.authenticationService = authenticationService;
     }
 
+//  PC: ROUTE according Acceptance Criteria
+    @PostMapping("/users/authenticate")
+    public ResponseEntity<?> login(@RequestBody UserAccount userAccount) {
+        try {
+            String token = loginService.login(userAccount);
+            return new ResponseEntity<>(gson.toJson(token), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(gson.toJson(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 //  MTK: ROUTE according Acceptance Criteria - return token in header
     @PostMapping("/users/headerAuthentication")
     public ResponseEntity<?> loginHeader(@RequestBody UserAccount userAccount) {
@@ -47,15 +58,19 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> login(@RequestBody UserAccount userAccount) {
+//  MTK: ROUTE with credentials in AUTHORIZATION HEADER (basic authentication)
+    @GetMapping("/users/basicAuthentication")
+    public ResponseEntity<String> login(@RequestHeader ("Authorization") String credentials) throws Exception {
+        logger.info("new login Basic Authentication attempt");
         try {
-            String token = loginService.login(userAccount);
-            return new ResponseEntity<>(gson.toJson(token), HttpStatus.OK);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", loginService.login(credentials));
+            return new ResponseEntity<>("Login Succesful", headers, HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>(gson.toJson(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
+
 
 //  MTK: TEST methode for frontend - to be continued
     @GetMapping("/users/loginStatus")

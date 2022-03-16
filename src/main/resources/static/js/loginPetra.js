@@ -36,7 +36,7 @@ const login = async (emailInput, passwordInput) => {
         body: JSON.stringify(loginObject)
     }
     try {
-        const response = await fetch(`http://localhost:8080/authenticate`, config);
+        const response = await fetch(`http://localhost:8080/users/authenticate`, config);
         const result = response.json()
             .then(result => {
                 if (response.status === 200) {
