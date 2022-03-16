@@ -1,5 +1,6 @@
 package nl.miwteam2.cryptomero.controller;
 
+import com.google.gson.Gson;
 import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.service.AddressService;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import java.util.List;
 public class AddressController {
 
     private final AddressService addressService;
+    private final Gson gson = new Gson();
 
     private final Logger logger = LoggerFactory.getLogger(AddressController.class);
 
@@ -35,11 +37,11 @@ public class AddressController {
     public ResponseEntity<String> storeAddress(@RequestBody Address address) {
         int storeStatus = addressService.storeAddress(address);
         if (storeStatus == 0) {
-            return new ResponseEntity<>("Geen bestaand adres in Nederland", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(gson.toJson("Geen bestaand adres in Nederland"), HttpStatus.BAD_REQUEST);
         } else if (storeStatus == -1) {
             List<String> missingDataList = addressService.checkRequiredFields(address);
-            return new ResponseEntity<>("De volgende velden missen: " + String.join(", ", missingDataList), HttpStatus.BAD_REQUEST);
-        } else return new ResponseEntity<>("Adres opgeslagen", HttpStatus.CREATED);
+            return new ResponseEntity<>(gson.toJson("De volgende velden missen: " + String.join(", ", missingDataList)), HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>(gson.toJson("Adres opgeslagen"), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -58,15 +60,15 @@ public class AddressController {
         // TODO: PathVariable juist verwerken (PutMapping kan niet zonder)
         int updateStatus = addressService.updateAddress(address);
         if (updateStatus == 1) {
-            return new ResponseEntity<>("Adres is bijgewerkt", HttpStatus.OK);
-        } return new ResponseEntity<>("Er bestaat geen adres met dit id", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson("Adres is bijgewerkt"), HttpStatus.OK);
+        } return new ResponseEntity<>(gson.toJson("Er bestaat geen adres met dit id"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAddress(@PathVariable int id) {
         int deleteStatus = addressService.deleteAddress(id);
         if (deleteStatus == 1) {
-            return new ResponseEntity<>("Adres is verwijderd", HttpStatus.OK);
-        } else return new ResponseEntity<>("Er bestaat geen adres met dit id", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson("Adres is verwijderd"), HttpStatus.OK);
+        } else return new ResponseEntity<>(gson.toJson("Er bestaat geen adres met dit id"), HttpStatus.NOT_FOUND);
     }
 }
