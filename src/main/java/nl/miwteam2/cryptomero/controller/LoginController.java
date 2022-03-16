@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.3
  */
 
+@CrossOrigin
 @RestController
 public class LoginController {
 
