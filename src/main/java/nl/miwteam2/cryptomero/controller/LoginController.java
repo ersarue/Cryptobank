@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.3
  */
 
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class LoginController {

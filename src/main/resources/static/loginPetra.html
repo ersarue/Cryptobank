@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8" />
+    <title>Cryptomero login</title>
+    <meta name="author" content="Petra Coenen">
+    <meta name="description" content="Cryptomero is a secure platform for buying and selling cryptocurrency.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--  TODO: Add favicon -->
+    <link rel="stylesheet" href="loginPetra.css">
+    <!-- Bootstrap specific for current page -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity=
+                  "sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+    <!-- Google fonts (Gloria Hallelujah font)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container ">
+    <div class="row">
+        <div class="col-sm-9 col-md-4 col-lg-5 mx-auto">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 col-md-4 col-lg-5 mx-auto">
+            <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                    <form class="needs-validation" id="form" novalidate>
+                        <div class="header">
+                            <div>
+                                <img src="chickie_klein.png" alt="Cryptomero chick" width="80px">
+                            </div>
+                            <div>
+                                <h1 class="title text-center mb-5">Cryptomero</h1>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                            <label for="email">Email</label>
+                            <div class="invalid-feedback">Geef een geldig emailadres op.</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="Wachtwoord" required>
+                            <label for="password">Wachtwoord</label>
+                            <div class="invalid-feedback">Geef een geldig wachtwoord op.</div>
+                        </div>
+<!--                        TODO: toevoegen optie 'wachtwoord onthouden'-->
+<!--                        <div class="form-check mb-3">-->
+<!--                            <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">-->
+<!--                            <label class="form-check-label" for="rememberPasswordCheck">-->
+<!--                                Wachtwoord onthouden-->
+<!--                            </label>-->
+<!--                        </div>-->
+                        <div class="d-grid">
+                            <button class="btn btn-primary border-0 btn-login text-uppercase fw-bold mt-4" id="submit-button" type="submit">Inloggen</button>
+                        </div>
+<!--                        TODO: Link maken naar registratiepagina-->
+                        <p class="text-center mt-3">Nieuwe gebruiker? Klik hier om te registreren!</p>
+                        </form>
+                    <div class="mt-4 px-2 py-2 text-center rounded-3" id="invalid-combination">Ongeldige combinatie van email en wachtwoord</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center" id="footer">SSMMEP &copy; 2022</div>
+<!--Bootstrap and Popper.js-->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="loginPetra.js"></script>
+</body>
+</html>
