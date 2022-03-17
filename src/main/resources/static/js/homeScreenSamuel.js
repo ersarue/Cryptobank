@@ -1,16 +1,23 @@
+// Author Samuel, Stijn, Mink
+
+
 const url = "http://localhost:8080/users/1"
 
 
 fetch(url, {
     method: 'GET',
     headers: {
-        'Content-Type': 'application/json'
+        'Authorization': localStorage.getItem("token"),
+        'Content-Type': 'application/json',
         //'Access-Control-Allow-Origin': '*'
     }
 })
     .then(response => {
         if (response.status === 200) {
             return response.json()
+        if(response.status === 401){
+            alert("Token niet meer geldig, u moet opnieuw inloggen")
+        }
         } else {
             throw new Error("something is wrong" + response.status)
         }
