@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/users")
 public class CustomerController implements GenericController<Customer>{
 
     private CustomerService customerService;
@@ -23,8 +23,8 @@ public class CustomerController implements GenericController<Customer>{
     public CustomerController(CustomerService service) {
         this.customerService = service;
     }
-
-    @PostMapping
+    @CrossOrigin
+    @PostMapping("/register")
     public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
         try {
             return new ResponseEntity<>(customerService.storeOne(customer), HttpStatus.CREATED);
@@ -33,6 +33,13 @@ public class CustomerController implements GenericController<Customer>{
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PostMapping
+//    public Customer storeOne(@RequestBody Customer customer) throws Exception {
+//
+//        customerService.storeOne(customer);
+//        return customer;
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
