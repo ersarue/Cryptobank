@@ -5,14 +5,16 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
+import nl.miwteam2.cryptomero.service.CustomerService;
 import nl.miwteam2.cryptomero.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * @author MinkTK
- * @version 1.2
+ * @version 1.3
  */
 
 @Service
@@ -20,12 +22,15 @@ public class AuthenticationService {
     private final HashService hashService;
     private final SecretService secretService;
     private final UserAccountService userAccountService;
+    private final CustomerService customerService;
 
     @Autowired
-    public AuthenticationService(HashService hashService, SecretService secretService, UserAccountService userAccountService) {
+    public AuthenticationService(HashService hashService, SecretService secretService, UserAccountService userAccountService,
+                                 CustomerService customerService) {
         this.hashService = hashService;
         this.secretService = secretService;
         this.userAccountService = userAccountService;
+        this.customerService = customerService;
     }
 
 
@@ -55,12 +60,27 @@ public class AuthenticationService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("auth0")
+                    .withIssuer("Cryptomero")
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             return true;
         } catch (JWTVerificationException exception){
             return false;
+        }
+    }
+
+    public Customer authenticateCustomer(String authorizationHeader) {
+        String token = getHeaderContent(authorizationHeader);
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("Cryptomero")
+                    .build();
+            DecodedJWT jwt = verifier.verify(token);
+            int Account = jwt.getClaim("Account").asInt();
+            return customerService.findById(Account);
+        } catch (JWTVerificationException exception){
+            return null;
         }
     }
 

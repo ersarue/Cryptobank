@@ -44,7 +44,7 @@ public class LoginController {
         }
     }
 
-//  MTK: ROUTE according Acceptance Criteria - return token in header
+//  MTK: ROUTE return token in header
     @PostMapping("/users/headerAuthentication")
     public ResponseEntity<?> loginHeader(@RequestBody UserAccount userAccount) {
         logger.info("new login attempt");
