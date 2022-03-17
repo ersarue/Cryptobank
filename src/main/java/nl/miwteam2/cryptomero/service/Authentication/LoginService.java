@@ -86,6 +86,10 @@ public class LoginService {
         return new Date(expMillis);
     }
 
+    public int setIdAccount() {
+        return 1;
+    }
+
     /**
      * Creates an Access Token (JWT) with expiry date
      * @return      JSON Web Token (JWT)
@@ -94,8 +98,8 @@ public class LoginService {
         // todo test JWT exception handling
         Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
         JWTCreator.Builder jwtBuilder = JWT.create();
-        jwtBuilder.withIssuer("auth0");
-        // add claim with userAccountId
+        jwtBuilder.withIssuer("Cryptomero");
+        jwtBuilder.withClaim("Account", setIdAccount());
         jwtBuilder.withClaim("exp", setExpiryDate());
         return jwtBuilder.sign(algorithm);
     }
