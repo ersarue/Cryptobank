@@ -46,7 +46,7 @@ public class AssetService {
     }
 
     public List<Asset> getAll() {
-        return jdbcAssetDao.getAll();
+        return assets;
     }
 
     public Asset findByName(String name) {
