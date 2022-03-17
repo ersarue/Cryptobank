@@ -1,0 +1,30 @@
+h1 {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #6610f2;
+  -ms-transform: skewY(-3deg);
+  transform: skewY(-3deg);
+}
+
+h2 {
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+#cryptologos {
+  margin-top: 1rem;
+  opacity: 0.9;
+}
+
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #6009ef;
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: #6009ef;
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  /*background: linear-gradient(to right, #6009ef, #8665f1);*/
+  background: linear-gradient(to right, #5A3EBA, #4829B2);
+}
+
+.custom-3 {
+  background: #6009ef;
+}
