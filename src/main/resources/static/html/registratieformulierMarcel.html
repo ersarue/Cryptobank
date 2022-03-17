@@ -9,6 +9,10 @@
     <button id="btnPostcodeApi">Postcode API</button>
     <button id="btnPostcodeRegEx">Postcode RegEx</button>
     <button id="btnEmailCheck">EmailLengte+RegEx</button>
+    <button id="btnPasswordCheck">Passwordcheck</button>
+    <button id="btnDobCheck">Leeftijdcheck</button>
+    <button id="btnBsnCheck">Bsncheck</button>
+    
     <p id="divResult" style="color:rgb(255, 0, 0);" ></p>
     <form>
         <fieldset>
@@ -16,12 +20,12 @@
             <div>
                 <label>Email</label>
                 <input id="email" type="email" value="a1@yahoo.com" >
-                <label id="emailtest" hidden></label>
-                <p id="divResult1" style="color:rgb(255, 0, 0);display: inline;" ></p>
+                <p id="emailResult" style="color:rgb(255, 0, 0);display: inline;" ></p>
             </div>
             <div>
                 <label>Password</label>
                 <input id="password" type="text" value="validPassword">
+                <p id="passwordResult" style="color:rgb(255, 0, 0);display: inline;" ></p>
             </div>
             <div>
                 <label>Voornaam</label>
@@ -34,14 +38,17 @@
             <div>
                 <label>Achternaam</label>
                 <input id="achternaam" type="text" value="brachten">
+
             </div>
             <div>
                 <label>Geboortedatum</label>
-                <input id="gebdatum" type="date" value="1968-03-06">
+                <input id="gebdatum" type="date" value="1968-01-01">
+                <p id="dobResult" style="color:rgb(255, 0, 0);display: inline;" ></p>
             </div>
             <div>
                 <label>BSN</label>
-                <input id="bsn" type="number" value="182358197">
+                <input id="bsn" type="number" value="162554989">
+                <p id="bsnResult" style="color:rgb(255, 0, 0);display: inline;" ></p>
             </div>
             <div>
                 <label>telefoonnummer</label>
@@ -63,6 +70,7 @@
                 <label>postcode</label>
                 <input id="postcode" type="text" value="2513ST">
                 <label id="pctest" hidden>postcode verkeerd</label>
+                <p id="postcodeResult" style="color:rgb(255, 0, 0);display: inline;" ></p>
             </div>
             <div>
                 <label>stad</label>
@@ -83,22 +91,88 @@
     document.querySelector('#btnEmailCheck').addEventListener('click', ()=>{
         emailChecker()
     })
+    document.querySelector('#btnPasswordCheck').addEventListener('click', ()=>{
+        passwordChecker()
+    })
+    document.querySelector('#btnDobCheck').addEventListener('click', ()=>{
+        leeftijdChecker()
+    })
+    document.querySelector('#btnBsnCheck').addEventListener('click', ()=>{
+        bsnChecker()
+    })
+    function bsnChecker(){
+        let bsn = document.querySelector('#bsn').value
+        document.querySelector('#bsnResult').innerHTML=""
+        const MIN_LENGTH = 8;
+        const MAX_LENGTH = 9;
+        if (bsn.length < MIN_LENGTH || bsn.length > MAX_LENGTH){
+            document.querySelector('#bsnResult').innerHTML="bsn voldoet niet aan lengte eis"
+        }
+        let regex = new RegExp(/^[^a-zA-Z]+$/)
+        if (!regex.test(bsn)){
+            document.querySelector('#bsnResult').innerHTML="bsn heeft letters"
+        }
+        if (bsn.length == 8){
+            bsn = "0" + bsn; //prepend 0 to ensure bsn consists of 9 numbers
+        } 
+        const FACTORS = [9, 8, 7, 6, 5, 4, 3, 2, -1];
+        const DIVISOR = 11
+        let sum = 0;
+        for (i = 0; i < bsn.length; i++) {
+            let digit = bsn.substring(i, i + 1);
+            sum += digit * FACTORS[i];
+        }
+        console.log(sum%DIVISOR);
+        if (sum%DIVISOR !== 0){
+            
+            document.querySelector('#bsnResult').innerHTML="geen geldig bsn"
+        }
+
+    }
+    function leeftijdChecker(){
+        let dateOfBirth = document.querySelector('#gebdatum').value
+        const d = new Date(dateOfBirth);
+        const maanden = Date.now() - d.getTime();
+        const newDate= new Date(maanden)
+        const year = newDate.getUTCFullYear();
+        const age = Math.abs(year - 1970);
+        if (age<18){
+            document.querySelector('#dobResult').innerHTML="te jong"
+        } else{
+            document.querySelector('#dobResult').innerHTML=""
+        }
+        
+    }
+    function passwordChecker(){
+        let regex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,64}$/i)
+        let passwordLengte= document.querySelector('#password').value.length
+        let passwordCheckerTekst=""
+        if (!regex.test(document.querySelector('#password').value)&&(passwordLengte>64||passwordLengte<8)){
+            passwordCheckerTekst="password te lang64/kort8 en 1 Kleine, 1 Hoofdletter 1 getal 1 special karakter"
+        }
+        else if(passwordLengte>64||passwordLengte<8){
+            passwordCheckerTekst="password te lang64/kort8"
+        }else if(!regex.test(document.querySelector('#password').value)){
+            passwordCheckerTekst="1 Kleine, 1 Hoofdletter 1 getal 1 special karakter"
+        }
+        else{
+            passwordCheckerTekst="na aanmelden wordt wachtwoord getest op gehackt en voorkomen bij onze klanten"
+        }
+        document.querySelector('#passwordResult').innerHTML =passwordCheckerTekst
+    }
     function emailChecker() {
         let regex = new RegExp(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/i)
         let emailLengte= document.querySelector('#email').value.length
-        document.querySelector('#emailtest').setAttribute("hidden", "hidden");
         let emailCheckerTekst=""
-        if (!regex.test(document.querySelector('#email').value)){
-            emailCheckerTekst+="email niet correct "
-            document.querySelector('#emailtest').removeAttribute("hidden");
-            
+        if (!regex.test(document.querySelector('#email').value)&&emailLengte>30){
+            emailCheckerTekst="email niet correct EN email te lang"
         }
-        if(emailLengte>30){
-            emailCheckerTekst+="email te lang"
-            document.querySelector('#emailtest').removeAttribute("hidden");
+        else if(emailLengte>30){
+            emailCheckerTekst="email te lang"
+        }else if(!regex.test(document.querySelector('#email').value)){
+            emailCheckerTekst="email niet correct"
         }
-        //document.querySelector('#emailtest').innerHTML=emailCheckerTekst
-        document.querySelector('#divResult1').innerHTML =emailCheckerTekst
+        document.querySelector('#emailResult').innerHTML =emailCheckerTekst
     
     }
     function postcodeRegEx() {
@@ -106,9 +180,9 @@
         let postcode = document.querySelector('#postcode').value
         //console.log('pc is valide: ' + regex.test(postcode))
         if (regex.test(postcode)){
-            document.querySelector('#pctest').setAttribute("hidden", "hidden");
+            document.querySelector('#postcodeResult').innerHTML=""
         }else{
-            document.querySelector('#pctest').removeAttribute("hidden");
+            document.querySelector('#postcodeResult').innerHTML="postcode verkeerd"
         }
     }
     function maakCustomer() {
