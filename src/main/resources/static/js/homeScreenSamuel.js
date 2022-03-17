@@ -50,46 +50,29 @@ Promise.all([
 function fillHeaders(json) {
     document.getElementById("welkom").innerHTML = json.firstName
     document.getElementById("iban").innerHTML = json.bankAccount.iban
-    document.getElementById("saldo").innerHTML = json.bankAccount.balanceEur
+    document.getElementById("saldo").innerHTML = `&#8364 ${json.bankAccount.balanceEur.toFixed(2)}`
 }
 
 function fillTable(data) {
 
     const table = document.getElementById("tableBody")
 
-    const assetNames = Object.keys(data[0].wallet);
-    const assetValues = Object.values(data[0].wallet);
+    for (asset in data[0].wallet) {
 
+        const amount = data[0].wallet[asset];
+        const rate = data[1].find(e => e.assetName === asset).rate;
+        const value = amount * rate;
 
-    for (let i = 0; i < assetNames.length; i++) {
-
-        console.log(assetNames[i])
-        console.log(data[1])
-
-        let rate = 0;
-
-        //todo fix probleem dat de juiste rate niet gevonden wordt
-        data[1].forEach(element => {
-            if (element.assetName.toLowerCase === assetNames[i].toLowerCase) {
-                rate = element.rate
-                console.log(rate)
-            }
-        })
-
-        let rowNode = document.createElement("tr")
-        let cellNode1 = document.createElement("td")
-        let cellNode2 = document.createElement("td")
-        let cellNode3 = document.createElement("td")
-        let cellNode4 = document.createElement("td")
-        let textNode1 = document.createTextNode(assetNames[i])
-        let textNode2 = document.createTextNode(assetValues[i])
-        let textNode3 = document.createTextNode(rate)
-        let textNode4 = document.createTextNode(assetValues[i]*rate)
-
-        cellNode1.appendChild(textNode1)
-        cellNode2.appendChild(textNode2)
-        cellNode3.appendChild(textNode3)
-        cellNode4.appendChild(textNode4)
+        const rowNode = document.createElement("tr");
+        
+        const cellNode1 = document.createElement("td");
+        cellNode1.innerHTML = asset;
+        const cellNode2 = document.createElement("td")
+        cellNode2.innerHTML = amount;
+        const cellNode3 = document.createElement("td")
+        cellNode3.innerHTML = `&#8364 ${rate.toFixed(2)}`;
+        const cellNode4 = document.createElement("td")
+        cellNode4.innerHTML = `&#8364 ${value.toFixed(2)}`;
 
         rowNode.appendChild(cellNode1)
         rowNode.appendChild(cellNode2)
@@ -99,9 +82,5 @@ function fillTable(data) {
         table.appendChild(rowNode)
 
     }
-
-
-
-
 }
 
