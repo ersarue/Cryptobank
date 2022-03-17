@@ -1,0 +1,36 @@
+#welkomLayout {
+    color: var(--paars);
+    font-weight: bold;
+    font-size: 25px;
+
+}
+input {
+    width: 25%;
+}
+.bargraph {
+    list-style: none;
+    padding-top: 20px;
+    width: 560px;
+  }
+ul.bargraph li {
+    height: 20px;
+    color: white;
+    text-align: left;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 14px;
+    line-height: 35px;
+    padding: 0px 20px;
+    margin-bottom: 5px;
+  }
+      
+  span {
+    position: absolute;
+    display: block;
+    height: 20px;
+    width: 1px;
+    background: black;
+  }
+  ul.bargraph li.oranje {
+    background: #E28159;
+    }
