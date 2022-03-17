@@ -49,9 +49,13 @@ public class LoginService {
      * @throws Exception    When credentials are invalid
      */
     public String login(UserAccount userAccount) throws Exception {
+        int idAccount;
         if (!authenticationService.authenticate(userAccount)) throw new Exception           // authenticate credentials
                 ("Invalid combination username and password");
-        return createToken();                                                               // create and return accessToken
+        else {
+            idAccount = getAuthenticatedUserAccount(userAccount.getEmail()).getIdAccount();
+        }
+        return createToken(idAccount);                                                               // create and return accessToken
     }
 
     /**
@@ -86,25 +90,26 @@ public class LoginService {
         return new Date(expMillis);
     }
 
-    public int setIdAccount() {
-        return 1;
-    }
-
     /**
      * Creates an Access Token (JWT) with expiry date
      * @return      JSON Web Token (JWT)
      */
-    public String createToken() {
+    public String createToken(int idAccount) {
         // todo test JWT exception handling
         Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
         JWTCreator.Builder jwtBuilder = JWT.create();
         jwtBuilder.withIssuer("Cryptomero");
-        jwtBuilder.withClaim("Account", setIdAccount());
+        jwtBuilder.withClaim("Account", idAccount);
+        System.out.println(idAccount);
         jwtBuilder.withClaim("exp", setExpiryDate());
         return jwtBuilder.sign(algorithm);
     }
 
     public Customer getAuthenticatedCustomer(String userName) {
         return customerService.findById(userAccountService.findByEmail(userName).getIdAccount());
+    }
+
+    public UserAccount getAuthenticatedUserAccount(String userName) {
+        return userAccountService.findByEmail(userName);
     }
 }
