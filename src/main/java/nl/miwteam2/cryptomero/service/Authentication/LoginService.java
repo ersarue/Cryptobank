@@ -16,7 +16,7 @@ import java.util.Date;
 
 /**
  * @author MinkTK
- * @version 1.3
+ * @version 1.4
  */
 
 @Service
@@ -38,6 +38,21 @@ public class LoginService {
 
 //    MTK: Cryptomero decided to implement a JSON Web Token (JWT) as an access token to minimize connection to the database.
 //    In future release a combination of an opaque token (previous release) and a JWT (current release) could be an option.
+
+
+
+//  MTK: ROUTE according Acceptance Criteria
+    /**
+     * Provides login for a userAccount
+     * @param userAccount   The userAccount that is attempting login; providing credentials.
+     * @return              Access token (JWT)
+     * @throws Exception    When credentials are invalid
+     */
+    public String login(UserAccount userAccount) throws Exception {
+        if (!authenticationService.authenticate(userAccount)) throw new Exception           // authenticate credentials
+                ("Invalid combination username and password");
+        return createToken();                                                               // create and return accessToken
+    }
 
     /**
      * Provides login based on credentials in authorization header
@@ -62,18 +77,6 @@ public class LoginService {
     }
 
     /**
-     * Provides login for a userAccount
-     * @param userAccount   The userAccount that is attempting login; providing credentials.
-     * @return              Access token (JWT)
-     * @throws Exception    When credentials are invalid
-     */
-    public String login(UserAccount userAccount) throws Exception {
-        if (!authenticationService.authenticate(userAccount)) throw new Exception           // authenticate credentials
-                ("Invalid combination username and password");
-        return createToken();                                                               // create and return accessToken
-    }
-
-    /**
      * Generates the expiry date based on current date and session length in this case for a JWT token
      * @return      Date of expiry token
      */
@@ -92,6 +95,7 @@ public class LoginService {
         Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
         JWTCreator.Builder jwtBuilder = JWT.create();
         jwtBuilder.withIssuer("auth0");
+        // add claim with userAccountId
         jwtBuilder.withClaim("exp", setExpiryDate());
         return jwtBuilder.sign(algorithm);
     }

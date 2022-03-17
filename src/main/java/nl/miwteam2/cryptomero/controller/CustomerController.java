@@ -23,7 +23,7 @@ public class CustomerController implements GenericController<Customer>{
     public CustomerController(CustomerService service) {
         this.customerService = service;
     }
-
+    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
         try {

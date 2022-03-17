@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    </head>
+<body>
+    <button id="btnStore">Store Customer</button>
+    <button id="btnPostcodeApi">Postcode API</button>
+    <button id="btnPostcodeRegEx">Postcode RegEx</button>
+    <button id="btnEmailCheck">EmailLengte+RegEx</button>
+    <p id="divResult" style="color:rgb(255, 0, 0);" ></p>
+    <form>
+        <fieldset>
+            <legend>registratieformulier</legend>
+            <div>
+                <label>Email</label>
+                <input id="email" type="email" value="a1@yahoo.com" >
+                <label id="emailtest" hidden></label>
+                <p id="divResult1" style="color:rgb(255, 0, 0);display: inline;" ></p>
+            </div>
+            <div>
+                <label>Password</label>
+                <input id="password" type="text" value="validPassword">
+            </div>
+            <div>
+                <label>Voornaam</label>
+                <input id="voornaam" type="text" value="marcel">
+            </div>
+            <div>
+                <label>Voorvoegsel</label>
+                <input id="voorvoegsel" type="text" value="de">
+            </div>
+            <div>
+                <label>Achternaam</label>
+                <input id="achternaam" type="text" value="brachten">
+            </div>
+            <div>
+                <label>Geboortedatum</label>
+                <input id="gebdatum" type="date" value="1968-03-06">
+            </div>
+            <div>
+                <label>BSN</label>
+                <input id="bsn" type="number" value="182358197">
+            </div>
+            <div>
+                <label>telefoonnummer</label>
+                <input id="telefoon" type="text" value="0612345678" >
+            </div>
+            <div>
+                <label>straat</label>
+                <input id="straatnaam" type="text" value="">
+            </div>
+            <div>
+                <label>huisnummer</label>
+                <input id="huisnummer" type="number" value="178">
+            </div>
+            <div>
+                <label>toevoeging</label>
+                <input id="toevoegsel" type="text" value="">
+            </div>
+            <div>
+                <label>postcode</label>
+                <input id="postcode" type="text" value="2513ST">
+                <label id="pctest" hidden>postcode verkeerd</label>
+            </div>
+            <div>
+                <label>stad</label>
+                <input id="stad" type="text" value="">
+            </div>
+        </fieldset>
+    </form>    
+    <script>
+        document.querySelector('#btnStore').addEventListener('click', ()=>{
+        maakCustomer()
+    })
+    document.querySelector('#btnPostcodeApi').addEventListener('click', ()=>{
+        postcodeApi()
+    })
+    document.querySelector('#btnPostcodeRegEx').addEventListener('click', ()=>{
+        postcodeRegEx()
+    })
+    document.querySelector('#btnEmailCheck').addEventListener('click', ()=>{
+        emailChecker()
+    })
+    function emailChecker() {
+        let regex = new RegExp(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/i)
+        let emailLengte= document.querySelector('#email').value.length
+        document.querySelector('#emailtest').setAttribute("hidden", "hidden");
+        let emailCheckerTekst=""
+        if (!regex.test(document.querySelector('#email').value)){
+            emailCheckerTekst+="email niet correct "
+            document.querySelector('#emailtest').removeAttribute("hidden");
+            
+        }
+        if(emailLengte>30){
+            emailCheckerTekst+="email te lang"
+            document.querySelector('#emailtest').removeAttribute("hidden");
+        }
+        //document.querySelector('#emailtest').innerHTML=emailCheckerTekst
+        document.querySelector('#divResult1').innerHTML =emailCheckerTekst
+    
+    }
+    function postcodeRegEx() {
+        let regex = new RegExp(/^[1-9][0-9]{3}[\s]?[A-Za-z]{2}$/i);
+        let postcode = document.querySelector('#postcode').value
+        //console.log('pc is valide: ' + regex.test(postcode))
+        if (regex.test(postcode)){
+            document.querySelector('#pctest').setAttribute("hidden", "hidden");
+        }else{
+            document.querySelector('#pctest').removeAttribute("hidden");
+        }
+    }
+    function maakCustomer() {
+        const em =  document.querySelector('#email').value
+        const pw =  document.querySelector('#password').value
+        const vn =  document.querySelector('#voornaam').value
+        const vv =  document.querySelector('#voorvoegsel').value
+        const an =  document.querySelector('#achternaam').value
+        const gb =  document.querySelector('#gebdatum').value
+        const bsn =  document.querySelector('#bsn').value
+        const tel =  document.querySelector('#telefoon').value
+        const sn =  document.querySelector('#straatnaam').value
+        const hn =  document.querySelector('#huisnummer').value
+        const tvv =  document.querySelector('#toevoegsel').value
+        const pc =  document.querySelector('#postcode').value
+        const pn =  document.querySelector('#stad').value
+        let data = {
+    "idAccount": 1,
+    "email": em,"password": pw,"firstName": vn,"namePrefix": vv,"lastName": an,
+    "dob": gb,"bsn": bsn,"telephone": tel,
+    "address": {"idAddress": 1,"streetName": sn,"houseNo": hn,"houseAdd": tvv,
+        "postalCode": pc,"city": pn
+    }
+}; 
+
+        fetch('http://localhost:8080/users/register', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)  // moet worden omgezet naar een string
+        })
+            .then(response => {
+                
+                     console.log(response)
+                    //const te = response.body
+                    //document.querySelector('#bericht').innerHTML = te.roman;
+                    return response.json()
+                
+                   
+                }
+            )
+            .then(data => {
+
+                document.querySelector('#divResult').innerHTML = data.email;
+            })
+        // .catch((error) => {
+        //     console.error('Foutje', error);
+        // })
+        ;
+    }
+
+    function postcodeApi(){
+        
+        let postcode = document.querySelector('#postcode').value
+        //let postcode = "2513ST"
+        let huisnummer = document.querySelector('#huisnummer').value
+        //let huisnummer = 178
+        // als postcode een valide postcode is nummer niet leeg, dan
+       // console.log('pc is valide: ' + regex.test(postcode))
+
+        
+            let formData = `postcode=${postcode}&number=${huisnummer}` //postcode=1234AB&nr=15
+
+            fetch("https://postcode.tech/api/v1/postcode?" + formData , {
+                headers: {
+                    'Authorization': 'Bearer 5cc336e3-c924-44d6-a44f-d8b9e5e0ddb9',
+                },
+            })
+            .then(response => {
+                
+                console.log(response)
+               //const te = response.body
+               //document.querySelector('#bericht').innerHTML = te.roman;
+               return response.json()
+           
+              
+           }
+       )
+       //.then(json => console.log(json.message))
+       .then(json => {
+           console.log(json.street)        
+            document.querySelector('#straatnaam').value=(json.street)
+            document.querySelector('#stad').value=json.city
+        })
+    }
+    
+    </script>
+</body>
+</html>
