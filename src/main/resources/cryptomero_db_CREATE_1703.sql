@@ -136,23 +136,6 @@ CREATE TABLE IF NOT EXISTS `cryptomero`.`wallet` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `cryptomero`.`session`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cryptomero`.`session` (
-  `id_account` INT NOT NULL,
-  `token` VARCHAR(100) NOT NULL,
-  `exp_time` DATETIME NOT NULL,
-  PRIMARY KEY (`id_account`),
-  INDEX `verzinNaam6_idx` (`id_account` ASC) VISIBLE,
-  CONSTRAINT `verzinNaam6`
-    FOREIGN KEY (`id_account`)
-    REFERENCES `cryptomero`.`user_account` (`id_account`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
