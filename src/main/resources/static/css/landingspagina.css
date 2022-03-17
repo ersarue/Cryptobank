@@ -1,0 +1,38 @@
+h1 {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #6610f2;
+  font-size: 2.2rem;
+  -ms-transform: skewY(-3deg);
+  transform: skewY(-3deg);
+}
+h2 {
+  margin-left: 4.5em;
+}
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #fccb90;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    #5609e6,
+    #4b14ca,
+    #52229e,
+    #3c2c75
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #5609e6, #4b14ca, #52229e, #3c2c75);
+}
+
+@media (min-width: 768px) {
+  .gradient-form {
+    height: 100vh !important;
+  }
+}
+@media (min-width: 769px) {
+  .gradient-custom-2 {
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+  }
+}
