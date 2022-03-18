@@ -1,28 +1,26 @@
 // Author Samuel, Stijn, Mink
 
+import {getToken} from "./tokenUtils";
+
 //use relative URL
 let url = new URL(window.location.href)
 
 
 // fetch customer information
-//todo update url - portfolio/assets
 //todo rate zonder token op te halen?
-//todo iets met Acces-control-allow-origin?
 
 Promise.all([
-    fetch(`${url.origin}/users/1`, {
+    fetch(`${url.origin}/portfolio/assets`, {
         method: 'GET',
         headers: {
-            'Authorization': localStorage.getItem("token"),
+            'Authorization': getToken(),
             'Content-Type': 'application/json',
-            //'Access-Control-Allow-Origin': '*'
         }
     }),
     fetch(`${url.origin}/assets`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            //'Access-Control-Allow-Origin': '*'
         }
     })
 ]).then(responses => {
