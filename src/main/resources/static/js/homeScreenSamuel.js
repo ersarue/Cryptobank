@@ -1,32 +1,29 @@
 // Author Samuel, Stijn, Mink
 
+import {getToken} from "./tokenUtils.js";
+
 //use relative URL
 let url = new URL(window.location.href)
 
 
 // fetch customer information
-//todo update url - portfolio/assets
 //todo rate zonder token op te halen?
-//todo iets met Acces-control-allow-origin?
 
 Promise.all([
-    fetch(`${url.origin}/users/1`, {
+    fetch(`${url.origin}/portfolio/assets`, {
         method: 'GET',
         headers: {
-            'Authorization': localStorage.getItem("token"),
+            'Authorization': getToken(),
             'Content-Type': 'application/json',
-            //'Access-Control-Allow-Origin': '*'
         }
     }),
     fetch(`${url.origin}/assets`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            //'Access-Control-Allow-Origin': '*'
         }
     })
 ]).then(responses => {
-        console.log(responses)
         if (responses[0].status === 401){
             alert("Token niet meer geldig, u moet opnieuw inloggen")
         } else if (responses[0].status === 200 && responses[1].status === 200) {
@@ -38,7 +35,6 @@ Promise.all([
         }
     })
     .then(data => {
-            console.log(data)
             fillHeaders(data[0])
             fillTable(data)
         }
@@ -57,7 +53,7 @@ function fillTable(data) {
 
     const table = document.getElementById("tableBody")
 
-    for (asset in data[0].wallet) {
+    for (let asset in data[0].wallet) {
 
         const amount = data[0].wallet[asset];
         const rate = data[1].find(e => e.assetName === asset).rate;
