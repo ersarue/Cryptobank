@@ -25,6 +25,12 @@ h2 {
   background: linear-gradient(to right, #5A3EBA, #4829B2);
 }
 
-.custom-3 {
+#submit-btn {
   background: #6009ef;
+}
+
+#invalid-combination {
+  background-color: #f6e4e4;
+  color: #b80202;
+  visibility: hidden;
 }
