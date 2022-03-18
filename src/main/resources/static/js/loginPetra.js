@@ -5,7 +5,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const submitButton = document.getElementById('submit-button');
 
     // Fetch the form to apply custom Bootstrap validation styles
     let form = document.querySelectorAll('.needs-validation');

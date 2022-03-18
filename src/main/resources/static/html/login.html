@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Cryptomero</title>
-    <meta name="description" content="Cryptomero is een veilig platform voor het kopen en verkopen van cryptocurrency.">
+    <meta name="description" content="Cryptomero is een platform voor het veilig kopen en verkopen van cryptocurrency.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--  TODO: Add favicon -->
     <!-- Bootstrap css file -->
@@ -33,12 +33,12 @@
 <!--                            Login form -->
                                 <form class="needs-validation" id="form" novalidate>
                                     <h5 class="title text-center mb-4">Login</h5>
-                                    <div class="form-outline">
+                                    <div class="input-group mb-4">
                                         <input type="email" class="form-control" id="email" placeholder="Email" required>
                                         <label for="email"></label>
                                         <div class="invalid-feedback">Geef een geldig emailadres op</div>
                                     </div>
-                                    <div class="form-outline mb-2">
+                                    <div class="input-group mb-4">
                                         <input type="password" class="form-control" id="password" placeholder="Wachtwoord" required>
                                         <label for="password"></label>
                                         <div class="invalid-feedback">Geef een geldig wachtwoord op</div>
@@ -51,9 +51,11 @@
 <!--                                        </label>-->
 <!--                                    </div>-->
                                     <div class="text-center pt-1 mb-3 pb-1">
-                                        <button class="btn btn-primary btn-block border-0 fa-lg custom-3 mb-3"
-                                                type="button">Inloggen
+                                        <button class="btn btn-primary btn-block border-0 fa-lg mb-3" id="submit-btn"
+                                                type="submit">Inloggen
                                         </button>
+                                        <div class="mt-4 px-2 py-2 text-center rounded-3" id="invalid-combination">
+                                            Ongeldige combinatie van email en wachtwoord</div>
                                         <hr>
                                     </div>
                                     <div class="d-flex flex-column align-items-center justify-content-center text-center
@@ -90,5 +92,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+<script src="../js/loginPetra.js"></script>
 </body>
 </html>
