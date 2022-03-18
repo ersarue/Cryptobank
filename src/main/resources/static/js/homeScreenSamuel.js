@@ -1,6 +1,6 @@
 // Author Samuel, Stijn, Mink
 
-import {getToken} from "./tokenUtils";
+import {getToken} from "./tokenUtils.js";
 
 //use relative URL
 let url = new URL(window.location.href)
@@ -24,7 +24,6 @@ Promise.all([
         }
     })
 ]).then(responses => {
-        console.log(responses)
         if (responses[0].status === 401){
             alert("Token niet meer geldig, u moet opnieuw inloggen")
         } else if (responses[0].status === 200 && responses[1].status === 200) {
@@ -36,7 +35,6 @@ Promise.all([
         }
     })
     .then(data => {
-            console.log(data)
             fillHeaders(data[0])
             fillTable(data)
         }
@@ -55,7 +53,7 @@ function fillTable(data) {
 
     const table = document.getElementById("tableBody")
 
-    for (asset in data[0].wallet) {
+    for (let asset in data[0].wallet) {
 
         const amount = data[0].wallet[asset];
         const rate = data[1].find(e => e.assetName === asset).rate;
