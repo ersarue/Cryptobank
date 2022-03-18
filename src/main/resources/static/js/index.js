@@ -41,7 +41,7 @@ const login = async (emailInput, passwordInput) => {
                 if (response.status === 200) {
                     localStorage.setItem("access-token", result);
                     // console.log(`localStorage set with token value: ${result}`)
-                    window.location = "../html/homeScreenSamuel.html";
+                    window.location = "../html/profile.html";
                 } else if (response.status === 401) {
                     // Empty the form fields
                     document.getElementById('email').value = null;
