@@ -13,6 +13,7 @@ import java.util.List;
  * @author Samuël Geurts & Stijn Klijn
  */
 
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class CustomerController implements GenericController<Customer>{
