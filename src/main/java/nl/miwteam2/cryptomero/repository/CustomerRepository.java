@@ -80,4 +80,8 @@ public class CustomerRepository implements GenericDao<Customer>{
     public int findAddressIdOfCustomer(Customer customer) {
         return jdbcCustomerDao.findAddressIdOfCustomer(customer);
     }
+
+    public boolean isBSNAlreadyInUse(String bsn) {
+        return jdbcCustomerDao.isBSNAlreadyInUse(bsn);
+    }
 }
