@@ -3,7 +3,7 @@ package nl.miwteam2.cryptomero.domain;
 import java.util.Objects;
 
 /**
- * @author Samuël Geurts & Stijn Klijn
+ * @author Stijn Klijn
  */
 
 public class Asset {
@@ -15,12 +15,6 @@ public class Asset {
      public Asset(String assetName, String assetAbbr) {
           this.assetName = assetName;
           this.assetAbbr = assetAbbr;
-          this.rate = getCurrentRate();
-     }
-
-     private double getCurrentRate() {
-          //TODO implementeren
-          return 0.0;
      }
 
      public String getAssetName() {
@@ -40,13 +34,16 @@ public class Asset {
      }
 
      public double getRate() {
-          this.rate = getCurrentRate();
           return rate;
+     }
+
+     public void setRate(double rate) {
+          this.rate = rate;
      }
 
      @Override
      public String toString() {
-          return String.format("Asset %s (%s)", assetName, assetAbbr);
+          return String.format("Asset %s (%s) with latest rate %.2f", assetName, assetAbbr, rate);
      }
 
      @Override

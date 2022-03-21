@@ -13,8 +13,9 @@ import java.util.List;
  * @author Samuël Geurts & Stijn Klijn
  */
 
+@CrossOrigin
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/users")
 public class CustomerController implements GenericController<Customer>{
 
     private CustomerService customerService;
@@ -23,8 +24,8 @@ public class CustomerController implements GenericController<Customer>{
     public CustomerController(CustomerService service) {
         this.customerService = service;
     }
-
-    @PostMapping
+    @CrossOrigin
+    @PostMapping("/register")
     public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
         try {
             return new ResponseEntity<>(customerService.storeOne(customer), HttpStatus.CREATED);
