@@ -3,7 +3,6 @@
     --geel: #f27ddd;
     --grijs: #616161;
     --lichtgrijs: #F6F6F6;
-
 }
 
 #footer {
@@ -24,19 +23,19 @@
     align-self: center;
 }
 
-#welkomLayout {    /* Positionering begroeting in financieelOverzicht */
+#welkomLayout {
     color: var(--paars);
     margin-top: 50px;
     font-weight: bold;
     font-size: 25px;
     text-align: center;
-
+    font-family: 'Gloria Hallelujah', cursive;
 }
 #ibanLayout{
     color: var(--paars);
     margin-top: 10px;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
 }
 
@@ -44,6 +43,18 @@
     color: var(--paars);
     margin-top: 10px;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
+}
+
+#logout-btn {
+    background: #6009ef;
+    border-color: white;
+    color: white;
+}
+
+.navbar {
+    /*color: white;*/
+    padding-top: 0rem;
+    padding-bottom: 0rem;
 }
