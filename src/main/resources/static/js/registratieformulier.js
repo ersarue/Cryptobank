@@ -1,3 +1,5 @@
+let url = new URL(window.location.href);
+
 document.querySelector('#btnStore').addEventListener('click', ()=>{
     maakCustomer()
 })
@@ -227,7 +229,7 @@ function maakCustomer() {
         }
     };
 
-    fetch('http://localhost:8080/users/register', {
+    fetch(`${url.origin}/users/register`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

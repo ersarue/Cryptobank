@@ -1,6 +1,7 @@
 // Author: Petra Coenen
 
 "use strict";
+let url = new URL(window.location.href);
 
 document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
@@ -35,7 +36,7 @@ const login = async (emailInput, passwordInput) => {
         body: JSON.stringify(loginObject)
     }
     try {
-        const response = await fetch(`http://localhost:8080/users/authenticate`, config);
+        const response = await fetch(`${url.origin}/users/authenticate`, config);
         const result = response.json()
             .then(result => {
                 if (response.status === 200) {
