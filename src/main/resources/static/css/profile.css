@@ -4,6 +4,10 @@
     --grijs: #616161;
     --lichtgrijs: #F6F6F6;
 }
+body {
+    background-image: url("../images/chickens.jpg")
+}
+
 
 #footer {
     position: fixed;
