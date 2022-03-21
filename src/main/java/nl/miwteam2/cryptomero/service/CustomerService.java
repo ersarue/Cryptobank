@@ -126,6 +126,7 @@ public class CustomerService implements GenericService<Customer> {
         if (numberOfBreaches!=0) errors.add("This password has been seen " + numberOfBreaches + " times before");
         if (!isValidDob(customer.getDob())) errors.add("Invalid date of birth (customer too young)");
         if (!isValidBsn(customer.getBsn())) errors.add("Invalid bsn");
+        if (customerRepository.isBSNAlreadyInUse(customer.getBsn())) errors.add("bsn already in use");
         return errors;
     }
 
