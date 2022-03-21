@@ -1,10 +1,12 @@
 // Author Samuel, Stijn, Mink
 
-import {getToken} from "./tokenUtils.js";
+import {getToken, removeToken} from "./tokenUtils.js";
 
 //use relative URL
-let url = new URL(window.location.href)
+const url = new URL(window.location.href)
 
+const logoutButton = document.getElementById("logout-btn" )
+logoutButton.addEventListener("click" , logout)
 
 // fetch customer information
 //todo rate zonder token op te halen?
@@ -26,6 +28,7 @@ Promise.all([
 ]).then(responses => {
         if (responses[0].status === 401){
             alert("Token niet meer geldig, u moet opnieuw inloggen")
+            logout()
         } else if (responses[0].status === 200 && responses[1].status === 200) {
             return Promise.all(responses.map(function (response) {
                 return response.json();
@@ -78,5 +81,11 @@ function fillTable(data) {
         table.appendChild(rowNode)
 
     }
+
 }
 
+function logout() {
+    console.log("logout");
+    removeToken();
+    window.location = "../index.html"
+}
