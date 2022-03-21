@@ -2,27 +2,24 @@
 
 "use strict";
 
-const form = document.querySelectorAll('.needs-validation');
+const form = document.querySelector('form');
 const inputFields = document.querySelectorAll('input');
 const invalidCredWarning = document.getElementById('invalid-combination');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Get form and prevent submission if invalid
-    Array.prototype.slice.call(form)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                } else {
-                    event.preventDefault();
-                    login(emailInput, passwordInput);
-                }
-                form.classList.add('was-validated');
-            }, false);
-        })
+    // Prevent submission of form if invalid
+    form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            event.preventDefault();
+            login(emailInput, passwordInput);
+        }
+        form.classList.add('was-validated');
+        }, false);
     // Hide invalid credentials warning when user starts entering new data
     inputFields.forEach((field) => {
         field.addEventListener('input', hideInvalidCredWarning);
