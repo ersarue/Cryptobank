@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Registratie nieuwe klant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/jpg" href="../images/chickie_icon.png"/>
+  <!-- Bootstrap css file -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+        crossorigin="anonymous">
+  <!--  Custom css file-->
+  <link rel="stylesheet" href="../css/registration.css">
+  <!-- Google fonts (Gloria Hallelujah font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+<div class="container" style="max-width: 600px;">
+  <div class="row d-flex  justify-content-center align-items-center">
+    <div class="card rounded-3 text-black mt-4 mb-4">
+      <div class="row">
+        <div class="col-xs">
+          </div>
+        <div class="col-xs-7 mx-auto">
+          <div class="card-body p-md-5 mx-md-4">
+              <div class="d-flex justify-content-center align-items-end">
+                <img src="../images/chickie_klein.png" alt="Cryptomero chick" width="100px">
+                <h1 class="title text-center mb-5" id="page-title">Cryptomero</h1>
+              </div>
+<!--              Registration form -->
+              <form class="needs-validation" id="form" novalidate>
+                <h5 class="title text-center mb-4">Registratie nieuwe klant</h5>
+<!--                First name -->
+                <div class="input-group mb-4">
+                  <input type="text" class="form-control" id="firstName" placeholder="Voornaam" maxlength="45" required>
+                  <label for="firstName"></label>
+                </div>
+<!--                Last name and possible prefix -->
+                <div class="d-flex">
+                  <div class="col">
+                <div class="input-group mb-4">
+                  <input type="text" class="form-control margin-right" id="namePrefix" placeholder="Voorv." maxlength="15">
+                  <label for="namePrefix"></label>
+                </div>
+                  </div>
+                  <div class="col-9">
+                    <div class="input-group mb-4 ">
+                      <input type="text" class="form-control" id="lastName" placeholder="Achternaam" maxlength="45" required>
+                      <label for="lastName"></label>
+                    </div>
+                  </div>
+                </div>
+<!--                Date of birth (quick ugly hack to display placeholder text at first) -->
+                <div class="input-group mb-4 ">
+                  <input type="text" class="form-control" id="dob" placeholder="Geboortedatum"
+                         onfocus="(this.type='date')" required>
+                  <label for="dob"></label>
+                  <div class="invalid-feedback invalid-dob"></div>
+                </div>
+<!--                bsn -->
+                <div class="input-group mb-4 ">
+                  <input type="text" class="form-control" id="bsn" placeholder="bsn" pattern="^[0-9]*$"
+                         minlength="8" maxlength="9" required>
+                  <label for="bsn"></label>
+                  <div class="invalid-feedback bsn-validation"></div>
+                </div>
+<!--                Postal code  -->
+                <div class="input-group mb-4 ">
+                  <input type="text" class="form-control" id="postalCode" placeholder="Postcode"
+                         pattern="[1-9][0-9]{3}[\s]?[A-Za-z]{2}" maxlength="7" required>
+                  <label for="postalCode"></label>
+                  <div class="invalid-feedback invalid-postalCode">Vul een geldige postcode in</div>
+                </div>
+<!--                House number and possible addition -->
+                <div class="d-flex">
+                  <div class="col">
+                    <div class="input-group mb-4 ">
+                      <input type="text" class="form-control margin-right" id="houseNo" placeholder="Huisnr."
+                             pattern="^[0-9]*$" required>
+                      <label for="houseNo"></label>
+                      <div class="invalid-feedback invalid-houseNo"></div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="input-group mb-4">
+                      <input type="text" class="form-control" id="houseAdd" placeholder="Toev.">
+                      <label for="houseAdd"></label>
+                      <div class="invalid-feedback invalid-houseAdd"></div>
+                    </div>
+                  </div>
+                </div>
+<!--                Street name -->
+                <div class="input-group mb-4 ">
+                  <input type="text" class="form-control" id="streetName" placeholder="Straatnaam" required>
+                  <label for="streetName"></label>
+                </div>
+<!--                City -->
+                <div class="input-group mb-4 ">
+                  <input type="text" class="form-control" id="city" placeholder="Woonplaats" required>
+                  <label for="city"></label>
+                </div>
+<!--                Telephone -->
+                <div class="input-group mb-4 ">
+                  <input type="text" class="form-control" id="telephone" placeholder="Telnr." maxlength="30"
+                         pattern="^[0-9-]*$" required>
+                  <label for="telephone"></label>
+                  <div class="invalid-feedback invalid-telephone">Vul een geldig telefoonnummer in</div>
+                </div>
+<!--                Email -->
+                <div class="input-group mb-4 ">
+                  <input type="email" class="form-control" id="email" placeholder="Email" required>
+                  <label for="email"></label>
+                  <div class="invalid-feedback invalid-email">Vul een geldig emailadres in</div>
+                </div>
+<!--                Password -->
+                <div class="input-group mb-4">
+                  <input type="password" class="form-control" id="password" placeholder="Wachtwoord" minlength="8"
+                         required>
+                  <label for="password"></label>
+                  <div class="invalid-feedback password-validation"></div>
+                </div>
+<!--                Submit button -->
+                <div class="text-center pt-1 mb-3 pb-1">
+                  <button class="btn btn-primary btn-block fa-lg mb-3" type="submit">Registreren</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        <div class="col-xs">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Bootstrap script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<!--Custom JS script-->
+<script src="../js/registration.js"></script>
+</body>
+</html>
