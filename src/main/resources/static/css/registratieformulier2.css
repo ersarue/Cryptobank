@@ -1,0 +1,22 @@
+body {
+  background: linear-gradient(to right, #5A3EBA, #4829B2);
+}
+
+h1 {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #6610f2;
+  -ms-transform: skewY(-3deg);
+  transform: skewY(-3deg);
+}
+
+img {
+  margin-bottom: 1rem;
+}
+
+.margin-right {
+  margin-right: 1rem;
+}
+
+#submit-btn {
+  background: #6009ef;
+}
