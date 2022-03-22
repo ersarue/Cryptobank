@@ -1,6 +1,5 @@
 package nl.miwteam2.cryptomero.controller;
 
-import com.google.gson.Gson;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author MinkTK
- * @version 1.4
+ * @version 1.5
  */
 
 @CrossOrigin
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
     private final LoginService loginService;
     private final AuthenticationService authenticationService;
-    private final Gson gson = new Gson();
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -38,9 +36,9 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestBody UserAccount userAccount) {
         try {
             String token = loginService.login(userAccount);
-            return new ResponseEntity<>(gson.toJson(token), HttpStatus.OK);
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>(gson.toJson(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 
