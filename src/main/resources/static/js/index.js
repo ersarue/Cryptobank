@@ -1,7 +1,7 @@
 // Author: Petra Coenen
 
 "use strict";
-let url = new URL(window.location.href);
+const url = new URL(window.location.href);
 
 const form = document.querySelector('form');
 const inputFields = document.querySelectorAll('input');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.stopPropagation();
         } else {
             event.preventDefault();
-            login(emailInput, passwordInput);
+            login();
         }
         form.classList.add('was-validated');
         }, false);
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
-const login = async (emailInput, passwordInput) => {
+const login = async () => {
     const loginObject = {"email": emailInput.value, "password": passwordInput.value };
     const config = {
         method: 'POST',
@@ -39,8 +39,7 @@ const login = async (emailInput, passwordInput) => {
     }
     try {
         const response = await fetch(`${url.origin}/users/authenticate`, config);
-        const result = response.json()
-            .then(result => {
+        response.text().then(result => {
                 if (response.status === 200) {
                     localStorage.setItem("access-token", result);
                     // console.log(`localStorage set with token value: ${result}`)
