@@ -1,4 +1,10 @@
-let url = new URL(window.location.href);
+const MAX_LENGTH_FIRST_NAME = 10;
+const MAX_LENGTH_NAME_PREFIX = 15;
+const MAX_LENGTH_LAST_NAME = 10;
+const MAX_LENGTH_TELEPHONE = 12;
+const MAX_LENGTH_PASSWORD = 64;
+const MIN_LENGTH_PASSWORD = 8;
+
 
 document.querySelector('#btnStore').addEventListener('click', ()=>{
     maakCustomer()
@@ -82,39 +88,34 @@ function voortgangsMeter(){
         document.querySelector('#btnStore').disabled=false
     }
 }
+function restCheckerStartWaarden(){
+    let vvs = document.querySelector('#voorvoegsel').value
+    let ans = document.querySelector('#achternaam').value
+    let tels = document.querySelector('#telefoon').value
+    let vns = document.querySelector('#voornaam').value
+    return [vns,ans,vvs,tels]
+}
+function restCheckerStartWaardenResults(){
+    let vvr = document.querySelector('#voorvoegselResult')
+    let anr = document.querySelector('#achternaamResult')
+    let telr = document.querySelector('#telefoonResult')
+    let vnr = document.querySelector('#voornaamResult')
+    return [vnr,anr,vvr,telr]
+}
+// deze methode roept eerst twee hulpmethode aan, daarna zal deze de lengte van vier velden testen
 function restChecker(){
-        const MAX_LENGTH_FIRST_NAME = 45;
-        const MAX_LENGTH_NAME_PREFIX = 15;
-        const MAX_LENGTH_LAST_NAME = 45;
-        const MAX_LENGTH_TELEPHONE = 30;
-        let voornaam = document.querySelector('#voornaam').value
-        let voorvoegsel = document.querySelector('#voorvoegsel').value
-        let achternaam = document.querySelector('#achternaam').value
-        let telefoon = document.querySelector('#telefoon').value
-        if (voornaam.length>=MAX_LENGTH_FIRST_NAME){
-            document.querySelector('#voornaamResult').innerHTML="te lang"
+        let restVelden = restCheckerStartWaarden()
+        const constanten=[MAX_LENGTH_FIRST_NAME,MAX_LENGTH_LAST_NAME,MAX_LENGTH_NAME_PREFIX,MAX_LENGTH_TELEPHONE]
+        let restVeldenResults = restCheckerStartWaardenResults()
+        let vvResult=document.querySelector('#voorvoegselResult')
+        for (let i=0;i<constanten.length;i++){
+            if (restVelden[i].length>constanten[i]){
+                restVeldenResults[i].innerHTML="de ingevoerde waarde is te lang"
         }
         else{
-            document.querySelector('#voornaamResult').innerHTML=""
+            restVeldenResults[i].innerHTML=""
         }
-        if (voorvoegsel.length>=MAX_LENGTH_NAME_PREFIX){
-            document.querySelector('#voorvoegselResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#voorvoegselResult').innerHTML=""
-        }
-        if (achternaam.length>=MAX_LENGTH_LAST_NAME){
-            document.querySelector('#achternaamResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#achternaamResult').innerHTML=""
-        }
-        if (telefoon.length>=MAX_LENGTH_TELEPHONE){
-            document.querySelector('#telefoonResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#telefoonResult').innerHTML=""
-        }
+    }
 }
 function bsnChecker(){
     let bsn = document.querySelector('#bsn').value
@@ -156,28 +157,42 @@ function leeftijdChecker(){
     const age = Math.abs(year - 1970);
     if (age<18){
         document.querySelector('#dobResult').innerHTML="te jong"
-    } else if (dateOfBirth.length===0){
+    }else if (dateOfBirth.length===0){
         document.querySelector('#dobResult').innerHTML="geen geldige datum"
     }else{
         document.querySelector('#dobResult').innerHTML=""
     }
 
 }
-function passwordChecker(){
-    let regex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,64}$/i)
-    let passwordLengte= document.querySelector('#password').value.length
-    let passwordCheckerTekst=""
-    document.querySelector('#passwordResult').innerHTML =""
-    if (!regex.test(document.querySelector('#password').value)&&(passwordLengte>64||passwordLengte<8)){
-        passwordCheckerTekst="passwordeisen 8-64 karakters, minimaal 1 kleine letter, 1 Hoofdletter 1 getal 1 special karakter"
-    }
-    else if(passwordLengte>64||passwordLengte<8){
-        passwordCheckerTekst="password te lang64/kort8"
-    }else if(!regex.test(document.querySelector('#password').value)){
-        passwordCheckerTekst="1 Kleine, 1 Hoofdletter 1 getal 1 special karakter"
-    }
-    document.querySelector('#passwordResult').innerHTML =passwordCheckerTekst
+//regex eisen volgens Product Owner, daarna database lengte velden testen, doel duidelijk info aan nieuwe klant
+function regexEisenPassword(){
+    let regexLG = new RegExp(/^(?=.*?[a-z]{2})(?=.*?[A-Z]{2}).{0,65}$/i)
+    let regexGS = new RegExp(/^(?=.*[0-9])(?=.*\W).{0,65}$/i)
+    let regexMinL = new RegExp(/^.{8,}$/i)
+    let regexMaxL = new RegExp(/^.{0,15}$/i)
+    return [regexLG, regexGS, regexMinL, regexMaxL]
 }
+function foutmeldingenPassword(){
+    let lettergrootteTekst="Minimaal 1 A-Z en 1 a-z <br>"
+    let speciaalTekst="Minimaal een 0-9 en een speciaal teken (%$#@)<br> "
+    let teKortTekst="Meer dan 8 karakters <br>"
+    let teLangTekst="Minder dan 15 karakters <br>"
+    return [lettergrootteTekst,speciaalTekst,teKortTekst,teLangTekst]
+}
+function passwordChecker(){
+    let pws = document.querySelector('#password').value
+    let pwr = document.querySelector('#passwordResult')
+    let regexVelden= regexEisenPassword()
+    let foutTekstenPassword=foutmeldingenPassword()
+    let passwordCheckerTekst=""
+    for (let j=0;j<regexVelden.length;j++){
+        if (!regexVelden[j].test(pws)){
+            passwordCheckerTekst+=foutTekstenPassword[j]
+        }
+    }
+    pwr.innerHTML =passwordCheckerTekst
+}
+
 function emailChecker() {
     let regex = new RegExp(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/i)
     let emailLengte= document.querySelector('#email').value.length
@@ -228,8 +243,7 @@ function maakCustomer() {
             "postalCode": pc,"city": pn
         }
     };
-
-    fetch(`${url.origin}/users/register`, {
+    fetch('http://localhost:8080/users/register', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -238,7 +252,11 @@ function maakCustomer() {
         body: JSON.stringify(data)  // moet worden omgezet naar een string
     })
         .then(response => {
+                if (response.status===400){
+                    
+                    alert("email of bsn wordt al gebruikt")
 
+                }
                 console.log(response)
                 //const te = response.body
                 //document.querySelector('#bericht').innerHTML = te.roman;
@@ -252,14 +270,15 @@ function maakCustomer() {
             let welkomtekst="Welkom "+data.firstName + " "+ data.lastName
             document.querySelector('#welkomLayout').innerHTML = welkomtekst;
         })
-    // .catch((error) => {
-    //     console.error('Foutje', error);
-    // })
+     .catch((error) => {    
+         console.log(error.message);
+     })
     ;
     document.querySelector('#plaatje').src="../images/chickie_klein.png"
     document.querySelector('#plaatje').width="80"
     document.querySelector('#plaatje').height="80"
     document.querySelector('#btnStore').disabled=true
+
 
 }
 
