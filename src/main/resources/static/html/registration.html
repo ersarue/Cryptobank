@@ -35,58 +35,58 @@
                 <h5 class="title text-center mb-4">Registratie nieuwe klant</h5>
 <!--                First name -->
                 <div class="input-group mb-4">
-                  <input type="text" class="form-control" id="firstName" placeholder="Voornaam" maxlength="45" required>
+                  <input type="text" class="form-control rounded" id="firstName" placeholder="Voornaam" maxlength="45" required>
                   <label for="firstName"></label>
                 </div>
 <!--                Last name and possible prefix -->
                 <div class="d-flex">
                   <div class="col">
                 <div class="input-group mb-4">
-                  <input type="text" class="form-control margin-right" id="namePrefix" placeholder="Voorv." maxlength="15">
+                  <input type="text" class="form-control rounded margin-right" id="namePrefix" placeholder="Voorv." maxlength="15">
                   <label for="namePrefix"></label>
                 </div>
                   </div>
                   <div class="col-9">
                     <div class="input-group mb-4 ">
-                      <input type="text" class="form-control" id="lastName" placeholder="Achternaam" maxlength="45" required>
+                      <input type="text" class="form-control rounded" id="lastName" placeholder="Achternaam" maxlength="45" required>
                       <label for="lastName"></label>
                     </div>
                   </div>
                 </div>
 <!--                Date of birth (quick ugly hack to display placeholder text at first) -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control" id="dob" placeholder="Geboortedatum"
+                  <input type="text" class="form-control rounded" id="dob" placeholder="Geboortedatum"
                          onfocus="(this.type='date')" required>
                   <label for="dob"></label>
-                  <div class="invalid-feedback invalid-dob"></div>
+                  <div class="invalid-feedback dob-validation"></div>
                 </div>
 <!--                bsn -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control" id="bsn" placeholder="bsn" pattern="^[0-9]*$"
+                  <input type="text" class="form-control rounded" id="bsn" placeholder="bsn" pattern="^[0-9]*$"
                          minlength="8" maxlength="9" required>
                   <label for="bsn"></label>
                   <div class="invalid-feedback bsn-validation"></div>
                 </div>
 <!--                Postal code  -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control" id="postalCode" placeholder="Postcode"
+                  <input type="text" class="form-control rounded" id="postalCode" placeholder="Postcode"
                          pattern="[1-9][0-9]{3}[\s]?[A-Za-z]{2}" maxlength="7" required>
                   <label for="postalCode"></label>
-                  <div class="invalid-feedback invalid-postalCode">Vul een geldige postcode in</div>
+                  <div class="invalid-feedback postalCode-validation">Vul een geldige postcode in</div>
                 </div>
 <!--                House number and possible addition -->
                 <div class="d-flex">
                   <div class="col">
                     <div class="input-group mb-4 ">
-                      <input type="text" class="form-control margin-right" id="houseNo" placeholder="Huisnr."
+                      <input type="text" class="form-control rounded margin-right" id="houseNo" placeholder="Huisnr."
                              pattern="^[0-9]*$" required>
                       <label for="houseNo"></label>
-                      <div class="invalid-feedback invalid-houseNo"></div>
+                      <div class="invalid-feedback houseNo-validation"></div>
                     </div>
                   </div>
                   <div class="col">
                     <div class="input-group mb-4">
-                      <input type="text" class="form-control" id="houseAdd" placeholder="Toev.">
+                      <input type="text" class="form-control rounded" id="houseAdd" placeholder="Toev.">
                       <label for="houseAdd"></label>
                       <div class="invalid-feedback invalid-houseAdd"></div>
                     </div>
@@ -94,30 +94,31 @@
                 </div>
 <!--                Street name -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control" id="streetName" placeholder="Straatnaam" required>
+                  <input type="text" class="form-control rounded" id="streetName" placeholder="Straatnaam"  disabled required>
                   <label for="streetName"></label>
                 </div>
 <!--                City -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control" id="city" placeholder="Woonplaats" required>
+                  <input type="text" class="form-control rounded" id="city" placeholder="Woonplaats" disabled required>
                   <label for="city"></label>
                 </div>
+                <div class="invalid-feedback"></div>
 <!--                Telephone -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control" id="telephone" placeholder="Telnr." maxlength="30"
+                  <input type="text" class="form-control rounded" id="telephone" placeholder="Telnr." maxlength="30"
                          pattern="^[0-9-]*$" required>
                   <label for="telephone"></label>
                   <div class="invalid-feedback invalid-telephone">Vul een geldig telefoonnummer in</div>
                 </div>
 <!--                Email -->
                 <div class="input-group mb-4 ">
-                  <input type="email" class="form-control" id="email" placeholder="Email" required>
+                  <input type="email" class="form-control rounded" id="email" placeholder="Email" required>
                   <label for="email"></label>
-                  <div class="invalid-feedback invalid-email">Vul een geldig emailadres in</div>
+                  <div class="invalid-feedback email-validation">Vul een geldig emailadres in</div>
                 </div>
 <!--                Password -->
                 <div class="input-group mb-4">
-                  <input type="password" class="form-control" id="password" placeholder="Wachtwoord" minlength="8"
+                  <input type="password" class="form-control rounded" id="password" placeholder="Wachtwoord" minlength="8"
                          required>
                   <label for="password"></label>
                   <div class="invalid-feedback password-validation"></div>
