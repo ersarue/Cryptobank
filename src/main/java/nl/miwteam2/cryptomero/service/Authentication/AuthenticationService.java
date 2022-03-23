@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
+import nl.miwteam2.cryptomero.domain.UserAccountDTO;
 import nl.miwteam2.cryptomero.service.CustomerService;
 import nl.miwteam2.cryptomero.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author MinkTK
- * @version 1.3
+ * @version 1.4
  */
 
 @Service
@@ -39,7 +40,7 @@ public class AuthenticationService {
      * @param userAccount   The userAccount that is attempting login; providing credentials.
      * @return              A boolean; true if the credentials  match the database, false if the credentials do not match
      */
-    public boolean authenticate(UserAccount userAccount) {
+    public boolean authenticateLogin(UserAccountDTO userAccount) {
         // MTK: now going twice into database because else cannot handle unknown user/emailadres - todo find cleaner solution
         if (userAccountService.isEmailAlreadyInUse(userAccount.getEmail())) {
             UserAccount userDb = userAccountService.findByEmail(userAccount.getEmail());
@@ -51,32 +52,42 @@ public class AuthenticationService {
     }
 
     /**
-     * Authenticates an active login
-     * @param authorizationHeader   An authorization header containing a JSON Web Token (JWT)
+     * Checks if a token is valid
+     * @param authorizationHeader   An authorization header (string) containing a JSON Web Token (JWT)
      * @return                      A boolean; true if the JWT is authentic, false if the JWT is not authentic
      */
-    public boolean authenticateToken(String authorizationHeader) {
-        String token = getHeaderContent(authorizationHeader);
+    public boolean isValidToken(String authorizationHeader) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("Cryptomero")
-                    .build();
-            DecodedJWT jwt = verifier.verify(token);
+            verifyToken(authorizationHeader);
             return true;
         } catch (JWTVerificationException exception){
             return false;
         }
     }
 
-    public Customer authenticateCustomer(String authorizationHeader) {
+    /**
+     * Verifies a token
+     * @param authorizationHeader           An authorization header (string) containing a JSON Web Token (JWT)
+     * @return                              A decoded JWT token from which other information can be extracted
+     * @throws JWTVerificationException     If the JWT token is not legit or expired an exception is thrown
+     */
+    public DecodedJWT verifyToken(String authorizationHeader) throws JWTVerificationException {
         String token = getHeaderContent(authorizationHeader);
+        Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("Cryptomero")
+                .build();
+        return verifier.verify(token);
+    }
+
+    /**
+     * Extracts userAccountId from authorizationHeader and returns the data of the customer corresponding with the id
+     * @param authorizationHeader       An authorization header (string) containing a JSON Web Token (JWT)
+     * @return                          An authenticated customer if token is valid, null if not
+     */
+    public Customer getAuthenticatedCustomer(String authorizationHeader) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secretService.getSecret());
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("Cryptomero")
-                    .build();
-            DecodedJWT jwt = verifier.verify(token);
+            DecodedJWT jwt = verifyToken(authorizationHeader);
             int Account = jwt.getClaim("Account").asInt();
             return customerService.findById(Account);
         } catch (JWTVerificationException exception){
@@ -84,6 +95,11 @@ public class AuthenticationService {
         }
     }
 
+    /**
+     * Extracts the token from the authorizationHeader
+     * @param header        An authorization header (string) containing a JSON Web Token (JWT)
+     * @return              An unverified JWT token
+     */
     public String getHeaderContent(String header) {
         String[] headerArray = header.split(" ", 2);
         return headerArray[1];
