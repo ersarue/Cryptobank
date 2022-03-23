@@ -11,7 +11,8 @@ input {
 .progressClass {
     font-size: 15px;
     color:rgb(255, 0, 0);   
-    display: inline
+    display: inline;
+    align-items: flex-end;
 }
 
 .progressClassInput {
@@ -20,7 +21,8 @@ input {
 }
 #voorvoegsel {
     font-size: 15px;
-    color:rgb(68, 0, 255)
+    color:rgb(68, 0, 255);
+    align-items:center
 }
 #voorvoegselResult{
     font-size: 15px;
@@ -35,4 +37,7 @@ input {
     font-size: 15px;
     color:rgb(255, 0, 0);   
     display: inline
+}
+#passwordResult{
+    font-size: 10px;
 }
