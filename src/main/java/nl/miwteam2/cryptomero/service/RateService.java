@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.miwteam2.cryptomero.domain.Asset;
 import nl.miwteam2.cryptomero.domain.Rate;
+import nl.miwteam2.cryptomero.repository.JdbcAssetDao;
 import nl.miwteam2.cryptomero.repository.JdbcRateDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,16 +28,16 @@ public class RateService {
     private static final String API_KEY = "cb014412-0aa2-406c-972e-2c8c2841a732";
     private static final long UPDATE_INTERVAL = 1000 * 3600 * 6; //Update interval in milliseconds (6 hours)
 
+    private JdbcAssetDao jdbcAssetDao;
     private JdbcRateDao jdbcRateDao;
-    private AssetService assetService;
     private List<Asset> assets;
     private Map<String, Double> latestRates;
 
     @Autowired
-    public RateService(JdbcRateDao jdbcRateDao, AssetService assetService) {
+    public RateService(JdbcAssetDao jdbcAssetDao, JdbcRateDao jdbcRateDao) {
+        this.jdbcAssetDao = jdbcAssetDao;
         this.jdbcRateDao = jdbcRateDao;
-        this.assetService = assetService;
-        this.assets = assetService.getAll();
+        this.assets = jdbcAssetDao.getAll();
         this.latestRates = new HashMap<>();
 
         //Update all asset rates every given time interval
@@ -58,7 +59,7 @@ public class RateService {
                 HttpRequest request = createGetRequest(URL);
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 processJsonResponse(response);
-                updateRates();
+                storeLatestRate();
             } catch (InterruptedException | IOException e) {
                 System.out.println("Failed to update asset rates: " + e.getMessage());
             }
@@ -82,12 +83,11 @@ public class RateService {
             }
         }
 
-        private void updateRates() {
+        private void storeLatestRate() {
             //For every asset, construct the latest rate, write it to the database and notify AssetService
             for (Asset asset : assets) {
                 Rate rate = new Rate(asset, LocalDateTime.now(), latestRates.get(asset.getAssetName()));
                 jdbcRateDao.storeOne(rate);
-                assetService.updateRates();
             }
         }
     }

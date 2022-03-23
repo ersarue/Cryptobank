@@ -14,28 +14,17 @@ import java.util.*;
 public class AssetService {
 
     private JdbcAssetDao jdbcAssetDao;
-    private RateService rateService;
-    private List<Asset> assets;
 
     @Autowired
     public AssetService(JdbcAssetDao jdbcAssetDao, RateService rateService) {
         this.jdbcAssetDao = jdbcAssetDao;
-        this.rateService = rateService;
-        this.assets = jdbcAssetDao.getAll();
     }
 
     public List<Asset> getAll() {
-        return assets;
+        return jdbcAssetDao.getAll();
     }
 
     public Asset findByName(String name) {
-        return assets.stream().filter(a -> a.getAssetName().equals(name)).findAny().orElse(null);
-    }
-
-   public void updateRates() {
-        Map<String, Double> rates = rateService.getLatestRates();
-        for (Asset asset : assets) {
-            asset.setRate(rates.get(asset.getAssetName()));
-        }
+        return jdbcAssetDao.findByName(name);
     }
 }
