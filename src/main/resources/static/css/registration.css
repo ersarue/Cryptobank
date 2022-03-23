@@ -2,7 +2,7 @@ body {
   background: linear-gradient(to right, #5A3EBA, #4829B2);
 }
 
-h1 {
+h1, .modal-body {
   font-family: 'Gloria Hallelujah', cursive;
   color: #6610f2;
   -ms-transform: skewY(-3deg);

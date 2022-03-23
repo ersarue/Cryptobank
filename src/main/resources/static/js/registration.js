@@ -20,6 +20,8 @@ const postalCodeInput = document.getElementById('postalCode');
 const streetNameInput = document.getElementById('streetName');
 const cityInput = document.getElementById('city');
 const passwordInput = document.getElementById('password');
+const modalButton = document.getElementById('modal-button');
+const modal = new bootstrap.Modal(document.getElementById('success-modal'));
 
 const bsnValidation = document.querySelector('.bsn-validation');
 const passwordValidation = document.querySelector('.password-validation');
@@ -93,7 +95,7 @@ const register = async () => {
         const response = await fetch(`http://localhost:8080/users/register`, config);
         response.text().then(result => {
                 if (response.status === 201) {
-                    window.location = "../index.html";
+                    modal.show();
                 } else if (response.status === 400) {
                     processBackendErrResponse(result);
                 }
@@ -102,6 +104,10 @@ const register = async () => {
         console.log(e);
     }
 }
+
+modalButton.addEventListener('click', () => {
+    window.location = "../index.html"
+})
 
 const processBackendErrResponse = (response) => {
     if (response.includes('E-mail already in use')) {

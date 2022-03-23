@@ -19,14 +19,30 @@
 </head>
 <body>
 <div class="container" style="max-width: 600px;">
-  <div class="row d-flex  justify-content-center align-items-center">
+  <div class="row d-flex justify-content-center align-items-center">
     <div class="card rounded-3 text-black mt-4 mb-4">
       <div class="row">
         <div class="col-xs">
           </div>
         <div class="col-xs-7 mx-auto">
           <div class="card-body p-md-5 mx-md-4">
-              <div class="d-flex justify-content-center align-items-end">
+<!--            Modal -->
+            <div class="modal fade" id="success-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <h2>Welkom!</h2>
+                    <p>Je bent succesvol geregistreerd.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="modal-button" class="btn btn-primary">Naar login</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+<!--            Start of registration part of page-->
+            <div class="d-flex justify-content-center align-items-end">
                 <img src="../images/chickie_klein.png" alt="Cryptomero chick" width="100px">
                 <h1 class="title text-center mb-5" id="page-title">Cryptomero</h1>
               </div>
