@@ -2,6 +2,7 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.CustomerDto;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.regex.Pattern;
  */
 
 @Service
-public class CustomerService implements GenericService<Customer> {
+public class CustomerService {
 
     private static final double INITIAL_BALANCE = 1000000;
 
@@ -43,24 +44,26 @@ public class CustomerService implements GenericService<Customer> {
 
     /**
      * Stores a new customer in the database
-     * @param customer      The customer to be stored
+     * @param customerDto   The customer data to be stored
      * @return              The stored customer if storage was successful
      * @throws Exception    If the customer cannot be stored
      */
-    @Override
-    public Customer storeOne(Customer customer) throws Exception {
+
+    public Customer storeOne(CustomerDto customerDto) throws Exception {
 
         //Check whether all fields are valid, otherwise throw exception
-        List<String> errors = checkFieldValidity(customer);
+        List<String> errors = checkFieldValidity(customerDto);
         if (!errors.isEmpty()) throw new Exception(String.join("\n", errors));
 
         //Attempt to store customer address and throw exception if address is invalid
-        int addressId = addressService.storeAddress(customer.getAddress());
-        customer.getAddress().setIdAddress(addressId);
+        int addressId = addressService.storeAddress(customerDto.getAddress());
+        customerDto.getAddress().setIdAddress(addressId);
         if (addressId == 0) {
             errors.add("Invalid address");
             throw new Exception(String.join("\n", errors));
         }
+
+        Customer customer = new Customer(customerDto);
 
         //Store customer in the database and receive the auto-generated key
         UserAccount userAccount = userAccountService.storeOne(customer);
@@ -79,29 +82,26 @@ public class CustomerService implements GenericService<Customer> {
         return customer;
     }
 
+
     /**
      * Retrieve customer with the given id from the database
      * @param id            Id of the customer to retrieve
      * @return              The retrieved customer
      */
-    @Override
     public Customer findById(int id) {
         return customerRepository.findById(id);
     }
 
-    @Override
     public List<Customer> getAll() {
         //Omitted until required
         return null;
     }
 
-    @Override
     public Customer updateOne(Customer customer) {
         //Omitted until required
         return null;
     }
 
-    @Override
     public Customer deleteOne(int id) {
         //Omitted until required
         return null;
@@ -112,7 +112,7 @@ public class CustomerService implements GenericService<Customer> {
      * @param customer      The customer to be stored
      * @return              String representing whether all fields are valid or which errors occurred.
      */
-    private List<String> checkFieldValidity(Customer customer) throws NoSuchAlgorithmException, IOException, InterruptedException {
+    private List<String> checkFieldValidity(CustomerDto customer) throws NoSuchAlgorithmException, IOException, InterruptedException {
         List<String> errors = new ArrayList<>();
         List<String> missingFields = checkMissingFields(customer);
         List<String> overflowingFields = checkOverflowingFields(customer);
@@ -135,7 +135,7 @@ public class CustomerService implements GenericService<Customer> {
      * @param customer      The customer to be stored
      * @return              List with the fields that are missing
      */
-    private List<String> checkMissingFields(Customer customer) {
+    private List<String> checkMissingFields(CustomerDto customer) {
         List<String> missingFields = new ArrayList<>();
         if (customer.getEmail().isEmpty()) missingFields.add("e-mail");
         if (customer.getPassword().isEmpty()) missingFields.add("password");
@@ -152,7 +152,7 @@ public class CustomerService implements GenericService<Customer> {
      * @param customer      The customer to be stored
      * @return              List with the fields that are overflowing
      */
-    private List<String> checkOverflowingFields(Customer customer) {
+    private List<String> checkOverflowingFields(CustomerDto customer) {
         final int MAX_LENGTH_EMAIL = 30;
         final int MAX_LENGTH_PASSWORD = 64;
         final int MAX_LENGTH_FIRST_NAME = 45;
