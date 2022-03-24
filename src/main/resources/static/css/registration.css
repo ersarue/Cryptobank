@@ -1,3 +1,5 @@
+/* TODO: streamline css file(s) */
+
 body {
   background: linear-gradient(to right, #5A3EBA, #4829B2);
 }
@@ -10,7 +12,6 @@ h1, h2 {
 }
 
 .cryptomero-logo {
-  /*margin-left: 30%;*/
   transition: 0.70s;
   display: block;
 }
@@ -20,7 +21,7 @@ h1, h2 {
   transform: rotate(360deg);
 }
 
-p {
+.modal-text {
   font-family: 'Gloria Hallelujah', cursive;
   color: #6610f2;
   font-size: 1.2rem;
@@ -34,7 +35,7 @@ img {
   margin-right: 1rem;
 }
 
-/* TODO: check how to adjust button color */
-#submit-btn {
+.btn {
   background: #6009ef;
 }
+
