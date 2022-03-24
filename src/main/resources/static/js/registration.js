@@ -2,17 +2,16 @@
 
 "use strict";
 
-// TODO: Refine validation, clean up code
+// TODO: Refine validation, clean up and refactor code!
 
 const url = new URL(window.location.href);
 
-// Selecting html-elements
 const form = document.querySelector('form');
 const inputFieldsArray = [...document.querySelectorAll('input')];
 const firstNameInput = document.getElementById('firstName');
 const namePrefixInput = document.getElementById('namePrefix');
 const lastNameInput = document.getElementById('lastName');
-const firstLastNameInputs = [...document.querySelectorAll('#firstName, #lastName')];
+const nameInputs = [...document.querySelectorAll('#firstName, #namePrefix, #lastName')];
 const dobInput = document.getElementById('dob');
 const bsnInput = document.getElementById('bsn');
 const houseNoInput = document.getElementById('houseNo');
@@ -36,26 +35,26 @@ const modalButton = document.getElementById('modal-button');
 const modal = new bootstrap.Modal(document.getElementById('success-modal'));
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Prevent submission of form if invalid (form.checkvalidity() checks the validations indicated in html only)
-    form.addEventListener('submit', function (event) {
-        trimInputFields(); // Removes whitespace from both ends of the input values
+    form.addEventListener('submit',(e) => {
+        trimInputFields();
+        // Prevent submission of form if invalid
         if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
+                e.preventDefault();
+                e.stopPropagation();
             } else {
-                event.preventDefault();
+                e.preventDefault();
                 register(); // Registration of new customer
             }
             form.classList.add('was-validated');
     }, false);
 });
 
-const trimInputFields = () => {
+const trimInputFields = () => { // TODO: Will become obsolete (remove at later stage)
     inputFieldsArray.forEach((field) => field.value = field.value.trim());
 }
 
 inputFieldsArray.forEach((field) => {
-    field.addEventListener('focus', () =>
+    field.addEventListener('input', () =>
         form.classList.remove('was.validated')); // Undo final form validation check if user modifies an input
 });
 
@@ -107,7 +106,7 @@ modalButton.addEventListener('click', () => {
     window.location = "../index.html"
 });
 
-const processBackendErrResponse = (response) => { // TODO: catch all of the possible errors
+const processBackendErrResponse = (response) => { // TODO: catch all of the possible errors & refactor
     if (response.includes('E-mail already in use')) {
         form.classList.remove('was-validated');
         emailInput.classList.add('is-invalid');
@@ -118,56 +117,92 @@ const processBackendErrResponse = (response) => { // TODO: catch all of the poss
         bsnInput.classList.add('is-invalid');
         bsnValidation.innerHTML = 'Bsn is al in gebruik';
     }
+    if (response.includes('This password has been seen')) {
+        form.classList.remove('was-validated');
+        passwordInput.classList.add('is-invalid');
+        passwordValidation.innerHTML = 'Wachtwoord te zwak, is bekend bij enge criminelen';
+    }
 }
 
-// Trim whitespaces of first and last name fields immediately after filling out field
+// Trim whitespaces of first name, name prefix and last name fields immediately after quitting field
 
-firstLastNameInputs.forEach((field) => {
+nameInputs.forEach((field) => {
     field.addEventListener('blur', () => {
         field.value = field.value.trim()
     })
 })
 
+// Check validity of first name, name prefix and last name fields immediately after filling out field
+
+nameInputs.forEach((field) => {
+    field.addEventListener('blur', () => {
+        if (!field.checkValidity()) {
+            field.classList.add('is-invalid')
+        }
+    })
+})
+
+nameInputs.forEach((field) => {
+    field.addEventListener('focus', () => {
+        field.classList.remove('is-invalid');
+    })
+})
+
 // Check validity of dob immediately after filling out field
 
-dobInput.addEventListener('blur', (event) => {
+dobInput.addEventListener('blur', (e) => {
     checkDob();
-    if (!event.target.checkValidity()) {
-        dobInput.classList.add('is-invalid')
+    if (!e.target.checkValidity()) {
+        e.target.classList.add('is-invalid')
     }
 });
 
-dobInput.addEventListener('focus', () => {
-    dobInput.classList.remove('is-invalid');
+dobInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
 });
 
-const checkDob = () => { // TODO: Check for invalid dob-format
-    const dateGiven = new Date(dobInput.value);
-    const months = Date.now() - dateGiven.getTime();
-    const newDate= new Date(months)
-    const year = newDate.getUTCFullYear();
-    const age = Math.abs(year - 1970);
-    if (age < 18) {
+const checkDob = () => {
+    if (!dobInput.checkValidity()) {
         dobInput.classList.add('is-invalid');
-        dobValidation.innerHTML="Je bent helaas te jong om klant te zijn bij Cryptomero";
+        if (!(dobInput.value.trim().length === 0)) {
+            dobValidation.innerHTML = 'Vul een geldige geboortedatum in'; // Show explicit error message only when field contains data
+        }
+    } else {
+        const age = calculateAge();
+        if(age < 18) {
+        dobInput.classList.add('is-invalid');
+        dobValidation.innerHTML = "Je moet min. 18 jaar zijn om klant te worden bij Cryptomero";
+        }
     }
 }
 
-// Check validity of bsn immediately after filling out field
+const calculateAge = () => {
+    // Author function: Marcel
+    const givenDate = new Date(dobInput.value);
+    const epochSeconds = Date.now() - givenDate.getTime();
+    const newDate = new Date(epochSeconds);
+    const year = newDate.getUTCFullYear();
+    return Math.abs(year - 1970);
+}
 
-bsnInput.addEventListener('blur', () => {
+// Check validity of bsn immediately after filling out field
+// TODO: Find way to avoid 'clash' with form validity checker
+
+bsnInput.addEventListener('blur', (e) => {
     checkBsn();
-    if (!(bsnInput.value.trim().length === 0)) { // Show explicit error message only when field has not been touched yet
+    if (!(e.target.value.trim().length === 0)) { // Show explicit error message only when field contains data
         bsnValidation.innerHTML = 'Vul een geldig bsn in';
     }
+    e.target.value = e.target.value.trim();
 });
 
-bsnInput.addEventListener('focus', () => {
-    bsnInput.classList.remove('is-invalid');
+bsnInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
     bsnValidation.innerHTML = null;
 });
 
 const checkBsn = () => {
+    // Author function: Marcel
     const FACTORS = [9, 8, 7, 6, 5, 4, 3, 2, -1];
     const DIVISOR = 11;
     let bsn = bsnInput.value;
@@ -180,17 +215,18 @@ const checkBsn = () => {
         const digit = parseInt(bsnArray[i]);
         sum += digit * FACTORS[i];
     }
-    if (sum % DIVISOR !== 0) {
+    if (sum % DIVISOR !== 0 || !bsnInput.checkValidity()) { // Execute '11-proef' validity check & checks indicated in html
         bsnInput.classList.add('is-invalid');
     }
 }
 
 // Check validity of postal code format immediately after filling out field (and complete the address if possible)
 
-postalCodeInput.addEventListener('blur', () => {
-    if (!postalCodeInput.checkValidity()) {
-        postalCodeInput.classList.add('is-invalid');
-        if (!(postalCodeInput.value.trim().length === 0)) { // Show explicit error message only when field is not empty
+postalCodeInput.addEventListener('blur', (e) => {
+    e.target.value = e.target.value.trim();
+    if (!e.target.checkValidity()) {
+        e.target.classList.add('is-invalid');
+        if (!(e.target.value.length === 0)) { // Show explicit error message only when field contains data
             postalCodeValidation.innerHTML = 'Vul een geldige postcode in';
         }
     } else {
@@ -198,18 +234,19 @@ postalCodeInput.addEventListener('blur', () => {
     }
 });
 
-postalCodeInput.addEventListener('focus', () => {
-    postalCodeInput.classList.remove('is-invalid');
+postalCodeInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
     streetNameInput.value = '';
     cityInput.value = '';
 });
 
 // Check validity of house number format immediately after filling out field (and complete the address if possible)
 
-houseNoInput.addEventListener('blur', () => {
-    if (!houseNoInput.checkValidity()) {
-        houseNoInput.classList.add('is-invalid');
-        if (houseNoInput.value !== '') {
+houseNoInput.addEventListener('blur', (e) => {
+    e.target.value = e.target.value.trim();
+    if (!e.target.checkValidity()) {
+        e.target.classList.add('is-invalid');
+        if (e.target.value.length !== 0) { // Show explicit error message only when field contains data
             houseNoValidation.innerHTML = 'Vul een nummer in';
         }
     } else {
@@ -217,61 +254,78 @@ houseNoInput.addEventListener('blur', () => {
     }
 });
 
-houseNoInput.addEventListener('focus', () => {
-    houseNoInput.classList.remove('is-invalid');
+houseNoInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
     streetNameInput.value = '';
     cityInput.value = '';
 });
 
 // Check validity of telephone format immediately after filling out field
 
-telInput.addEventListener('blur', () => {
-    if (!telInput.checkValidity()) {
-        telInput.classList.add('is-invalid');
-        if (!(telInput.value.trim().length === 0)) {
-            telValidation.innerHTML = 'Vul een geldig telefoonnummer in'; // // Show explicit error message only when field is not empty
+telInput.addEventListener('blur', (e) => {
+    if (!e.target.checkValidity()) {
+        e.target.classList.add('is-invalid');
+        if (e.target.value.trim().length !== 0) {
+            telValidation.innerHTML = 'Vul een geldig telefoonnummer in'; // Show explicit error message only when field contains data
         }
     }
+    e.target.value = e.target.value.trim();
 });
 
-telInput.addEventListener('focus', () => {
-    telInput.classList.remove('is-invalid');
+telInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
 });
 
 // Check validity of email immediately after filling out field
 
-emailInput.addEventListener('blur', () => {
-    if (!emailInput.checkValidity()) {
-        emailInput.classList.add('is-invalid');
-        if (!(emailInput.value.trim().length === 0)) {
-            emailValidation.innerHTML = 'Vul een geldig emailadres in'; // // Show explicit error message only when field is not empty
+emailInput.addEventListener('blur', (e) => {
+    if (!e.target.checkValidity()) {
+        e.target.classList.add('is-invalid');
+        if (e.target.value.trim().length !== 0) {
+            emailValidation.innerHTML = 'Vul een geldig emailadres in'; // Show explicit error message only when field contains data
         }
     }
+    e.target.value = e.target.value.trim();
 });
 
-emailInput.addEventListener('focus', () => {
-    emailInput.classList.remove('is-invalid');
+emailInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
 });
 
 // Check validity of password immediately after filling out field
 
-passwordInput.addEventListener('blur', () => {
-    if (!passwordInput.checkValidity()) {
-        passwordInput.classList.add('is-invalid');
-        if (!(passwordInput.value.trim().length === 0)) { // Show explicit error message only when field is not empty
+passwordInput.addEventListener('blur', (e) => {
+    checkRepPassword();
+    if (!e.target.checkValidity()) {
+        e.target.classList.add('is-invalid');
+        if (e.target.value.trim().length !== 0) { // Show explicit error message only when field contains data
             passwordValidation.innerHTML = 'Wachtwoord moet minimaal 8 tekens lang zijn';
         }
     }
+    e.target.value = e.target.value.trim();
 });
 
-passwordInput.addEventListener('focus', () => {
-    passwordInput.classList.remove('is-invalid');
+passwordInput.addEventListener('focus', (e) => {
+    e.target.classList.remove('is-invalid');
 });
+
+const checkRepPassword = () => {
+    // Regex patterns match those of the check done in the backend
+    const regexPatChar = /(.)\1\1\1/g;
+    const regexGroup1 = /(.{4,7})\1/g;
+    const regexGroup2 = /(.{2,3})\1\1/g;
+    const regexPatNum = /\d{5}/g;
+    if (regexPatChar.test(passwordInput.value) || regexGroup1.test(passwordInput.value) || regexGroup2.test(passwordInput.value)
+        || regexPatNum.test(passwordInput.value)) {
+        passwordInput.classList.add('is-invalid');
+        passwordValidation.innerHTML = 'Wachtwoord mag niet teveel herhaling bevatten';
+    }
+}
 
 // Automatic address completion
 
 const completeAddressFields = async () => {
-    if (postalCodeInput.value !== '' && houseNoInput.value !== '') { // Note: Undefined or null does not imply empty
+    if (postalCodeInput.value !== '' && houseNoInput.value !== '') {
         const trimmedPostalCode = postalCodeInput.value.trim();
         const postalCodeHouseNo = `postcode=${trimmedPostalCode}&number=${houseNoInput.value}`;
         const config = {
