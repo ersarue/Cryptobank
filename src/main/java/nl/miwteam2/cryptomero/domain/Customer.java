@@ -31,9 +31,18 @@ public class Customer extends UserAccount {
         this.bsn = bsn;
         this.telephone = telephone;
     }
-//    public Customer(){
-//        //todo constructor chain of verwijder
-//    }
+    public Customer(CustomerDto customerDto){
+        this.firstName=customerDto.getFirstName();
+        this.namePrefix=customerDto.getNamePrefix();
+        this.lastName= customerDto.getLastName();
+        this.dob = customerDto.getDob();
+        this.bsn = customerDto.getBsn();
+        this.telephone = customerDto.getTelephone();
+        this.address = customerDto.getAddress();
+        this.setEmail(customerDto.getEmail());
+        this.setPassword(customerDto.getPassword());
+    }
+
 
     public String getFirstName() {
         return firstName;
