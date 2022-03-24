@@ -295,6 +295,7 @@ emailInput.addEventListener('focus', (e) => {
 // Check validity of password immediately after filling out field
 
 passwordInput.addEventListener('blur', (e) => {
+    checkRepPassword();
     if (!e.target.checkValidity()) {
         e.target.classList.add('is-invalid');
         if (e.target.value.trim().length !== 0) { // Show explicit error message only when field contains data
@@ -307,6 +308,19 @@ passwordInput.addEventListener('blur', (e) => {
 passwordInput.addEventListener('focus', (e) => {
     e.target.classList.remove('is-invalid');
 });
+
+const checkRepPassword = () => {
+    // Regex patterns match those of the check done in the backend
+    const regexPatChar = /(.)\1\1\1/g;
+    const regexGroup1 = /(.{4,7})\1/g;
+    const regexGroup2 = /(.{2,3})\1\1/g;
+    const regexPatNum = /\d{5}/g;
+    if (regexPatChar.test(passwordInput.value) || regexGroup1.test(passwordInput.value) || regexGroup2.test(passwordInput.value)
+        || regexPatNum.test(passwordInput.value)) {
+        passwordInput.classList.add('is-invalid');
+        passwordValidation.innerHTML = 'Wachtwoord mag niet teveel herhaling bevatten';
+    }
+}
 
 // Automatic address completion
 
