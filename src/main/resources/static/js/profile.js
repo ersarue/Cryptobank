@@ -9,6 +9,14 @@ const url = new URL(window.location.href)
 const logoutButton = document.getElementById("logout-btn" )
 logoutButton.addEventListener("click" , logout)
 
+window.addEventListener( "pageshow", function ( event ) {
+    var perfEntries = performance.getEntriesByType("navigation");
+    if (perfEntries[0].type === "back_forward") {
+        location.reload();
+    }
+});
+
+
 // fetch customer information
 //todo rate zonder token op te halen?
 
