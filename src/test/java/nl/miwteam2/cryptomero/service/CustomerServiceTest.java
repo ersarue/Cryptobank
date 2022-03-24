@@ -150,14 +150,14 @@ class CustomerServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"aaaaaaaa", "kdjsfuv444", "jjjaaAnnN", "worstworst", "2BeOrNot2Be", "12345678", "Yo123",
-                            "1212"})
+    @ValueSource(strings = {"aaaaaaaa", "kdjsfuv19752", "jjjjaaAnnN", "worstworst", "2Be2Be2Be", "12345678", "catcatcat",
+                            "12123"})
     void testRepetitivePasswords(String password) {
         assertThat(serviceUnderTest.isRepetitive(password)).isNotNull().isTrue();
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "jfiKCidf", "kdjsfuv44", "WachtMot", "hallo", "zomerVakantie12"})
+    @ValueSource(strings = { "jfiKCidf", "kdjsfuv44", "WachtMot", "hallo", "zomerVakantie12","hallo1hallo"})
     void testNonRepetitivePasswords(String password) {
         assertThat(serviceUnderTest.isRepetitive(password)).isNotNull().isFalse();
     }

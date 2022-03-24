@@ -248,11 +248,21 @@ public class CustomerService {
      * @return              True if the password contains one or more sequences; false if it does not
      */
     public boolean isRepetitive(String password) {
-        Pattern patChar = Pattern.compile("(.)\\1\\1");
-        Pattern patGroup = Pattern.compile("(..)(.*?)\\1");
-        Pattern patNum = Pattern.compile("\\d{3,}");
+        //todo alleen zware eisen als het password te kort is
+        //checkt herhalingen van 4 de zelfde tekens achter elkaar
+        Pattern patChar = Pattern.compile("(.)\\1\\1\\1"); //hhhh mag niet
+
+        //checkt of een sequence van 4 tot 7 tekens, direct achter elkaar herhaald wordt.
+        Pattern patGroup1 = Pattern.compile("(.{4,7})\\1"); //hallohallo mag niet
+
+        //checkt of een sequence van 3, direct achter elkaar 2 maal herhaald wordt.
+        Pattern patGroup2 = Pattern.compile("(.{2,3})\\1\\1"); //halhalhal mag niet
+
+        //5 getallen achterelkaar is niet toegestaan.
+        Pattern patNum = Pattern.compile("\\d{5}"); //38132 mag niet
+
         // Use Pattern.matcher() and find() because we don't necessarily want to match the entire string
-        return patChar.matcher(password).find() | patGroup.matcher(password).find() | patNum.matcher(password).find();
+        return patChar.matcher(password).find() | patGroup1.matcher(password).find() | patGroup2.matcher(password).find()| patNum.matcher(password).find();
     }
 
     /**
