@@ -4,51 +4,33 @@
     --grijs: #616161;
     --lichtgrijs: #F6F6F6;
 }
+
 body {
-    background-image: url("../images/chickens.jpg")
+    background-image: url("../images/crypto-background.jpeg");
+    background-size: cover;
+    opacity: 0.8;
 }
 
-
-#footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 0.5em;
-    color: #616161;
-    background-color: #F6F6F6;
+.navbar {
+    background-color: var(--paars);
 }
 
-#asset-table {
-    background-color: #F6F6F6;
-    color: #6610f2;
-    margin-top: 60px;
-    width: 70%;
-    align-content: center;
-    align-self: center;
+img {
+    width: 60px;
+    height: 60px;
+    transition: 0.70s;
+    display: block;
 }
 
-#welkomLayout {
-    color: var(--paars);
-    margin-top: 50px;
-    font-weight: bold;
-    font-size: 25px;
-    text-align: center;
+img:hover {
+    transition: 0.90s;
+    transform: rotate(360deg);
+}
+
+.go-home {
     font-family: 'Gloria Hallelujah', cursive;
-}
-#ibanLayout{
-    color: var(--paars);
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    text-align: center;
-}
-
-#saldoLayout{
-    color: var(--paars);
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    text-align: center;
+    font-size: 1.1em;
+    transform: skewY(-3deg);
 }
 
 #logout-btn {
@@ -57,8 +39,52 @@ body {
     color: white;
 }
 
-.navbar {
-    /*color: white;*/
-    padding-top: 0rem;
-    padding-bottom: 0rem;
+.welcome-container {
+    margin: 10%;
+    opacity: 0.8;
+    background-color: var(--paars);
+    border-radius: 10px;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#asset-table {
+    background-color: var(--lichtgrijs);
+    color: var(--paars);
+    margin-top: 60px;
+    width: 70%;
+    align-content: center;
+    align-self: center;
+}
+
+h1, h2 {
+    color: white;
+}
+
+
+#welkomLayout {
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
+    font-family: 'Gloria Hallelujah', cursive;
+}
+
+#ibanLayout, #saldoLayout {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: left;
+}
+
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 0.2em;
+    color: var(--grijs);
+    background-color: var(--lichtgrijs);
 }
