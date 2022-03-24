@@ -41,7 +41,7 @@ img:hover {
 
 .welcome-container {
     margin: 10%;
-    opacity: 0.8;
+    opacity: 1;
     background-color: var(--paars);
     border-radius: 10px;
 }
@@ -65,20 +65,18 @@ h1, h2 {
     color: white;
 }
 
-
 #welkomLayout {
     font-weight: bold;
     font-size: 25px;
     text-align: center;
-    font-family: 'Gloria Hallelujah', cursive;
+    padding-bottom: 30px;
 }
 
 #ibanLayout, #saldoLayout {
     font-weight: bold;
     font-size: 16px;
-    text-align: left;
+    text-align: center;
 }
-
 
 #footer {
     position: fixed;
