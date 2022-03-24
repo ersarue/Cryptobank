@@ -1,6 +1,7 @@
 // Author: Petra Coenen
 
 "use strict";
+
 const url = new URL(window.location.href);
 
 const form = document.querySelector('form');
@@ -32,7 +33,6 @@ const login = async () => {
     const config = {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(loginObject)
