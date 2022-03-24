@@ -9,6 +9,17 @@ h1, h2 {
   transform: skewY(-3deg);
 }
 
+.cryptomero-logo {
+  /*margin-left: 30%;*/
+  transition: 0.70s;
+  display: block;
+}
+
+.cryptomero-logo:hover {
+  transition: 0.90s;
+  transform: rotate(360deg);
+}
+
 p {
   font-family: 'Gloria Hallelujah', cursive;
   color: #6610f2;
