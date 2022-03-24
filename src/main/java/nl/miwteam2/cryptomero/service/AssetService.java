@@ -20,10 +20,19 @@ public class AssetService {
         this.jdbcAssetDao = jdbcAssetDao;
     }
 
+    /**
+     * Return information of all assets (except rates)
+     * @return                      Information of all assets (except rates)
+     */
     public List<Asset> getAll() {
         return jdbcAssetDao.getAll();
     }
 
+    /**
+     * Return information of specific asset (except rates)
+     * @param name                  The specified asset
+     * @return                      Information of specific asset (except rates)
+     */
     public Asset findByName(String name) {
         return jdbcAssetDao.findByName(name);
     }
