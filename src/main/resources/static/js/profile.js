@@ -20,7 +20,7 @@ Promise.all([
             'Content-Type': 'application/json',
         }
     }),
-    fetch(`${url.origin}/assets`, {
+    fetch(`${url.origin}/rates/latest`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function fillTable(data) {
     for (let asset in data[0].wallet) {
 
         const amount = data[0].wallet[asset];
-        const rate = data[1].find(e => e.assetName === asset).rate;
+        const rate = data[1].find(e => e.asset.assetName === asset).rate;
         const value = amount * rate;
 
         const rowNode = document.createElement("tr");
