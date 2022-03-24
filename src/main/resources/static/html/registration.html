@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Registratie nieuwe klant</title>
+  <meta charset="utf-8">
+  <title>Registratie nieuwe klant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" type="image/jpg" href="../images/chickie_icon.png"/>
   <!-- Bootstrap css file -->
@@ -32,8 +32,9 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-body">
-                    <h2>Welkom!</h2>
-                    <p>Je bent succesvol geregistreerd.</p>
+                    <h2>Gelukt!</h2>
+                    <br>
+                    <p>Je bent succesvol geregistreerd. <br> Wat fijn dat je klant bent geworden bij Cryptomero!</p>
                   </div>
                   <div class="modal-footer">
                     <button type="button" id="modal-button" class="btn btn-primary">Naar login</button>
@@ -88,7 +89,7 @@
                   <input type="text" class="form-control rounded" id="postalCode" placeholder="Postcode"
                          pattern="[1-9][0-9]{3}[\s]?[A-Za-z]{2}" maxlength="7" required>
                   <label for="postalCode"></label>
-                  <div class="invalid-feedback postalCode-validation">Vul een geldige postcode in</div>
+                  <div class="invalid-feedback postalCode-validation"></div>
                 </div>
 <!--                House number and possible addition -->
                 <div class="d-flex">
@@ -102,7 +103,7 @@
                   </div>
                   <div class="col">
                     <div class="input-group mb-4">
-                      <input type="text" class="form-control rounded" id="houseAdd" placeholder="Toev.">
+                      <input type="text" class="form-control rounded" id="houseAdd" placeholder="Toev." maxlength="15">
                       <label for="houseAdd"></label>
                       <div class="invalid-feedback invalid-houseAdd"></div>
                     </div>
@@ -110,7 +111,7 @@
                 </div>
 <!--                Street name -->
                 <div class="input-group mb-4 ">
-                  <input type="text" class="form-control rounded" id="streetName" placeholder="Straatnaam"  disabled required>
+                  <input type="text" class="form-control rounded" id="streetName" placeholder="Straatnaam" disabled required>
                   <label for="streetName"></label>
                 </div>
 <!--                City -->
@@ -124,13 +125,13 @@
                   <input type="text" class="form-control rounded" id="telephone" placeholder="Telnr." maxlength="30"
                          pattern="^[0-9-]*$" required>
                   <label for="telephone"></label>
-                  <div class="invalid-feedback invalid-telephone">Vul een geldig telefoonnummer in</div>
+                  <div class="invalid-feedback telephone-validation"></div>
                 </div>
 <!--                Email -->
                 <div class="input-group mb-4 ">
-                  <input type="email" class="form-control rounded" id="email" placeholder="Email" required>
+                  <input type="email" class="form-control rounded" id="email" placeholder="Email" maxlength="254" required>
                   <label for="email"></label>
-                  <div class="invalid-feedback email-validation">Vul een geldig emailadres in</div>
+                  <div class="invalid-feedback email-validation"></div>
                 </div>
 <!--                Password -->
                 <div class="input-group mb-4">
