@@ -1,16 +1,10 @@
 package nl.miwteam2.cryptomero.controller;
 
-import nl.miwteam2.cryptomero.domain.Asset;
-import nl.miwteam2.cryptomero.domain.Rate;
-import nl.miwteam2.cryptomero.service.AssetService;
 import nl.miwteam2.cryptomero.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Stijn Klijn
@@ -27,9 +21,30 @@ public class RateController {
         this.rateService = rateService;
     }
 
-    @GetMapping
-    public List<Rate> getAll() {
-        return null;
+    @GetMapping("/latest")
+    public ResponseEntity<?> getLatest() {
+        try {
+            return new ResponseEntity<>(rateService.getLatest(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
+    @GetMapping("/latest/{name}")
+    public ResponseEntity<?> getLatestByName(@PathVariable String name) {
+        try {
+            return new ResponseEntity<>(rateService.getLatestByName(name), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getHistory(@RequestParam String name, @RequestParam String interval, @RequestParam int datapoints) {
+        try {
+            return new ResponseEntity<>(rateService.getHistory(name, interval, datapoints), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

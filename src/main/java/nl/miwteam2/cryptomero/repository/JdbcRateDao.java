@@ -9,14 +9,16 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Stijn Klijn
  */
 
 @Repository
-public class JdbcRateDao implements GenericDao<Rate> {
+public class JdbcRateDao {
 
     private JdbcTemplate jdbcTemplate;
     private JdbcAssetDao jdbcAssetDao;
@@ -27,41 +29,39 @@ public class JdbcRateDao implements GenericDao<Rate> {
         this.jdbcAssetDao = jdbcAssetDao;
     }
 
-    @Override
-    public List<Rate> getAll() {
-        //Omitted until required
-        return null;
+    public List<Rate> getLatest() {
+        String sql = "SELECT * FROM rate " +
+                "WHERE `datetime` IN " +
+                "(SELECT MAX(`datetime`) FROM rate " +
+                "GROUP BY asset);";
+        return jdbcTemplate.query(sql, new JdbcRateDao.RateRowMapper());
     }
 
-    @Override
-    public Rate findById(int id) {
-        //This method will not be implemented because Rate has no id
-        return null;
+    public Rate getLatestByName(String name) {
+        String sql = "SELECT * FROM rate " +
+                "WHERE `datetime` IN " +
+                "(SELECT MAX(`datetime`) FROM rate " +
+                "GROUP BY asset) " +
+                "AND asset = ?;";
+        return jdbcTemplate.queryForObject(sql, new JdbcRateDao.RateRowMapper(), name);
     }
 
-    @Override
+    public List<Rate> getHistory(String name, LocalDateTime startTimepoint) {
+        String sql = "SELECT * FROM rate " +
+                "WHERE asset = ? AND `datetime` >= ?;";
+        return jdbcTemplate.query(sql, new JdbcRateDao.RateRowMapper(), name, startTimepoint);
+    }
+
     public int storeOne(Rate rate) {
         String sql = "INSERT INTO rate VALUES(?, ?, ?);";
         return jdbcTemplate.update(sql, rate.getAsset().getAssetName(), rate.getTimepoint(), rate.getRate());
-    }
-
-    @Override
-    public int updateOne(Rate rate) {
-        //Omitted until required
-        return 0;
-    }
-
-    @Override
-    public int deleteOne(int id) {
-        //Omitted until required
-        return 0;
     }
 
     private class RateRowMapper implements RowMapper<Rate> {
         @Override
         public Rate mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Rate(jdbcAssetDao.findByName(rs.getString("asset")),
-                    LocalDateTime.parse(rs.getString("datetime")),
+                    LocalDateTime.parse(rs.getString("datetime"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     rs.getDouble("rate")
             );
         }

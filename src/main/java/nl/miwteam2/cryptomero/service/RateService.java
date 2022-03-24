@@ -45,8 +45,49 @@ public class RateService {
         timer.scheduleAtFixedRate(new UpdateRates(), 0, UPDATE_INTERVAL);
     }
 
-    public Map<String, Double> getLatestRates() {
-        return latestRates;
+    public List<Rate> getLatest() {
+        return jdbcRateDao.getLatest();
+    }
+
+    public Rate getLatestByName(String name) {
+        return jdbcRateDao.getLatestByName(name);
+    }
+
+    public Rate[] getHistory(String name, String interval, int numberOfDatapoints) {
+
+        if (numberOfDatapoints <= 0) throw new IllegalArgumentException("Mininum datapoints is 1");
+
+        LocalDateTime endTimePoint = LocalDateTime.now();
+        LocalDateTime startTimepoint = subtractInterval(endTimePoint, interval, numberOfDatapoints);
+        List<Rate> unfilteredList =  jdbcRateDao.getHistory(name, startTimepoint);
+        Rate[] filteredList = new Rate[numberOfDatapoints];
+
+        LocalDateTime nextTimepoint = endTimePoint;
+        LocalDateTime previousTimepoint = subtractInterval(nextTimepoint, interval, 1);
+
+        for (int i = numberOfDatapoints - 1; i >= 0; i--) {
+            for (Rate rate : unfilteredList) {
+                if (rate.getTimepoint().isAfter(previousTimepoint) && rate.getTimepoint().isBefore(nextTimepoint)) {
+                    filteredList[i] = rate;
+                }
+            }
+            nextTimepoint = previousTimepoint;
+            previousTimepoint = subtractInterval(previousTimepoint, interval, 1);
+        }
+
+        return filteredList;
+    }
+
+    private LocalDateTime subtractInterval(LocalDateTime dateTime, String interval, int times) {
+        switch (interval) {
+            case "daypart": return dateTime.minusHours(6L * times);
+            case "day": return dateTime.minusDays(times);
+            case "month": return dateTime.minusMonths(times);
+            case "quarter": return dateTime.minusMonths(3L * times);
+            case "hyear": return dateTime.minusMonths(6L * times);
+            case "year": return dateTime.minusYears(times);
+            default: throw new IllegalArgumentException(String.format("Interval %s does not exist", interval));
+        }
     }
 
     private class UpdateRates extends TimerTask {
