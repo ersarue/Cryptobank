@@ -40,44 +40,83 @@ public class RateService {
         this.assets = jdbcAssetDao.getAll();
         this.latestRates = new HashMap<>();
 
-        //Update all asset rates every given time interval
+        //Update all asset rates every given time interval, using an external API
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new UpdateRates(), 0, UPDATE_INTERVAL);
     }
 
+    /**
+     * Return latest rate for all assets
+     * @return                      The latest rate for all assets
+     */
     public List<Rate> getLatest() {
         return jdbcRateDao.getLatest();
     }
 
+    /**
+     * Return latest rate for the specified asset
+     * @param name                  The specified asset
+     * @return                      The latest rate for the specified asset
+     */
     public Rate getLatestByName(String name) {
         return jdbcRateDao.getLatestByName(name);
     }
 
-    public Rate[] getHistory(String name, String interval, int numberOfDatapoints) {
+    /**
+     * Return historical rates for the specified asset
+     * This algorithm contains a nested for-loop and therefore will run in O(n^2) time
+     * It is inefficient for large amounts of datapoints, which is therefore limited to 50
+     * @param name                  The specified asset
+     * @param interval              Requested time interval: "daypart", "day", "month", "quarter", "hyear" or "year"
+     * @param numberOfDatapoints    Requested number of datapoints
+     * @return                      TreeMap with the requested number of datapoints.
+     *                              Key represents timepoint and value represents rate
+     */
+    public Map<LocalDateTime, Double> getHistory(String name, String interval, int numberOfDatapoints) {
 
-        if (numberOfDatapoints <= 0) throw new IllegalArgumentException("Mininum datapoints is 1");
+        if (numberOfDatapoints <= 0 || numberOfDatapoints > 50) {
+            throw new IllegalArgumentException("Number of datapoints must be between 1 and 50");
+        }
 
-        LocalDateTime endTimePoint = LocalDateTime.now();
-        LocalDateTime startTimepoint = subtractInterval(endTimePoint, interval, numberOfDatapoints);
-        List<Rate> unfilteredList =  jdbcRateDao.getHistory(name, startTimepoint);
-        Rate[] filteredList = new Rate[numberOfDatapoints];
+        //Specify current time as endTimepoint and interval * numberOfDatapoints as startTimepoint.
+        LocalDateTime endTimepoint = LocalDateTime.now();
+        LocalDateTime startTimepoint = subtractInterval(endTimepoint, interval, numberOfDatapoints);
 
-        LocalDateTime nextTimepoint = endTimePoint;
+        //Retrieve all (unfiltered) rate information since startTimepoint from database
+        List<Rate> unfilteredDatapoints =  jdbcRateDao.getHistory(name, startTimepoint);
+
+        //Create TreeMap to store the filtered information
+        Map<LocalDateTime, Double> filteredDatapoints = new TreeMap<>();
+
+        //Define the limits of the current interval. We start with the most recent interval
+        LocalDateTime nextTimepoint = endTimepoint;
         LocalDateTime previousTimepoint = subtractInterval(nextTimepoint, interval, 1);
 
         for (int i = numberOfDatapoints - 1; i >= 0; i--) {
-            for (Rate rate : unfilteredList) {
+            //Starting with the last datapoint, find the most recent rate information for the current interval
+            Rate currentRate = null;
+            for (Rate rate : unfilteredDatapoints) {
                 if (rate.getTimepoint().isAfter(previousTimepoint) && rate.getTimepoint().isBefore(nextTimepoint)) {
-                    filteredList[i] = rate;
+                    currentRate = rate;
                 }
             }
+
+            //If information was found for this interval, it is stored. Then the current interval shifts one unit to the left
+            filteredDatapoints.put(nextTimepoint, currentRate != null ? currentRate.getRate() : null);
             nextTimepoint = previousTimepoint;
             previousTimepoint = subtractInterval(previousTimepoint, interval, 1);
         }
 
-        return filteredList;
+        return filteredDatapoints;
     }
 
+    /**
+     * Subtract given time interval from the given timepoint
+     * @param dateTime              The timepoint to subtract from
+     * @param interval              The interval that must be subtracted: "daypart", "day", "month", "quarter", "hyear" or "year"
+     * @param times                 The number of times the interval should be subtracted
+     * @return                      The resulting timepoint
+     */
     private LocalDateTime subtractInterval(LocalDateTime dateTime, String interval, int times) {
         switch (interval) {
             case "daypart": return dateTime.minusHours(6L * times);
