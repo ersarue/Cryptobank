@@ -1,0 +1,40 @@
+body {
+  background: linear-gradient(to right, #5A3EBA, #4829B2);
+}
+
+h1, h2 {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #6610f2;
+  -ms-transform: skewY(-3deg);
+  transform: skewY(-3deg);
+}
+
+.cryptomero-logo {
+  /*margin-left: 30%;*/
+  transition: 0.70s;
+  display: block;
+}
+
+.cryptomero-logo:hover {
+  transition: 0.90s;
+  transform: rotate(360deg);
+}
+
+p {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #6610f2;
+  font-size: 1.2rem;
+}
+
+img {
+  margin-bottom: 1rem;
+}
+
+.margin-right {
+  margin-right: 1rem;
+}
+
+/* TODO: check how to adjust button color */
+#submit-btn {
+  background: #6009ef;
+}

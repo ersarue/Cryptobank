@@ -14,6 +14,17 @@ h2 {
   opacity: 0.9;
 }
 
+.cryptomero-logo {
+  margin-left: 30%;
+  transition: 0.70s;
+  display: block;
+}
+
+.cryptomero-logo:hover {
+  transition: 0.90s;
+  transform: rotate(360deg);
+}
+
 .gradient-custom-2 {
   /* fallback for old browsers */
   background: #6009ef;

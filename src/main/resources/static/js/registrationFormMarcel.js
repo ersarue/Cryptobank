@@ -1,4 +1,13 @@
-let url = new URL(window.location.href);
+const MAX_LENGTH_FIRST_NAME = 10;
+const MAX_LENGTH_NAME_PREFIX = 15;
+const MAX_LENGTH_LAST_NAME = 10;
+const MAX_LENGTH_TELEPHONE = 12;
+const MAX_LENGTH_PASSWORD = 64;
+const MIN_LENGTH_PASSWORD = 8;
+const MIN_LENGTH_BSN = 8;
+const MAX_LENGTH_BSN = 9;
+const FACTORS = [9, 8, 7, 6, 5, 4, 3, 2, -1];
+const DIVISOR = 11
 
 document.querySelector('#btnStore').addEventListener('click', ()=>{
     maakCustomer()
@@ -34,119 +43,102 @@ document.querySelector('#gebdatum').addEventListener('focusout', ()=>{
     voortgangsMeter()
 })
 document.querySelector('#bsn').addEventListener('focusout', ()=>{
-    bsnChecker()
-    voortgangsMeter()
+    if (bsnPreCheck()){
+        bsnChecker()
+        voortgangsMeter()
+    }
 })
 document.querySelector('#telefoon').addEventListener('focusout', ()=>{
     restChecker()
     voortgangsMeter()
 })
 document.querySelector('#huisnummer').addEventListener('focusout', ()=>{
-    postcodeApi()
-    voortgangsMeter()
-})
-document.querySelector('#postcode').addEventListener('focusout', ()=>{
-    document.querySelector('#postcodeResult').innerHTML=""
-    document.querySelector('#huisnummerResult').innerHTML=""
-    if (postcodeRegEx()){
+    if (postcodeHuisnummerChecker()){
         postcodeApi()
         voortgangsMeter()
     }
-    
 })
+document.querySelector('#postcode').addEventListener('focusout', ()=>{
+    if (postcodeHuisnummerChecker()){
+        postcodeApi()
+        voortgangsMeter()
+    }
+})
+
 function voortgangsMeter(){
     let voortgangsgetal=0
-    passwordChecker()
     let tabelFoutTeksten = document.querySelectorAll('.progressClass')
     let tabelInputVelden = document.querySelectorAll('.progressClassInput')
-    //console.log(tabelFoutTeksten.length)
-    //console.log(tabelInputVelden.length)
     const extra= 100/tabelFoutTeksten.length
     for (let i=0;i<tabelInputVelden.length;i++){
-        //console.log(tabelInputVelden[i].value)
-        //console.log(tabelFoutTeksten[i].innerHTML.length)
         if(tabelFoutTeksten[i].innerHTML===""&&tabelInputVelden[i].value!=="")
-        voortgangsgetal+=extra
-        //console.log(voortgangsgetal)
+            voortgangsgetal+=extra
     }
-    
-    // tabelFoutTeksten.forEach(e => {
-    //     if (e.innerHTML===""){
-    //         voortgangsgetal+=extra
-    //     }
-    // })
-    //console.log(tabel.length)
-    //voortgangsgetal = voortgangsgetal+ 10 
     document.getElementById("myBar").style.width=`${voortgangsgetal}%`
-    if (voortgangsgetal>99){
+    if (voortgangsgetal>=100){
         document.querySelector('#btnStore').disabled=false
     }
 }
-function restChecker(){
-        const MAX_LENGTH_FIRST_NAME = 45;
-        const MAX_LENGTH_NAME_PREFIX = 15;
-        const MAX_LENGTH_LAST_NAME = 45;
-        const MAX_LENGTH_TELEPHONE = 30;
-        let voornaam = document.querySelector('#voornaam').value
-        let voorvoegsel = document.querySelector('#voorvoegsel').value
-        let achternaam = document.querySelector('#achternaam').value
-        let telefoon = document.querySelector('#telefoon').value
-        if (voornaam.length>=MAX_LENGTH_FIRST_NAME){
-            document.querySelector('#voornaamResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#voornaamResult').innerHTML=""
-        }
-        if (voorvoegsel.length>=MAX_LENGTH_NAME_PREFIX){
-            document.querySelector('#voorvoegselResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#voorvoegselResult').innerHTML=""
-        }
-        if (achternaam.length>=MAX_LENGTH_LAST_NAME){
-            document.querySelector('#achternaamResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#achternaamResult').innerHTML=""
-        }
-        if (telefoon.length>=MAX_LENGTH_TELEPHONE){
-            document.querySelector('#telefoonResult').innerHTML="te lang"
-        }
-        else{
-            document.querySelector('#telefoonResult').innerHTML=""
-        }
+
+function restCheckerStartWaarden(){
+    let vvs = document.querySelector('#voorvoegsel').value
+    let ans = document.querySelector('#achternaam').value
+    let tels = document.querySelector('#telefoon').value
+    let vns = document.querySelector('#voornaam').value
+    return [vns,ans,vvs,tels]
 }
-function bsnChecker(){
+function restCheckerStartWaardenResults(){
+    let vvr = document.querySelector('#voorvoegselResult')
+    let anr = document.querySelector('#achternaamResult')
+    let telr = document.querySelector('#telefoonResult')
+    let vnr = document.querySelector('#voornaamResult')
+    return [vnr,anr,vvr,telr]
+}
+// deze methode roept eerst twee hulpmethode aan, daarna zal deze de lengte van vier velden testen
+function restChecker(){
+        let restVelden = restCheckerStartWaarden()
+        const constanten=[MAX_LENGTH_FIRST_NAME,MAX_LENGTH_LAST_NAME,MAX_LENGTH_NAME_PREFIX,MAX_LENGTH_TELEPHONE]
+        let restVeldenResults = restCheckerStartWaardenResults()
+        let vvResult=document.querySelector('#voorvoegselResult')
+        for (let i=0;i<constanten.length;i++){
+            if (restVelden[i].length>constanten[i]){
+                restVeldenResults[i].innerHTML="de ingevoerde waarde is te lang"
+        }
+        else{
+            restVeldenResults[i].innerHTML=""
+        }
+    }
+}
+function bsnPreCheck(){
     let bsn = document.querySelector('#bsn').value
     document.querySelector('#bsnResult').innerHTML=""
-    const MIN_LENGTH = 8;
-    const MAX_LENGTH = 9;
-    if (bsn.length < MIN_LENGTH || bsn.length > MAX_LENGTH){
-        document.querySelector('#bsnResult').innerHTML="bsn voldoet niet aan lengte eis"
+    if (bsn.length < MIN_LENGTH_BSN || bsn.length > MAX_LENGTH_BSN){
+        document.querySelector('#bsnResult').innerHTML="Bsn voldoet niet aan lengte eis"
+        return false
     }
     let regex = new RegExp(/^[^a-zA-Z]+$/)
     if (!regex.test(bsn)){
-        document.querySelector('#bsnResult').innerHTML="bsn heeft letters"
+        document.querySelector('#bsnResult').innerHTML="Bsn heeft letters"
+        return false
     }
+    return true
+}
+
+function bsnChecker(){
+    let bsn = document.querySelector('#bsn').value
     if (bsn.length == 8){
         bsn = "0" + bsn; //prepend 0 to ensure bsn consists of 9 numbers
     }
-    const FACTORS = [9, 8, 7, 6, 5, 4, 3, 2, -1];
-    const DIVISOR = 11
     let sum = 0;
     for (i = 0; i < bsn.length; i++) {
         let digit = bsn.substring(i, i + 1);
         sum += digit * FACTORS[i];
     }
-    console.log(sum%DIVISOR);
     if (sum%DIVISOR !== 0){
-
-        document.querySelector('#bsnResult').innerHTML="geen geldig bsn"
+        document.querySelector('#bsnResult').innerHTML="Geen geldig bsn"
     }
-    //document.querySelector('#voortgang').style.width=100
-
-
 }
+
 function leeftijdChecker(){
     let dateOfBirth = document.querySelector('#gebdatum').value
     const d = new Date(dateOfBirth);
@@ -155,29 +147,43 @@ function leeftijdChecker(){
     const year = newDate.getUTCFullYear();
     const age = Math.abs(year - 1970);
     if (age<18){
-        document.querySelector('#dobResult').innerHTML="te jong"
-    } else if (dateOfBirth.length===0){
-        document.querySelector('#dobResult').innerHTML="geen geldige datum"
+        document.querySelector('#dobResult').innerHTML="De minimumleeftijd is 18 jaar"
+    }else if (dateOfBirth.length===0){
+        document.querySelector('#dobResult').innerHTML="Geen geldige datum"
     }else{
         document.querySelector('#dobResult').innerHTML=""
     }
 
 }
-function passwordChecker(){
-    let regex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,64}$/i)
-    let passwordLengte= document.querySelector('#password').value.length
-    let passwordCheckerTekst=""
-    document.querySelector('#passwordResult').innerHTML =""
-    if (!regex.test(document.querySelector('#password').value)&&(passwordLengte>64||passwordLengte<8)){
-        passwordCheckerTekst="passwordeisen 8-64 karakters, minimaal 1 kleine letter, 1 Hoofdletter 1 getal 1 special karakter"
-    }
-    else if(passwordLengte>64||passwordLengte<8){
-        passwordCheckerTekst="password te lang64/kort8"
-    }else if(!regex.test(document.querySelector('#password').value)){
-        passwordCheckerTekst="1 Kleine, 1 Hoofdletter 1 getal 1 special karakter"
-    }
-    document.querySelector('#passwordResult').innerHTML =passwordCheckerTekst
+//regex eisen volgens Product Owner, daarna database lengte velden testen, doel duidelijk info aan nieuwe klant
+function regexEisenPassword(){
+    let regexLG = new RegExp(/^(?=.*?[a-z]{2})(?=.*?[A-Z]{2}).{0,65}$/i)
+    let regexGS = new RegExp(/^(?=.*[0-9])(?=.*\W).{0,65}$/i)
+    let regexMinL = new RegExp(/^.{8,}$/i)
+    let regexMaxL = new RegExp(/^.{0,15}$/i)
+    return [regexLG, regexGS, regexMinL, regexMaxL]
 }
+function foutmeldingenPassword(){
+    let lettergrootteTekst="Minimaal 1 A-Z en 1 a-z;"
+    let speciaalTekst="Minimaal een 0-9 en een speciaal teken (%$#@); "
+    let teKortTekst="Meer dan 8 karakters;"
+    let teLangTekst="Minder dan 15 karakters;"
+    return [lettergrootteTekst,speciaalTekst,teKortTekst,teLangTekst]
+}
+function passwordChecker(){
+    let pws = document.querySelector('#password').value
+    let pwr = document.querySelector('#passwordResult')
+    let regexVelden= regexEisenPassword()
+    let foutTekstenPassword=foutmeldingenPassword()
+    let passwordCheckerTekst=""
+    for (let j=0;j<regexVelden.length;j++){
+        if (!regexVelden[j].test(pws)){
+            passwordCheckerTekst+=foutTekstenPassword[j]
+        }
+    }
+    pwr.innerHTML =passwordCheckerTekst
+}
+
 function emailChecker() {
     let regex = new RegExp(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/i)
     let emailLengte= document.querySelector('#email').value.length
@@ -191,22 +197,20 @@ function emailChecker() {
         emailCheckerTekst="email niet correct"
     }
     document.querySelector('#emailResult').innerHTML =emailCheckerTekst
-
 }
-function postcodeRegEx() {
+function postcodeHuisnummerChecker() {
     let regex = new RegExp(/^[1-9][0-9]{3}[\s]?[A-Za-z]{2}$/i);
     let postcode = document.querySelector('#postcode').value
-    //console.log('pc is valide: ' + regex.test(postcode))
-    if (regex.test(postcode)){
+    let huisnummer = document.querySelector('#huisnummer').value
+    if (regex.test(postcode)&&(postcode!=="")&&huisnummer!==""){
         document.querySelector('#postcodeResult').innerHTML=""
         return true
     }else{
-        document.querySelector('#postcodeResult').innerHTML="postcode verkeerd"
+        document.querySelector('#postcodeResult').innerHTML="Postcode formaat 1234DE? Huisnummer ingevuld?"
         return false
     }
-    
 }
-function maakCustomer() {
+function samenstellenJsonCustomer(){
     const em =  document.querySelector('#email').value
     const pw =  document.querySelector('#password').value
     const vn =  document.querySelector('#voornaam').value
@@ -220,7 +224,7 @@ function maakCustomer() {
     const tvv =  document.querySelector('#toevoegsel').value
     const pc =  document.querySelector('#postcode').value
     const pn =  document.querySelector('#stad').value
-    let data = {
+    return data = {
         "idAccount": 1,
         "email": em,"password": pw,"firstName": vn,"namePrefix": vv,"lastName": an,
         "dob": gb,"bsn": bsn,"telephone": tel,
@@ -228,8 +232,10 @@ function maakCustomer() {
             "postalCode": pc,"city": pn
         }
     };
-
-    fetch(`${url.origin}/users/register`, {
+}
+function maakCustomer() {
+    let data = samenstellenJsonCustomer()
+    fetch('http://localhost:8080/users/register', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -238,76 +244,50 @@ function maakCustomer() {
         body: JSON.stringify(data)  // moet worden omgezet naar een string
     })
         .then(response => {
-
-                console.log(response)
-                //const te = response.body
-                //document.querySelector('#bericht').innerHTML = te.roman;
+                if (response.status===400){
+                    alert("email of bsn wordt al gebruikt")
+                }
                 return response.json()
-
-
             }
         )
         .then(data => {
-            
             let welkomtekst="Welkom "+data.firstName + " "+ data.lastName
             document.querySelector('#welkomLayout').innerHTML = welkomtekst;
-        })
-    // .catch((error) => {
-    //     console.error('Foutje', error);
-    // })
-    ;
+        });
+        opmaakschermNaRegistreren()
+}
+
+function opmaakschermNaRegistreren(){
     document.querySelector('#plaatje').src="../images/chickie_klein.png"
     document.querySelector('#plaatje').width="80"
     document.querySelector('#plaatje').height="80"
     document.querySelector('#btnStore').disabled=true
-
 }
-
 function postcodeApi(){
-
     let postcode = document.querySelector('#postcode').value
-    //let postcode = "2513ST"
     let huisnummer = document.querySelector('#huisnummer').value
-    if (huisnummer===""||postcode===""){
-        document.querySelector('#postcodeResult').innerHTML="postcode en huisnummer allebei invullen"
-        document.querySelector('#huisnummerResult').innerHTML="postcode en huisnummer allebei invullen"
-        return
-    }
-    //let huisnummer = 178
-    // als postcode een valide postcode is nummer niet leeg, dan
-    // console.log('pc is valide: ' + regex.test(postcode))
-
-
-    let formData = `postcode=${postcode}&number=${huisnummer}` //postcode=1234AB&nr=15
-
+    let formData = `postcode=${postcode}&number=${huisnummer}`
     fetch("https://postcode.tech/api/v1/postcode?" + formData , {
         headers: {
             'Authorization': 'Bearer 5cc336e3-c924-44d6-a44f-d8b9e5e0ddb9',
         },
     })
         .then(response => {
-
-                console.log(response)
-                //const te = response.body
-                //document.querySelector('#bericht').innerHTML = te.roman;
                 return response.json()
-
-
             }
         )
-        //.then(json => console.log(json.message))
         .then(json => {
-            console.log(json.street)
-            if (json.street===undefined){
-                document.getElementById('straatnaam').value = null;
-                document.getElementById('stad').value = null;
-                document.querySelector('#postcodeResult').innerHTML="dit is geen geldige huisnummer/postcode combinatie"
-            }else{
-                document.querySelector('#postcodeResult').innerHTML=""
-            document.querySelector('#straatnaam').value=(json.street)
-            document.querySelector('#stad').value=json.city
-            }
-            
-
+            aanvullenAdresgegevens(json.street, json.city)
         })
+}
+function aanvullenAdresgegevens(responseStreet, responseCity){
+    if (responseStreet===undefined){
+        document.getElementById('straatnaam').value = null;
+        document.getElementById('stad').value = null;
+        document.querySelector('#postcodeResult').innerHTML="dit is geen geldige huisnummer/postcode combinatie"
+    }else{
+        document.querySelector('#postcodeResult').innerHTML=""
+        document.querySelector('#straatnaam').value=responseStreet
+        document.querySelector('#stad').value=responseCity
+    }
 }

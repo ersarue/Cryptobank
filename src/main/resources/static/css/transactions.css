@@ -1,0 +1,17 @@
+
+img {
+    width: 20%;
+    height: 20%;
+    padding: 10px;
+}
+
+body {
+    background-image: url("../images/transactions.jpeg");
+    background-size: cover;
+    opacity: 1.1;
+}
+
+.column {
+    width: 30%;
+}
+

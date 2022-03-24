@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registreer als klant</title>
+    <link rel="shortcut icon" type="image/jpg" href="../images/chickie_icon.png"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/registrationFormMarcel.css">
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </head>
+<body>
+    <h2 class="title text-center mb-5" id="page-title" inline >Cryptomero</h2>
+    <img id="plaatje" src="../images/ei.jpg" alt="" width="80" height="80">
+    <button id="btnStore" disabled>REGISTREER</button>
+    <p id="welkomLayout"></p>
+    
+    <table >
+        <tr>
+            <td style="width:300px">
+                <label >Email</label>
+            </td>
+            <td>
+                <input id="email" class="progressClassInput" type="email" value="x4@yahoo.com" style="width:100%" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                 
+            </td>
+            <td>
+                <p id="emailResult" class="progressClass"  ></p> 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Password</label>
+            </td>
+            <td>
+                <input id="password" class="progressClassInput" type="text" value="ValidPassword1@" style="width:100%">
+            </td>
+        </tr>
+            <td>
+                
+            </td> 
+            <td>
+                <p id="passwordResult" class="progressClass" </p>
+            </td> 
+        </tr>
+        
+    </table>
+    <form>
+        <fieldset>
+            <legend class="naamLegend">Naam BSN en telefoonnummer</legend>
+    <table >
+        <tr>
+            <td style="width:200px">
+                <label>Voornaam</label>
+            </td>
+            <td>
+                <input id="voornaam" class="progressClassInput" type="text" value="ghhg" style="width:100%">
+            </td>
+            <td style="width:200px">
+                <label>Voorvoegsel</label>
+            </td>
+            <td>
+                <input id="voorvoegsel" type="text" value="" style="width:100%">
+            </td>
+        </tr>
+        <tr>
+            <td style="width:200px">
+            </td>
+            <td>
+                <p id="voornaamResult" class="progressClass"></p>
+            </td>
+            <td style="width:200px">
+            </td>
+            <td>
+                <p id="voorvoegselResult"></p><br>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:400px">
+                <label>Achternaam</label><br>
+            </td>
+            <td>
+                <input id="achternaam" class="progressClassInput" type="text" value="bfgbfg" style="width:100%">
+            </td>
+            <td style="width:400px">
+                <label>Geboortedatum</label><br>
+            </td>
+            <td>
+                <input id="gebdatum" class="progressClassInput" type="date" value="2000-01-01" style="width:100%">
+            </td>
+        </tr>
+        <tr>
+            <td style="width:300px">
+            </td>
+            <td>
+                <p id="achternaamResult" class="progressClass"></p>
+            </td>
+            <td style="width:300px">
+            </td>
+            <td>
+                <p id="dobResult"  class="progressClass"></p><br>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:400px">
+                <label>BSN</label><br>
+            </td>
+            <td>
+                <input id="bsn" class="progressClassInput" type="number" value="162554989" style="width:100%">
+            </td>
+            <td style="width:400px">
+                <label>Telefoonnummer</label><br>
+            </td>
+            <td>
+                <input id="telefoon" class="progressClassInput" type="text" value="0612345678" style="width:100%">
+            </td>
+        </tr>
+        <tr>
+            <td style="width:300px">
+            </td>
+            <td>
+                <p id="bsnResult"  class="progressClass" ></p>
+            </td>
+            <td style="width:300px">
+            </td>
+            <td>
+                 <p id="telefoonResult"  class="progressClass" ></p>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+</form>
+<form>
+    <fieldset>
+            <legend class="naamLegend">Automatisch adresformulier</legend>
+            <table>
+            <tr>
+                <td style="width:400px">
+                    <label>Huisnummer</label><br>
+                </td>
+                <td>
+                    <input id="huisnummer" class="progressClassInput" type="number" value="178" style="width:100%">
+                </td>
+                <td style="width:400px">
+                    <label>Straat</label><br>
+                </td>
+                <td>
+                    <input id="straatnaam" class="progressClassInput" type="text" value="" style="width:100%" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:300px">
+                </td>
+                <td>
+                    <p id="huisnummerResult"  class="progressClass" ></p>
+                </td>
+                <td style="width:300px">
+                </td>
+                <td>
+                    <p id="straatnaamResult"  class="progressClass" ></p><br>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px">
+                    <label>Toevoeging</label><br>
+                </td>
+                <td>
+                    <input id="toevoegsel" type="text" value="" style="width:100%">
+                </td>
+                <td style="width:400px">
+                    <label>Stad</label><br>
+                </td>
+                <td>
+                    <input id="stad"class="progressClassInput" type="text" value="" style="width:100%" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:300px">
+                </td>
+                <td>
+                    <p id="toevoegselResult" ></p>
+            </div>
+                </td>
+                <td style="width:300px">
+                </td>
+                <td>
+                    <p id="stadResult" class="progressClass"  ></p><br>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:400px">
+                    <label>Postcode</label><br>
+                </td>
+                <td>
+                    <input id="postcode" class="progressClassInput" type="text" style="width:100%" value="2513ST">
+                </td>
+                <td style="width:400px">
+                    <p id="postcodeResult" class="progressClass"  ></p>
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            </table>
+            
+            
+        </fieldset>
+    </form>
+    <div class="w3-light-grey">
+        <div id="myBar" class="w3-container w3-green" style="height:24px;width:1%"></div>
+    </div>
+    <!-- Bootstrap script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+crossorigin="anonymous"></script>
+    <script src="../js/registrationFormMarcel.js"></script>
+</body>
+</html>
