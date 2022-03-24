@@ -1,13 +1,28 @@
+:root {
+    --paars: #6610f2;
+    --geel: #f27ddd;
+    --grijs: #616161;
+    --lichtgrijs: #F6F6F6;
+}
 #welkomLayout {
     color: var(--paars);
     font-weight: bold;
     font-size: 25px;
 
 }
+h1, h2 {
+    font-family: 'Gloria Hallelujah', cursive;
+    color: #6610f2;
+    -ms-transform: skewY(-3deg);
+    transform: skewY(-3deg);
+  }
+
 input {
     width: 25%;
 }
-
+.naamLegend {
+    color: var(--paars)
+}
 .progressClass {
     font-size: 15px;
     color:rgb(255, 0, 0);   
@@ -40,4 +55,23 @@ input {
 }
 #passwordResult{
     font-size: 10px;
+}
+body {
+    background-image: url("../images/crypto-background.jpeg");
+    background-size: cover;
+    opacity: 0.9;
+}
+table, th, td {
+    border: 1px solid white;
+    border-collapse: collapse;
+    
+
+  }
+  th, td {
+    background-color: #f9fdfd;
+  }
+
+  img:hover {
+    transition: 0.90s;
+    transform: rotate(360deg);
 }
