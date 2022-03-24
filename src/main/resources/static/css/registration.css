@@ -12,7 +12,6 @@ h1, h2 {
 }
 
 .cryptomero-logo {
-  /*margin-left: 30%;*/
   transition: 0.70s;
   display: block;
 }
@@ -22,7 +21,6 @@ h1, h2 {
   transform: rotate(360deg);
 }
 
-p {
 .modal-text {
   font-family: 'Gloria Hallelujah', cursive;
   color: #6610f2;
