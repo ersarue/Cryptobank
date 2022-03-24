@@ -1,6 +1,7 @@
 package nl.miwteam2.cryptomero.controller;
 
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.CustomerDto;
 import nl.miwteam2.cryptomero.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/users")
-public class CustomerController implements GenericController<Customer>{
+public class CustomerController {
 
     private CustomerService customerService;
 
@@ -26,21 +27,15 @@ public class CustomerController implements GenericController<Customer>{
     }
     @CrossOrigin
     @PostMapping("/register")
-    public ResponseEntity<?> storeOne(@RequestBody Customer customer) {
+    public ResponseEntity<?> storeOne(@RequestBody CustomerDto customerDTO) {
         try {
-            return new ResponseEntity<>(customerService.storeOne(customer), HttpStatus.CREATED);
+            return new ResponseEntity<>(customerService.storeOne(customerDTO), HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-//    @PostMapping
-//    public Customer storeOne(@RequestBody Customer customer) throws Exception {
-//
-//        customerService.storeOne(customer);
-//        return customer;
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {

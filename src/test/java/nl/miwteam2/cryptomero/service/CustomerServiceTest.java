@@ -2,6 +2,7 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.domain.Customer;
+import nl.miwteam2.cryptomero.domain.CustomerDto;
 import nl.miwteam2.cryptomero.domain.UserAccount;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,9 +31,10 @@ class CustomerServiceTest {
     private BankAccountService bankAccountService = Mockito.mock(BankAccountService.class);
     private UserAccountService userAccountService = Mockito.mock(UserAccountService.class);
 
+    private CustomerDto customerDtoToStore;
     private Customer customerToStore;
     private Address validAddress;
-    private int customerToStoreAge;
+    private int customerDtoToStoreAge;
 
     CustomerServiceTest() {
         this.serviceUnderTest = new CustomerService(customerRepository, addressService, bankAccountService, userAccountService);
@@ -51,13 +53,21 @@ class CustomerServiceTest {
 
     @BeforeEach
     private void createValidCustomer() {
-        //customerToStore changes with each test and thus has to be recreated between tests, hence @BeforeEach
-        customerToStoreAge = 25;
-        customerToStore = new Customer("firstName", "namePrefix", "lastName",
-                LocalDate.now().minusYears(customerToStoreAge), "182358197", "0612345678");
-        customerToStore.setEmail("example@domain.com");
-        customerToStore.setPassword("validPassword");
-        customerToStore.setAddress(validAddress);
+        //customerDtoToStore changes with each test and thus has to be recreated between tests, hence @BeforeEach
+        customerDtoToStoreAge = 25;
+        customerDtoToStore = new CustomerDto();
+        customerDtoToStore.setFirstName("firstName");
+        customerDtoToStore.setNamePrefix("namePrefix");
+        customerDtoToStore.setLastName("lastName");
+        customerDtoToStore.setDob(LocalDate.now().minusYears(customerDtoToStoreAge));
+        customerDtoToStore.setBsn("182358197");
+        customerDtoToStore.setTelephone("0612345678");
+        customerDtoToStore.setEmail("example@domain.com");
+        customerDtoToStore.setPassword("validPassword");
+        customerDtoToStore.setAddress(validAddress);
+
+        customerToStore = new Customer(customerDtoToStore);
+
         Mockito.when(userAccountService.storeOne(customerToStore)).thenReturn(new UserAccount(1, "example@domain.com", "validPassword"));
     }
 
@@ -65,7 +75,7 @@ class CustomerServiceTest {
     void storeValidCustomer() {
         Customer actual = null;
         try {
-            actual = serviceUnderTest.storeOne(customerToStore);
+            actual = serviceUnderTest.storeOne(customerDtoToStore);
         } catch (Exception e) {
             fail("Storage of valid customer yielded exception: " + e.getMessage());
         }
@@ -78,8 +88,8 @@ class CustomerServiceTest {
     void storeCustomerWithInvalidFieldLength() {
         Exception exception = null;
         try {
-            customerToStore.setFirstName("");
-            serviceUnderTest.storeOne(customerToStore);
+            customerDtoToStore.setFirstName("");
+            serviceUnderTest.storeOne(customerDtoToStore);
             fail("Storage of invalid customer succeeded");
         } catch (Exception e) {
             exception = e;
@@ -92,8 +102,8 @@ class CustomerServiceTest {
     void storeCustomerWithInvalidEmail() {
         Exception exception = null;
         try {
-            customerToStore.setEmail("exampledomain.com");
-            serviceUnderTest.storeOne(customerToStore);
+            customerDtoToStore.setEmail("exampledomain.com");
+            serviceUnderTest.storeOne(customerDtoToStore);
             fail("Storage of invalid customer succeeded");
         } catch (Exception e) {
             exception = e;
@@ -107,8 +117,8 @@ class CustomerServiceTest {
         final int ILLEGAL_AGE = 17;
         Exception exception = null;
         try {
-            customerToStore.setDob(LocalDate.now().minusYears(ILLEGAL_AGE));
-            serviceUnderTest.storeOne(customerToStore);
+            customerDtoToStore.setDob(LocalDate.now().minusYears(ILLEGAL_AGE));
+            serviceUnderTest.storeOne(customerDtoToStore);
             fail("Storage of invalid customer succeeded");
         } catch (Exception e) {
             exception = e;
@@ -121,8 +131,8 @@ class CustomerServiceTest {
     void storeCustomerWithInvalidBsn() {
         Exception exception = null;
         try {
-            customerToStore.setBsn("182358196");
-            serviceUnderTest.storeOne(customerToStore);
+            customerDtoToStore.setBsn("182358196");
+            serviceUnderTest.storeOne(customerDtoToStore);
             fail("Storage of invalid customer succeeded");
         } catch (Exception e) {
             exception = e;
