@@ -1,3 +1,5 @@
+/* TODO: streamline css file(s) */
+
 body {
   background: linear-gradient(to right, #5A3EBA, #4829B2);
 }
@@ -9,7 +11,7 @@ h1, h2 {
   transform: skewY(-3deg);
 }
 
-p {
+.modal-text {
   font-family: 'Gloria Hallelujah', cursive;
   color: #6610f2;
   font-size: 1.2rem;
@@ -23,7 +25,7 @@ img {
   margin-right: 1rem;
 }
 
-/* TODO: check how to adjust button color */
-#submit-btn {
+.btn {
   background: #6009ef;
 }
+
