@@ -12,7 +12,38 @@ logoutButton.addEventListener("click" , logout)
 // fetch customer information
 //todo rate zonder token op te halen?
 
-Promise.alllh((err) => {
+Promise.all([
+    fetch(`${url.origin}/portfolio/assets`, {
+        method: 'GET',
+        headers: {
+            'Authorization': getToken(),
+            'Content-Type': 'application/json',
+        }
+    }),
+    fetch(`${url.origin}/assets`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+]).then(responses => {
+    if (responses[0].status === 401){
+        alert("Token niet meer geldig, u moet opnieuw inloggen")
+        logout()
+    } else if (responses[0].status === 200 && responses[1].status === 200) {
+        return Promise.all(responses.map(function (response) {
+            return response.json();
+        }));
+    } else {
+        throw new Error("something is wrong" + response.status)
+    }
+})
+    .then(data => {
+            fillHeaders(data[0])
+            fillTable(data)
+        }
+    )
+    .catch((err) => {
         console.log(err);
     });
 
