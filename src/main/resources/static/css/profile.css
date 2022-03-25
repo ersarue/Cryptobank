@@ -1,0 +1,88 @@
+:root {
+    --paars: #6610f2;
+    --geel: #f27ddd;
+    --grijs: #616161;
+    --lichtgrijs: #F6F6F6;
+}
+
+body {
+    background-image: url("../images/crypto-background.jpeg");
+    background-size: cover;
+    opacity: 0.8;
+}
+
+.navbar {
+    background-color: var(--paars);
+}
+
+img {
+    width: 60px;
+    height: 60px;
+    transition: 0.70s;
+    display: block;
+}
+
+img:hover {
+    transition: 0.90s;
+    transform: rotate(360deg);
+}
+
+.go-home {
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 1.1em;
+    transform: skewY(-3deg);
+}
+
+#logout-btn {
+    background: #6009ef;
+    border-color: white;
+    color: white;
+}
+
+.welcome-container {
+    margin: 10%;
+    opacity: 1;
+    background-color: var(--paars);
+    border-radius: 10px;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#asset-table {
+    background-color: var(--lichtgrijs);
+    color: var(--paars);
+    margin-top: 60px;
+    width: 70%;
+    align-content: center;
+    align-self: center;
+}
+
+h1, h2 {
+    color: white;
+}
+
+#welkomLayout {
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#ibanLayout, #saldoLayout {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 0.2em;
+    color: var(--grijs);
+    background-color: var(--lichtgrijs);
+}
