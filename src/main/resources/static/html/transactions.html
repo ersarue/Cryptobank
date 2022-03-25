@@ -1,15 +1,19 @@
+<!-- @author Ercan Ersaru-->
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <title>Transactions</title>
+    <!--    <meta name="description" content="Cryptomero is een platform voor het veilig kopen en verkopen van cryptocurrency.">-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uw Cryptomero</title>
     <link rel="shortcut icon" type="image/jpg" href="../images/chickie_icon.png"/>
-    <link rel="stylesheet" href="../css/profile.css">
-    <!--Bootstrap css-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+
+    <!-- Bootstrap css file -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/transactions.css">
     <!-- Google fonts (Gloria Hallelujah font) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,11 +21,9 @@
           rel="stylesheet">
 </head>
 <body>
-<!--Navigation bar-->
 <nav class="navbar navbar-expand-md navbar-dark">
     <div class="container-fluid">
         <img class="cryptomero-logo" src="../images/chickie_klein.png" alt="Cryptomero logo">
-        <!--Button alleen zichbaar bij klein scherm-->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +35,8 @@
                     <a class="nav-link active go-home" aria-current="page" href="../html/profile.html">Cryptomero</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../html/transactions.html">Transacties</a>
+                    <a class="nav-link active" aria-current="page" href="../html/profile.html">Profiel
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Assets</a>
@@ -47,25 +50,41 @@
 </nav>
 
 <div class="card-deck">
-    <div class="card w-50 bg-transparent container-fluid border-0">
-        <div class="card-body welcome-container">
-            <h1 id="welkomLayout">Welkom <span id="welkom"></span></h1>
-            <h2 id="ibanLayout">IBAN: <span id="iban"></span></h2>
-            <h2 id="saldoLayout">Saldo: <span class="symbol"></span> <span id="saldo"></span></h2>
-        </div>
-    </div>
-    <div class="card bg-transparent container-fluid border-0">
+    <div class="card container-fluid border-0 bg-transparent border-0">
         <div class="card-body table-container w-100">
-            <table id="asset-table" class="table table-light table-striped table-hover table-responsive">
+            <table class="table table-hover table-responsive text-white transaction-container">
                 <thead>
                 <tr>
-                    <th scope="col">Coin</th>
-                    <th scope="col">Aantal</th>
-                    <th scope="col">Koers</th>
-                    <th scope="col">Waarde</th>
+                    <th scope="col">Transactienummer</th>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Totaal</th>
                 </tr>
                 </thead>
-                <tbody id="tableBody"></tbody>
+                <tbody>
+                <tr>
+                    <th scope="row">3234456</th>
+                    <td class="column"><img src="../images/btc-logo.png">BTCBitcoin</td>
+                    <td class="p-3 mb-2 bg-success text-white">Afgerond</td>
+                    <td>11-12-2021 14:34</td>
+                    <td>€27.03 B</td>
+                </tr>
+                <tr>
+                    <th scope="row">214456</th>
+                    <td><img src="../images/ethereum-logo.png">ETHEthereum</td>
+                    <td class="p-3 mb-2 bg-success text-white">Afgerond</td>
+                    <td>21-08-2020 10:01</td>
+                    <td>€35.43 B</td>
+                </tr>
+                <tr>
+                    <th scope="row">315676</th>
+                    <td><img src="../images/tether-logo.png">Tether</td>
+                    <td class="p-3 mb-2 bg-warning text-dark">Actie Vereist</td>
+                    <td>14-03-2022 08:11</td>
+                    <td>€11.98 B</td>
+                </tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -73,10 +92,10 @@
 
 <div class="text-center" id="footer">SSMMEP &copy; 2022</div>
 
+<script type="module" src="../js/transactions.js"></script>
+<!-- Bootstrap script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-<script type="module" src="../js/profile.js"></script>
-<script type="module" src="../js/tokenUtils.js"></script>
 </body>
 </html>

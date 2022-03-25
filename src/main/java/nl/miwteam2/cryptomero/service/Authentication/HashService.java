@@ -14,11 +14,11 @@ import java.security.spec.KeySpec;
 public class HashService {
 
     private static final String PEPPER = "SSMMEP4Life";
-    private static final Logger logger = LoggerFactory.getLogger(HashService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HashService.class);
 
     public HashService() {
         super();
-        logger.info("New HashService");
+        LOGGER.info("New HashService");
     }
 
     public String hashPassword(String password, String salt) {

@@ -31,19 +31,4 @@ public class AssetController {
     public Asset findByName(@PathVariable String name) {
         return assetService.findByName(name);
     }
-
-    @PostMapping
-    public void storeOne(@RequestBody Asset asset) {
-        assetService.storeOne(asset);
-    }
-
-    @PutMapping
-    public void updateOne(@RequestBody Asset asset) {
-        assetService.updateOne(asset);
-    }
-
-    @DeleteMapping("/{name}")
-    public void deleteOne(@PathVariable String name) {
-        assetService.deleteOne(name);
-    }
 }

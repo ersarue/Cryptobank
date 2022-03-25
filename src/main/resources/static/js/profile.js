@@ -1,9 +1,20 @@
 // Author Samuel, Stijn, Mink
+'use strict'
 
-import {getToken} from "./tokenUtils.js";
+import {getToken, removeToken} from "./tokenUtils.js";
 
 //use relative URL
-let url = new URL(window.location.href)
+const url = new URL(window.location.href)
+
+const logoutButton = document.getElementById("logout-btn" )
+logoutButton.addEventListener("click" , logout)
+
+window.addEventListener( "pageshow", function ( event ) {
+    var perfEntries = performance.getEntriesByType("navigation");
+    if (perfEntries[0].type === "back_forward") {
+        location.reload();
+    }
+});
 
 
 // fetch customer information
@@ -17,23 +28,24 @@ Promise.all([
             'Content-Type': 'application/json',
         }
     }),
-    fetch(`${url.origin}/assets`, {
+    fetch(`${url.origin}/rates/latest`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         }
     })
 ]).then(responses => {
-        if (responses[0].status === 401){
-            alert("Token niet meer geldig, u moet opnieuw inloggen")
-        } else if (responses[0].status === 200 && responses[1].status === 200) {
-            return Promise.all(responses.map(function (response) {
-                return response.json();
-            }));
-        } else {
-            throw new Error("something is wrong" + response.status)
-        }
-    })
+    if (responses[0].status === 401){
+        alert("Token niet meer geldig, u moet opnieuw inloggen")
+        logout()
+    } else if (responses[0].status === 200 && responses[1].status === 200) {
+        return Promise.all(responses.map(function (response) {
+            return response.json();
+        }));
+    } else {
+        throw new Error("something is wrong" + response.status)
+    }
+})
     .then(data => {
             fillHeaders(data[0])
             fillTable(data)
@@ -56,7 +68,7 @@ function fillTable(data) {
     for (let asset in data[0].wallet) {
 
         const amount = data[0].wallet[asset];
-        const rate = data[1].find(e => e.assetName === asset).rate;
+        const rate = data[1].find(e => e.asset.assetName === asset).rate;
         const value = amount * rate;
 
         const rowNode = document.createElement("tr");
@@ -78,5 +90,11 @@ function fillTable(data) {
         table.appendChild(rowNode)
 
     }
+
 }
 
+function logout() {
+    console.log("logout");
+    removeToken();
+    window.location = "../index.html"
+}

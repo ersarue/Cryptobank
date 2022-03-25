@@ -10,7 +10,6 @@ public class Asset {
 
      private String assetName;
      private String assetAbbr;
-     private double rate;
 
      public Asset(String assetName, String assetAbbr) {
           this.assetName = assetName;
@@ -33,17 +32,9 @@ public class Asset {
           this.assetAbbr = assetAbbr;
      }
 
-     public double getRate() {
-          return rate;
-     }
-
-     public void setRate(double rate) {
-          this.rate = rate;
-     }
-
      @Override
      public String toString() {
-          return String.format("Asset %s (%s) with latest rate %.2f", assetName, assetAbbr, rate);
+          return String.format("Asset %s (%s)", assetName, assetAbbr);
      }
 
      @Override
