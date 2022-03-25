@@ -21,10 +21,10 @@ import java.util.List;
 @Service
 public class UserAccountService {
     private static final Logger logger = LoggerFactory.getLogger(UserAccountService.class);
-    private HashService hashService;
-    private SaltMaker saltMaker;
-    private RootRepository rootRepository;
-    private JdbcUserAccountDao userAccountDao;
+    private final HashService hashService;
+    private final SaltMaker saltMaker;
+    private final RootRepository rootRepository;
+    private final JdbcUserAccountDao userAccountDao;
 
     @Autowired
     public UserAccountService(HashService hash, SaltMaker salt, RootRepository repository, JdbcUserAccountDao dao) {

@@ -8,14 +8,14 @@ import java.security.SecureRandom;
 
 @Service
 public class SaltMaker {
-  private static final Logger logger = LoggerFactory.getLogger(SaltMaker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SaltMaker.class);
   private static final int SALT_LENGTH = 8;
   private final int saltLength;
   private final SecureRandom secureRandom;
 
   public SaltMaker(int saltLength) {
 	super();
-	logger.info("New SaltMaker");
+	LOGGER.info("New SaltMaker");
 	this.saltLength = saltLength;
 	this.secureRandom = new SecureRandom();
   }

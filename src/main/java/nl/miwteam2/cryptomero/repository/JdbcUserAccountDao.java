@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * JDBC UserAccountDao
@@ -21,13 +22,13 @@ import java.util.List;
 
 @Repository
 public class JdbcUserAccountDao implements GenericDao<UserAccount> {
-  private static final Logger logger = LoggerFactory.getLogger(JdbcUserAccountDao.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JdbcUserAccountDao.class);
   JdbcTemplate jdbcTemplate;
 
   @Autowired
   public JdbcUserAccountDao(JdbcTemplate jdbcTemplate) {
 	this.jdbcTemplate = jdbcTemplate;
-	logger.info("New JdbcUserAccountDao");
+	LOGGER.info("New JdbcUserAccountDao");
   }
 
   @Override
@@ -52,13 +53,13 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
 	  ps.setString(3, userAccount.getSalt());
 	  return ps;
 	}, keyHolder);
-	return keyHolder.getKey().intValue();
+	return Objects.requireNonNull(keyHolder.getKey()).intValue();
   }
 
   @Override
   public List<UserAccount> getAll() {
 	String sql = "SELECT * FROM user_account;";
-	return jdbcTemplate.query(sql, new UserAccountRowMapper(), null);
+	return jdbcTemplate.query(sql, new UserAccountRowMapper(), (Object) null);
   }
 
   @Override

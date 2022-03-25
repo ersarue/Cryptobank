@@ -20,14 +20,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/useraccount")
 public class UserAccountController implements GenericController<UserAccount> {
-  private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserAccountController.class);
   private final UserAccountService userAccountService;
 
   @Autowired
   public UserAccountController(UserAccountService service) {
 	super();
 	userAccountService = service;
-	logger.info("New UserAccountController");
+	LOGGER.info("New UserAccountController");
   }
 
   @GetMapping("/{id}")
