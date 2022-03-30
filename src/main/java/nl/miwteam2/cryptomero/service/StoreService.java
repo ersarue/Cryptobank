@@ -68,19 +68,23 @@ public class StoreService {
                 String plaatsnaam = regelArray[3];
                 String straatnaam = regelArray[4];
                 Address adres = new Address(straatnaam, huisnummer, "", postcode, plaatsnaam);
-                int addressId = addressService.storeAddress(adres);
-                adres.setIdAddress(addressId);
-                adressen.add(adres);
+                if (addressService.storeAddress(adres)!=0){
+                    int addressId = addressService.storeAddress(adres);
+                    adres.setIdAddress(addressId);
+                    adressen.add(adres);
+                }
+
 
             }
         }
-        System.out.println(bsnLijst);
-        String bsn1 = bsnLijst.get(0);
+        //System.out.println(bsnLijst);
+        String bsn1 = bsnLijst.get(8);
         System.out.println(adressen.get(0));
         Random rng = new Random();
         CustomerDto customerDto = new CustomerDto();
-        //System.out.println(customerService.isValidBsn("714440930"));
-        Address adres = adressen.get(0);
+        //System.out.println(customerService.isValidBsn("699920036"));
+        for (int i=0;i<100;i++){
+            Address adres = adressen.get(0);
             String voornaam = firstNames[rng.nextInt(firstNames.length)];
             String achternaam = lastNames[rng.nextInt(lastNames.length)];
             customerDto.setAddress(adres);
@@ -88,11 +92,18 @@ public class StoreService {
             customerDto.setNamePrefix("");
             customerDto.setLastName(achternaam);
             customerDto.setDob(LocalDate.parse("2000-01-01"));
-            customerDto.setBsn(bsn1);
+            customerDto.setBsn(bsnLijst.get(i));
             customerDto.setTelephone("0610066586");
-            customerDto.setEmail("marcelb1@yahoo.com");
-            customerDto.setPassword("ValidPassword19");
-            customerService.storeOne(customerDto);
+            String email = "gast" + i + "@yahoo.com";
+            customerDto.setEmail(email);
+            customerDto.setPassword("ValidPassword");
+            customerService.storeOne(customerDTO);
+//            if (customerService.isValidBsn(bsnLijst.get(i))){
+//                customerService.storeOne(customerDto);
+//            }
+
+        }
+
 
             return customerDto;
 
