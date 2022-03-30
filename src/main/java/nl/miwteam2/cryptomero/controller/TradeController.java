@@ -63,7 +63,7 @@ public class TradeController {
 
         if (authenticatedCustomer != null) {
             try {
-                return new ResponseEntity<>(TransactionService.tradeWithBank(tradeBankDto), HttpStatus.CREATED);
+                return new ResponseEntity<>(transactionService.tradeWithBank(tradeBankDto), HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
