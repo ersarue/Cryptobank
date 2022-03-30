@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
 * @author Petra Coenen
-* @version 1.0
+* @version 1.1
 */
 
 @SpringBootTest
@@ -58,6 +58,13 @@ public class JdbcAddressDaoTest {
     }
 
     @Test
+    void getAll() {
+        List<Address> allAdresses = daoUnderTest.getAll();
+        assertThat(allAdresses).isNotNull().isNotEmpty();
+        assertThat(allAdresses.size()).isEqualTo(2);
+    }
+
+    @Test
     void updateOne() {
         int expectedReturn = 1;
         int actualReturn = daoUnderTest.updateOne(new Address(1,"Street", 101, "B",
@@ -71,9 +78,9 @@ public class JdbcAddressDaoTest {
     }
 
     @Test
-    void testGetAll() {
-        List<Address> klanten = daoUnderTest.getAll();
-        assertThat(klanten).isNotNull().isNotEmpty();
-        assertThat(klanten.size()).isEqualTo(2);
+    void deleteOne() {
+        int expectedReturn = 1;
+        int actualReturn = daoUnderTest.deleteOne(2);
+        assertThat(actualReturn).isNotNull().isEqualTo(expectedReturn);
     }
 }
