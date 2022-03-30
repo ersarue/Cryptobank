@@ -59,7 +59,8 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
   @Override
   public List<UserAccount> getAll() {
 	String sql = "SELECT * FROM user_account;";
-	return jdbcTemplate.query(sql, new UserAccountRowMapper(), (Object) null);
+	List<UserAccount> userAccountList = jdbcTemplate.query(sql, new UserAccountRowMapper(), null);
+	return (userAccountList.size() != 0) ? userAccountList : null;
   }
 
   @Override
