@@ -11,7 +11,6 @@ public class OfferDto {
     private String assetNameOffer;
     private double amountOffer;
     private double rateOffer;
-    private Timestamp timestampOffer;
 
     public int getIdAccountOffer() {
         return idAccountOffer;
@@ -45,11 +44,4 @@ public class OfferDto {
         this.rateOffer = rateOffer;
     }
 
-    public Timestamp getTimestampOffer() {
-        return timestampOffer;
-    }
-
-    public void setTimestampOffer(Timestamp timestampOffer) {
-        this.timestampOffer = timestampOffer;
-    }
 }
