@@ -5,7 +5,7 @@ import java.sql.Timestamp;
  * DTO Used for the endpoint "/trade/offer"
  * @author: Samuel Geurts en Mink Tielenius Kruijthoff
 */
-public class OfferDto {
+public class TradeOfferDto {
 
     private int idAccountOffer;
     private String assetNameOffer;

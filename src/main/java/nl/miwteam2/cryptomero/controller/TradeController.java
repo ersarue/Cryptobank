@@ -1,7 +1,7 @@
 package nl.miwteam2.cryptomero.controller;
 
 import nl.miwteam2.cryptomero.domain.Customer;
-import nl.miwteam2.cryptomero.domain.OfferDto;
+import nl.miwteam2.cryptomero.domain.TradeOfferDto;
 import nl.miwteam2.cryptomero.domain.TradeBankDto;
 import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
 import nl.miwteam2.cryptomero.service.OfferService;
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Endpoints for trade with the bank of with the marketplace
+ * Endpoints for trade with the bank or with the marketplace
  * @author: Samuel Geurts, studentnr: 500893275 - MIW Cohort 26
  * version 1.0
 */
@@ -35,16 +35,16 @@ public class TradeController {
 
     @CrossOrigin
     @PostMapping("/offer")
-    public ResponseEntity<?> storeOneOffer(@RequestBody OfferDto offerDto, @RequestHeader ("Authorization") String jwt) {
+    public ResponseEntity<?> storeOneOffer(@RequestBody TradeOfferDto tradeOfferDto, @RequestHeader ("Authorization") String jwt) {
         Customer authenticatedCustomer = authenticationService.getAuthenticatedCustomer(jwt);
-        offerDto.setIdAccountOffer(authenticatedCustomer.getIdAccount());
+        tradeOfferDto.setIdAccountOffer(authenticatedCustomer.getIdAccount());
         //offerDto.setIdAccountOffer(1);
         //todo vervang bovenstaande regels door als Mink de methode getAuthenticatedAccountId heeft geimplementeerd
         // offerDto.setIdAccountOffer(authenticationService.getAuthenticatedAccountId(jwt);
 
         if (authenticatedCustomer != null) {
             try {
-                return new ResponseEntity<>(offerService.storeOne(offerDto), HttpStatus.CREATED);
+                return new ResponseEntity<>(offerService.storeOne(tradeOfferDto), HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
