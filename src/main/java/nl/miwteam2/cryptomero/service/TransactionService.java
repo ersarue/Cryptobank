@@ -1,7 +1,5 @@
 package nl.miwteam2.cryptomero.service;
 
-import nl.miwteam2.cryptomero.domain.Offer;
-import nl.miwteam2.cryptomero.domain.OfferDto;
 import nl.miwteam2.cryptomero.domain.TradeBankDto;
 import nl.miwteam2.cryptomero.domain.Transaction;
 import org.springframework.stereotype.Service;
