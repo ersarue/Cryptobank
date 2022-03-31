@@ -22,11 +22,8 @@ import java.util.List;
 @Service
 public class OfferService {
 
-    public OfferService() {
-
     private CustomerService customerService;
     private AssetService assetService;
-
 
     public OfferService(CustomerService customerService,AssetService assetService) {
         this.customerService = customerService;
@@ -38,6 +35,8 @@ public class OfferService {
         //todo handel offer af
         Offer offer = getOffer(tradeOfferDto);
         List<Offer> offerList = getListOfOffers();
+        return null;
+    }
 
 
     public List<Offer> findSellers(Offer buyer) {
