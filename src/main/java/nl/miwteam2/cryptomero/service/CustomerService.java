@@ -280,7 +280,7 @@ public class CustomerService {
      * @param bsn           The bsn to be checked
      * @return              Boolean representing whether this condition is met
      */
-    private boolean isValidBsn(String bsn) {
+    public boolean isValidBsn(String bsn) {
         final int MIN_LENGTH = 8;
         final int MAX_LENGTH = 9;
         final int[] FACTORS = {9, 8, 7, 6, 5, 4, 3, 2, -1};
