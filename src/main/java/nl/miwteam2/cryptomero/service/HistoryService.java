@@ -26,8 +26,7 @@ public class HistoryService {
     /**
      * Stores a transaction in the database.
      * @param  transaction    The transaction to be stored.
-     * @return                The auto-generated id from the database if the transaction was stored successfully and 0
-     *                        if the transaction could not be stored.
+     * @return                TODO: check returns (PC)
      */
     public int storeOne(Transaction transaction) { return transactionRepository.storeOne(transaction); }
 
