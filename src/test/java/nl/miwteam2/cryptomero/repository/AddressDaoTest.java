@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class JdbcAddressDaoTest {
+public class AddressDaoTest {
 
     private GenericDao<Address> daoUnderTest;
 
@@ -28,8 +28,8 @@ public class JdbcAddressDaoTest {
     private Address addressHague;
 
     @Autowired
-    public JdbcAddressDaoTest(GenericDao<Address> jdbcAddressDao) {
-        this.daoUnderTest = jdbcAddressDao;
+    public AddressDaoTest(GenericDao<Address> AddressDao) {
+        this.daoUnderTest = AddressDao;
     }
 
     @BeforeAll

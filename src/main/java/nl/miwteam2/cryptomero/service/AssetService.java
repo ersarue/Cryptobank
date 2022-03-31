@@ -1,7 +1,7 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Asset;
-import nl.miwteam2.cryptomero.repository.JdbcAssetDao;
+import nl.miwteam2.cryptomero.repository.AssetDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import java.util.*;
 @Service
 public class AssetService {
 
-    private JdbcAssetDao jdbcAssetDao;
+    private AssetDao assetDao;
 
     @Autowired
-    public AssetService(JdbcAssetDao jdbcAssetDao, RateService rateService) {
-        this.jdbcAssetDao = jdbcAssetDao;
+    public AssetService(AssetDao assetDao, RateService rateService) {
+        this.assetDao = assetDao;
     }
 
     /**
@@ -25,7 +25,7 @@ public class AssetService {
      * @return                      Information of all assets (except rates)
      */
     public List<Asset> getAll() {
-        return jdbcAssetDao.getAll();
+        return assetDao.getAll();
     }
 
     /**
@@ -34,6 +34,6 @@ public class AssetService {
      * @return                      Information of specific asset (except rates)
      */
     public Asset findByName(String name) {
-        return jdbcAssetDao.findByName(name);
+        return assetDao.findByName(name);
     }
 }

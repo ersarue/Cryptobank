@@ -21,13 +21,13 @@ import java.util.Objects;
  */
 
 @Repository
-public class JdbcAddressDao implements GenericDao<Address> {
+public class AddressDao implements GenericDao<Address> {
 
-    private final Logger logger = LoggerFactory.getLogger(JdbcAddressDao.class);
+    private final Logger logger = LoggerFactory.getLogger(AddressDao.class);
 
     JdbcTemplate jdbcTemplate;
 
-    public JdbcAddressDao(JdbcTemplate jdbcTemplate) {
+    public AddressDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         logger.info("New JdbcAddressDao");
     }

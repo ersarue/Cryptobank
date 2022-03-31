@@ -1,11 +1,9 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
-import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.UserAccount;
-import nl.miwteam2.cryptomero.repository.JdbcBankAccountDao;
+import nl.miwteam2.cryptomero.repository.BankAccountDao;
 import nl.miwteam2.cryptomero.repository.RootRepository;
-import nl.miwteam2.cryptomero.service.BankAccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,12 +13,12 @@ import static org.assertj.core.api.Assertions.fail;
 
 public class BankAccountServiceTest {
 
-    private JdbcBankAccountDao jdbcBankAccountDao= Mockito.mock(JdbcBankAccountDao.class);
+    private BankAccountDao bankAccountDao = Mockito.mock(BankAccountDao.class);
     private RootRepository rootRepository=Mockito.mock(RootRepository.class);
     private BankAccountService bankAccountServiceTest;
     private BankAccount bankaccountToStore;
     public BankAccountServiceTest(){
-        this.bankAccountServiceTest = new BankAccountService(jdbcBankAccountDao,rootRepository);
+        this.bankAccountServiceTest = new BankAccountService(bankAccountDao,rootRepository);
 
     }
 

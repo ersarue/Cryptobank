@@ -1,7 +1,7 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Address;
-import nl.miwteam2.cryptomero.repository.JdbcAddressDao;
+import nl.miwteam2.cryptomero.repository.AddressDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AddressServiceTest {
 
     private AddressService serviceUnderTest;
-    private JdbcAddressDao daoMock = Mockito.mock(JdbcAddressDao.class);
+    private AddressDao daoMock = Mockito.mock(AddressDao.class);
 
     private Address addressZutphen = new Address(14, "Kerklaan", 3, "A", "1234AB", "Zutphen");
     private Address addressHaarlem = new Address(4, "Schachgelstraat", 5, "ZW", "3898CJ", "Haarlem");

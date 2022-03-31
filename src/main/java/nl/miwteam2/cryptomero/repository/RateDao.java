@@ -11,22 +11,21 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Stijn Klijn
  */
 
 @Repository
-public class JdbcRateDao {
+public class RateDao {
 
     private JdbcTemplate jdbcTemplate;
-    private JdbcAssetDao jdbcAssetDao;
+    private AssetDao assetDao;
 
     @Autowired
-    public JdbcRateDao(JdbcTemplate jdbcTemplate, JdbcAssetDao jdbcAssetDao) {
+    public RateDao(JdbcTemplate jdbcTemplate, AssetDao assetDao) {
         this.jdbcTemplate = jdbcTemplate;
-        this.jdbcAssetDao = jdbcAssetDao;
+        this.assetDao = assetDao;
     }
 
     public List<Rate> getLatest() {
@@ -34,7 +33,7 @@ public class JdbcRateDao {
                 "WHERE `datetime` IN " +
                 "(SELECT MAX(`datetime`) FROM rate " +
                 "GROUP BY asset);";
-        return jdbcTemplate.query(sql, new JdbcRateDao.RateRowMapper());
+        return jdbcTemplate.query(sql, new RateDao.RateRowMapper());
     }
 
     public Rate getLatestByName(String name) {
@@ -43,13 +42,13 @@ public class JdbcRateDao {
                 "(SELECT MAX(`datetime`) FROM rate " +
                 "GROUP BY asset) " +
                 "AND asset = ?;";
-        return jdbcTemplate.queryForObject(sql, new JdbcRateDao.RateRowMapper(), name);
+        return jdbcTemplate.queryForObject(sql, new RateDao.RateRowMapper(), name);
     }
 
     public List<Rate> getHistory(String name, LocalDateTime startTimepoint) {
         String sql = "SELECT * FROM rate " +
                 "WHERE asset = ? AND `datetime` >= ?;";
-        return jdbcTemplate.query(sql, new JdbcRateDao.RateRowMapper(), name, startTimepoint);
+        return jdbcTemplate.query(sql, new RateDao.RateRowMapper(), name, startTimepoint);
     }
 
     public int storeOne(Rate rate) {
@@ -60,7 +59,7 @@ public class JdbcRateDao {
     private class RateRowMapper implements RowMapper<Rate> {
         @Override
         public Rate mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Rate(jdbcAssetDao.findByName(rs.getString("asset")),
+            return new Rate(assetDao.findByName(rs.getString("asset")),
                     LocalDateTime.parse(rs.getString("datetime"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     rs.getDouble("rate")
             );
