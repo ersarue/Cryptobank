@@ -36,15 +36,11 @@ public class TradeController {
     @CrossOrigin
     @PostMapping("/offer")
     public ResponseEntity<?> storeOneOffer(@RequestBody TradeOfferDto tradeOfferDto, @RequestHeader ("Authorization") String jwt) {
-        Customer authenticatedCustomer = authenticationService.getAuthenticatedCustomer(jwt);
-        tradeOfferDto.setIdAccountOffer(authenticatedCustomer.getIdAccount());
-        //offerDto.setIdAccountOffer(1);
-        //todo vervang bovenstaande regels door als Mink de methode getAuthenticatedAccountId heeft geimplementeerd
-        // offerDto.setIdAccountOffer(authenticationService.getAuthenticatedAccountId(jwt);
-
-        if (authenticatedCustomer != null) {
+        int IdAccount = authenticationService.getAuthenticatedIdAccount(jwt);
+        tradeOfferDto.setIdAccountOffer(IdAccount);
+        if (IdAccount != 0) {
             try {
-                return new ResponseEntity<>(offerService.storeOne(tradeOfferDto), HttpStatus.CREATED);
+                return new ResponseEntity<>(offerService.tradeOffer(tradeOfferDto), HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
@@ -56,12 +52,9 @@ public class TradeController {
     @CrossOrigin
     @PostMapping("/bank")
     public ResponseEntity<?> tradeWithBank(@RequestBody TradeBankDto tradeBankDto, @RequestHeader ("Authorization") String jwt) {
-        Customer authenticatedCustomer = authenticationService.getAuthenticatedCustomer(jwt);
-        tradeBankDto.setIdAccountTrade(authenticatedCustomer.getIdAccount());
-        //todo vervang bovenstaande regels door als Mink de methode getAuthenticatedAccountId heeft geimplementeerd
-        // offerDto.setIdAccountOffer(authenticationService.getAuthenticatedAccountId(jwt);
-
-        if (authenticatedCustomer != null) {
+        int IdAccount = authenticationService.getAuthenticatedIdAccount(jwt);
+        tradeBankDto.setIdAccountTrade(IdAccount);
+        if (IdAccount != 0) {
             try {
                 return new ResponseEntity<>(transactionService.tradeWithBank(tradeBankDto), HttpStatus.CREATED);
             } catch (Exception e) {
