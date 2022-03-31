@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-public class JdbcOfferDao {
+public class OfferDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcOfferDao(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
+    public OfferDao(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
     private final RowMapper<OfferDTO> offerRowMapper = (resultSet, rowNum) -> new OfferDTO(
             resultSet.getInt("id_offer"),

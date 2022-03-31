@@ -13,31 +13,31 @@ import java.util.List;
 @Repository
 public class OfferRepository {
 
-    private JdbcUserAccountDao jdbcUserAccountDao;
-    private JdbcAssetDao jdbcAssetDao;
-    private JdbcOfferDao jdbcOfferDao;
+    private UserAccountDao jdbcUserAccountDao;
+    private AssetDao jdbcAssetDao;
+    private OfferDao offerDao;
 
     @Autowired
-    public OfferRepository(JdbcUserAccountDao jdbcUserAccountDao, JdbcAssetDao jdbcAssetDao, JdbcOfferDao jdbcOfferDao) {
+    public OfferRepository(UserAccountDao UserAccountDao, AssetDao AssetDao, OfferDao offerDao) {
         this.jdbcUserAccountDao = jdbcUserAccountDao;
         this.jdbcAssetDao = jdbcAssetDao;
-        this.jdbcOfferDao = jdbcOfferDao;
+        this.offerDao = offerDao;
     }
 
     public Offer findById(int id) {
-        OfferDTO offer = jdbcOfferDao.findById(id);
+        OfferDTO offer = offerDao.findById(id);
         UserAccount userOffer = jdbcUserAccountDao.findById(offer.getIdAccountOffer());
         Asset assetOffer = jdbcAssetDao.findByName(offer.getAssetNameOffer());
         return new Offer(userOffer, assetOffer, offer);
     }
 
     public List<Offer> findAllByIdAccount(int idAccount) {
-        List<OfferDTO> offerDTOs = jdbcOfferDao.getAllByIdAccount(idAccount);
+        List<OfferDTO> offerDTOs = offerDao.getAllByIdAccount(idAccount);
         return fillOfferList(offerDTOs);
     }
 
     public List<Offer> getAll() {
-        List<OfferDTO> offerDTOs = jdbcOfferDao.getAll();
+        List<OfferDTO> offerDTOs = offerDao.getAll();
         return fillOfferList(offerDTOs);
     }
 
@@ -52,14 +52,14 @@ public class OfferRepository {
     }
 
     public int storeOne(Offer offer) {
-        return jdbcOfferDao.storeOne(offer);
+        return offerDao.storeOne(offer);
     }
 
     public int updateOne(Offer offer) {
-        return jdbcOfferDao.updateOne(offer);
+        return offerDao.updateOne(offer);
     }
 
     public int deleteOne(int idOffer) {
-        return jdbcOfferDao.deleteOne(idOffer);
+        return offerDao.deleteOne(idOffer);
     }
 }
