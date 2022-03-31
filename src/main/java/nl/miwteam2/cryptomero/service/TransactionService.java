@@ -32,16 +32,15 @@ public class TransactionService {
 		throw new Exception("Cannot buy from bank. Insufficient balance");
 	  }
 	  updateBankAccount(trade.getCustomer(), trade.getAmountTrade());
+	  // TODO update wallet
 	  // TODO call storeTransaction
 	} else {
 	  // sell to bank
-	  if (trade.getAmountTrade() > 0) {
-		if (checkBalance(trade.getCustomer().getBankAccount().getBalanceEur(), trade.getAmountTrade())) {
-		  throw new Exception("Cannot buy from bank. Insufficient balance");
+		if (checkWallet(String.valueOf(trade.getCustomer().getWallet()), trade.getAmountTrade())) {
+		  throw new Exception("Cannot sell to bank. Insufficient balance");
 		}
-		updateBankAccount(trade.getCustomer(), trade.getAmountTrade());
-		// TODO call storeTransaction
-	  }
+	  // TODO update bank wallet
+	  // TODO call storeTransaction
 	}
     return null;
   }
