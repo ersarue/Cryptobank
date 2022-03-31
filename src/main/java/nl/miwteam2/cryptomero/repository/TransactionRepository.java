@@ -2,6 +2,7 @@ package nl.miwteam2.cryptomero.repository;
 
 import nl.miwteam2.cryptomero.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
 * @author Petra Coenen
 */
 
+@Repository
 public class TransactionRepository {
 
     private TransactionDao transactionDao;

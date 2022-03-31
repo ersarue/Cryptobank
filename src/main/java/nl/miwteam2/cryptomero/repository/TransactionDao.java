@@ -4,6 +4,7 @@ import nl.miwteam2.cryptomero.domain.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,6 +14,7 @@ import java.util.List;
 * @author Petra Coenen
 */
 
+@Repository
 public class TransactionDao {
 
     private JdbcTemplate jdbcTemplate;
