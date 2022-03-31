@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.miwteam2.cryptomero.domain.Asset;
 import nl.miwteam2.cryptomero.domain.Rate;
-import nl.miwteam2.cryptomero.repository.JdbcAssetDao;
-import nl.miwteam2.cryptomero.repository.JdbcRateDao;
+import nl.miwteam2.cryptomero.repository.AssetDao;
+import nl.miwteam2.cryptomero.repository.RateDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,16 +28,16 @@ public class RateService {
     private static final String API_KEY = "cb014412-0aa2-406c-972e-2c8c2841a732";
     private static final long UPDATE_INTERVAL = 1000 * 3600 * 6; //Update interval in milliseconds (6 hours)
 
-    private JdbcAssetDao jdbcAssetDao;
-    private JdbcRateDao jdbcRateDao;
+    private AssetDao assetDao;
+    private RateDao rateDao;
     private List<Asset> assets;
     private Map<String, Double> latestRates;
 
     @Autowired
-    public RateService(JdbcAssetDao jdbcAssetDao, JdbcRateDao jdbcRateDao) {
-        this.jdbcAssetDao = jdbcAssetDao;
-        this.jdbcRateDao = jdbcRateDao;
-        this.assets = jdbcAssetDao.getAll();
+    public RateService(AssetDao assetDao, RateDao rateDao) {
+        this.assetDao = assetDao;
+        this.rateDao = rateDao;
+        this.assets = assetDao.getAll();
         this.latestRates = new HashMap<>();
 
         //Update all asset rates every given time interval, using an external API
@@ -50,7 +50,7 @@ public class RateService {
      * @return                      The latest rate for all assets
      */
     public List<Rate> getLatest() {
-        return jdbcRateDao.getLatest();
+        return rateDao.getLatest();
     }
 
     /**
@@ -59,7 +59,7 @@ public class RateService {
      * @return                      The latest rate for the specified asset
      */
     public Rate getLatestByName(String name) {
-        return jdbcRateDao.getLatestByName(name);
+        return rateDao.getLatestByName(name);
     }
 
     /**
@@ -83,7 +83,7 @@ public class RateService {
         LocalDateTime startTimepoint = subtractInterval(endTimepoint, interval, numberOfDatapoints);
 
         //Retrieve all (unfiltered) rate information since startTimepoint from database
-        List<Rate> unfilteredDatapoints =  jdbcRateDao.getHistory(name, startTimepoint);
+        List<Rate> unfilteredDatapoints =  rateDao.getHistory(name, startTimepoint);
 
         //Create TreeMap to store the filtered information
         Map<LocalDateTime, Double> filteredDatapoints = new TreeMap<>();
@@ -167,7 +167,7 @@ public class RateService {
             //For every asset, construct the latest rate, write it to the database and notify AssetService
             for (Asset asset : assets) {
                 Rate rate = new Rate(asset, LocalDateTime.now(), latestRates.get(asset.getAssetName()));
-                jdbcRateDao.storeOne(rate);
+                rateDao.storeOne(rate);
             }
         }
     }

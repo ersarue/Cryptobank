@@ -18,36 +18,65 @@ public class StoreService {
     private CustomerService customerService;
     private CustomerRepository customerRepository;
     private AddressService addressService;
+
     private static final String[] firstNames = { "Eva", "Karel", "Willem", "Marie", "Saskia", "Annet", "Sergio", "Michel", "Ria" };
     private static final String[] lastNames = { "Jansen", "Pietersen", "Willemsen", "Smit", "Jong", "Vries", "Bakker", "Bos" };
-
+    private static final String PREFIX = "";
+    private static final String PASSWORD = "ValidPassword";
+    private static final String NETNUMMER = "06";
+    private static final int PHONENUMBERMIN = 10000000;
+    private static final int PHONENUMBERMAX = 99999999;
+    private static final String STARTEMAIL = "gast";
+    private static final String ENDEMAIL = "@yahoo.com";
+    private static final LocalDate localDate = LocalDate.of(1960, 06, 22);
     @Autowired
     public StoreService(CustomerRepository customerRepository, CustomerService customerService, AddressService addressService) {
         this.customerRepository = customerRepository;
         this.customerService = customerService;
         this.addressService = addressService;
     }
-    public CustomerDto storePractise(CustomerDto customerDTO) throws Exception {
-        ArrayList<String> regelsUitBestand = new ArrayList<>();
-        ArrayList<String> bsnLijst = new ArrayList<>();
-        File bsnBestand = new File("src/main/resources/oefenBsn.csv");
-        try {
-            Scanner invoer = new Scanner(bsnBestand);
-            while (invoer.hasNextLine()) {
-                regelsUitBestand.add(invoer.nextLine());
-            }
-        } catch (FileNotFoundException nietGevonden) {
-            System.out.println("Het bestand is niet gevonden.");
-        }
-        if (regelsUitBestand.size() > 0) {
 
-            for (int i = 0; i < regelsUitBestand.size(); i++) {
-                bsnLijst.add(regelsUitBestand.get(i));
+
+    public CustomerDto storeExtraCustomers(int aantal) throws Exception {
+        ArrayList<String> lijstBsnNummers = inlezenBsnNummers();
+        ArrayList<Address> adressen = addressListStore();
+        Random rng = new Random();
+        CustomerDto customerDto = new CustomerDto();
+        for (int i=0;i<aantal;i++){
+            String email = STARTEMAIL + i + ENDEMAIL;
+            LocalDate newDate = localDate.plusDays(i);
+            customerDto = setAddress(adressen, customerDto, rng);
+            customerDto = setOverigeGegevens(customerDto, rng);
+            customerDto.setDob(newDate);
+            customerDto.setBsn(lijstBsnNummers.get(i));
+            customerDto.setEmail(email);
+            if (customerService.isValidBsn(lijstBsnNummers.get(i))){
+                customerService.storeOne(customerDto);
             }
         }
+        return customerDto;
+    }
+    private CustomerDto setAddress(ArrayList<Address> addressesList, CustomerDto customerDto, Random rng){
+        Address adres = addressesList.get(rng.nextInt(addressesList.size()));
+        customerDto.setAddress(adres);
+        return customerDto;
+    }
+    private CustomerDto setOverigeGegevens(CustomerDto customerDto, Random rng){
+        String voornaam = firstNames[rng.nextInt(firstNames.length)];
+        String achternaam = lastNames[rng.nextInt(lastNames.length)];
+        String telefoonNummer = NETNUMMER + rng.nextInt(PHONENUMBERMIN,PHONENUMBERMAX);
+        customerDto.setFirstName(voornaam);
+        customerDto.setNamePrefix(PREFIX);
+        customerDto.setLastName(achternaam);
+        customerDto.setTelephone(telefoonNummer);
+        customerDto.setPassword(PASSWORD);
+        return customerDto;
+    }
 
+
+    private ArrayList<Address> addressListStore(){
         ArrayList<String> regelsUitBestandAdres = new ArrayList<>();
-        File adresBestand = new File("src/main/resources/oefenAdres1.csv");
+        File adresBestand = new File("src/main/resources/adressenLijst.csv");
         try {
             Scanner invoer = new Scanner(adresBestand);
             while (invoer.hasNextLine()) {
@@ -58,56 +87,49 @@ public class StoreService {
         }
         ArrayList<Address> adressen = new ArrayList<>();
         if (regelsUitBestandAdres.size() > 0) {
-
-            for (int i = 0; i < regelsUitBestandAdres.size(); i++) {
-                String[] regelArray = regelsUitBestandAdres.get(i).split(";");
-                String postcodeCijfers = regelArray[0];
-                String postcodeLetters = regelArray[1];
-                String postcode = postcodeCijfers + postcodeLetters;
-                int huisnummer = Integer.parseInt(regelArray[2]);
-                String plaatsnaam = regelArray[3];
-                String straatnaam = regelArray[4];
-                Address adres = new Address(straatnaam, huisnummer, "", postcode, plaatsnaam);
-                if (addressService.storeAddress(adres)!=0){
-                    int addressId = addressService.storeAddress(adres);
-                    adres.setIdAddress(addressId);
-                    adressen.add(adres);
-                }
+            adressen = addressArrayList(regelsUitBestandAdres);
+        }
+        return adressen;
+    }
 
 
+    public ArrayList<Address> addressArrayList(ArrayList<String> bestandsregels) {
+        ArrayList<Address> addresses = new ArrayList<>();
+        for (int i = 0; i < bestandsregels.size(); i++) {
+            String[] regelArray = bestandsregels.get(i).split(";");
+            String postcodeCijfers = regelArray[0];
+            String postcodeLetters = regelArray[1];
+            String postcode = postcodeCijfers + postcodeLetters;
+            int huisnummer = Integer.parseInt(regelArray[2]);
+            String plaatsnaam = regelArray[3];
+            String straatnaam = regelArray[4];
+            Address adres = new Address(straatnaam, huisnummer, PREFIX, postcode, plaatsnaam);
+            if (addressService.storeAddress(adres) != 0) {
+                int addressId = addressService.storeAddress(adres);
+                adres.setIdAddress(addressId);
+                addresses.add(adres);
             }
         }
-        //System.out.println(bsnLijst);
-        String bsn1 = bsnLijst.get(8);
-        System.out.println(adressen.get(0));
-        Random rng = new Random();
-        CustomerDto customerDto = new CustomerDto();
-        //System.out.println(customerService.isValidBsn("699920036"));
-        for (int i=0;i<100;i++){
-            Address adres = adressen.get(0);
-            String voornaam = firstNames[rng.nextInt(firstNames.length)];
-            String achternaam = lastNames[rng.nextInt(lastNames.length)];
-            customerDto.setAddress(adres);
-            customerDto.setFirstName(voornaam);
-            customerDto.setNamePrefix("");
-            customerDto.setLastName(achternaam);
-            customerDto.setDob(LocalDate.parse("2000-01-01"));
-            customerDto.setBsn(bsnLijst.get(i));
-            customerDto.setTelephone("0610066586");
-            String email = "gast" + i + "@yahoo.com";
-            customerDto.setEmail(email);
-            customerDto.setPassword("ValidPassword");
-            customerService.storeOne(customerDTO);
-//            if (customerService.isValidBsn(bsnLijst.get(i))){
-//                customerService.storeOne(customerDto);
-//            }
+        return addresses;
+    }
 
+    private ArrayList<String> inlezenBsnNummers(){
+        ArrayList<String> regelsUitBestand = new ArrayList<>();
+        ArrayList<String> bsnLijst = new ArrayList<>();
+        File bsnBestand = new File("src/main/resources/bsnLijst.csv");
+        try {
+            Scanner invoer = new Scanner(bsnBestand);
+            while (invoer.hasNextLine()) {
+                regelsUitBestand.add(invoer.nextLine());
+            }
+        } catch (FileNotFoundException nietGevonden) {
+            System.out.println("Het bestand is niet gevonden.");
         }
-
-
-            return customerDto;
-
-
-
+        if (regelsUitBestand.size() > 0) {
+            for (int i = 0; i < regelsUitBestand.size(); i++) {
+                bsnLijst.add(regelsUitBestand.get(i));
+            }
+        }
+        return bsnLijst;
     }
 }

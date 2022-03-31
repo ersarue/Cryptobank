@@ -14,11 +14,11 @@ import java.util.List;
  */
 
 @Repository
-public class JdbcCustomerDao implements GenericDao<Customer>{
+public class CustomerDao implements GenericDao<Customer>{
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcCustomerDao(JdbcTemplate jdbcTemplate) {
+    public CustomerDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

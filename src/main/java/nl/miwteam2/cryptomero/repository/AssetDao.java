@@ -15,12 +15,12 @@ import java.util.List;
  */
 
 @Repository
-public class JdbcAssetDao implements GenericDao<Asset> {
+public class AssetDao implements GenericDao<Asset> {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JdbcAssetDao(JdbcTemplate jdbcTemplate) {
+    public AssetDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

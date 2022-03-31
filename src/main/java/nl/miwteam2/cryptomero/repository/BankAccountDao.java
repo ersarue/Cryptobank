@@ -17,10 +17,10 @@ import java.util.List;
  * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
  */
 @Repository
-public class JdbcBankAccountDao implements GenericDao<BankAccount> {
+public class BankAccountDao implements GenericDao<BankAccount> {
     private JdbcTemplate jdbcTemplate;
     @Autowired
-    public JdbcBankAccountDao(JdbcTemplate jdbcTemplate) {
+    public BankAccountDao(JdbcTemplate jdbcTemplate) {
         super();
         this.jdbcTemplate=jdbcTemplate;
 

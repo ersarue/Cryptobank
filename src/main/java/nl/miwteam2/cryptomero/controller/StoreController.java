@@ -6,10 +6,7 @@ import nl.miwteam2.cryptomero.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 //controller voor het store van 3000 klanten
 
@@ -21,10 +18,10 @@ public class StoreController {
         this.storeService = service;
     }
     @CrossOrigin
-    @PostMapping("/oefenen")
-    public ResponseEntity<?> oefenOne(CustomerDto customerDTO) {
+    @PostMapping("/CustomerBulkStore/{aantal}")
+    public ResponseEntity<?> store3000Customers(@PathVariable int aantal) {
         try {
-            return new ResponseEntity<>(storeService.storePractise(customerDTO), HttpStatus.CREATED);
+            return new ResponseEntity<>(storeService.storeExtraCustomers(aantal), HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
