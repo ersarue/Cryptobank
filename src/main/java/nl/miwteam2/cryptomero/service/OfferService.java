@@ -1,6 +1,7 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.*;
+import nl.miwteam2.cryptomero.repository.OfferDao;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,6 +53,9 @@ public class OfferService {
         }
         while ((offer.getAmountOffer() != 0) || !matchList.isEmpty());
 
+        //als er nog een deel van het offer over is, dan moet deze toegevoegd worden aan de database
+        if (offer.getAmountOffer != 0)
+            //todo store offer
 
 
         return null;
