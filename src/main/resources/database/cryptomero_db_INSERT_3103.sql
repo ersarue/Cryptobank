@@ -17,4 +17,4 @@ INSERT INTO `cryptomero`.`bank_account` (`id_account`, `iban`, `balance_eur`) VA
 INSERT INTO `cryptomero`.`wallet` (`id_account`, `asset_name`, `amount`) VALUES ('1', 'Bitcoin', '1'), ('1', 'Ethereum', '2'), ('2', 'Tether', '3'), ('2', 'BNB', '4');
 
 -- tabel transaction
-INSERT INTO `cryptomero`.`transaction` (`id_transaction`, `datetime`, `asset_giver`, `asset_recipient`, `asset_name`, `asset_amount`, `eur_amount`) VALUES ('1', '2022-03-30 11:20:34', '1', '2', 'Bitcoin', '0.5', '21409.61'), ('2', '2022-03-30 11:21:50', '2', '1', 'Ethereum', '2.0', '6099.62');
+INSERT INTO `cryptomero`.`transaction` (`id_transaction`, `datetime`, `asset_giver`, `asset_recipient`, `asset_name`, `asset_amount`, `eur_amount`, `eur_fee`) VALUES ('1', '2022-03-30 11:20:34', '1', '2', 'Bitcoin', '0.5', '21409.61', '30.50'), ('2', '2022-03-30 11:21:50', '2', '1', 'Ethereum', '2.0', '6099.62', '4.25');

@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS `cryptomero`.`transaction` (
   `asset_name` VARCHAR(45) NOT NULL,
   `asset_amount` DECIMAL(13,4) NOT NULL,
   `eur_amount` DECIMAL(13,4) NOT NULL,
+  `eur_fee` DECIMAL(13,4) NOT NULL,
   PRIMARY KEY (`id_transaction`),
   CONSTRAINT `transactionFrom_account`
     FOREIGN KEY (`asset_giver`)
