@@ -1,7 +1,7 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.UserAccount;
-import nl.miwteam2.cryptomero.repository.JdbcUserAccountDao;
+import nl.miwteam2.cryptomero.repository.UserAccountDao;
 import nl.miwteam2.cryptomero.repository.RootRepository;
 import nl.miwteam2.cryptomero.service.Authentication.HashService;
 import nl.miwteam2.cryptomero.service.Authentication.SaltMaker;
@@ -24,10 +24,10 @@ public class UserAccountService {
     private final HashService hashService;
     private final SaltMaker saltMaker;
     private final RootRepository rootRepository;
-    private final JdbcUserAccountDao userAccountDao;
+    private final UserAccountDao userAccountDao;
 
     @Autowired
-    public UserAccountService(HashService hash, SaltMaker salt, RootRepository repository, JdbcUserAccountDao dao) {
+    public UserAccountService(HashService hash, SaltMaker salt, RootRepository repository, UserAccountDao dao) {
         super();
         hashService = hash;
         saltMaker = salt;

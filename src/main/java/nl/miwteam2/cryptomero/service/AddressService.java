@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.miwteam2.cryptomero.domain.Address;
-import nl.miwteam2.cryptomero.repository.JdbcAddressDao;
+import nl.miwteam2.cryptomero.repository.AddressDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,13 @@ import java.util.Map;
 @Service
 public class AddressService {
 
-    private final JdbcAddressDao jdbcAddressDao;
+    private final AddressDao addressDao;
 
     private final Logger logger = LoggerFactory.getLogger(AddressService.class);
 
     @Autowired
-    public AddressService(JdbcAddressDao dao) {
-        jdbcAddressDao = dao;
+    public AddressService(AddressDao dao) {
+        addressDao = dao;
         logger.info("New AddressService");
     }
 
@@ -56,7 +56,7 @@ public class AddressService {
                     System.out.println(e.getMessage());
                 }
                 if (isValid) {
-                    return jdbcAddressDao.storeOne(address);
+                    return addressDao.storeOne(address);
                 } else return 0; // Return 0 if address does not exist
             } else return -1; // Return -1 if required values are missing
         } else return checkForUniqueAddress(address); // If address already exists in database, return corresponding id
@@ -68,7 +68,7 @@ public class AddressService {
     * @return       The address with the corresponding id value, if exists. Null if no such address exists in the database.
     */
     public Address getAddressById(int id) {
-        return jdbcAddressDao.findById(id);
+        return addressDao.findById(id);
     }
 
     /**
@@ -77,7 +77,7 @@ public class AddressService {
     *               no addresses in the database.
     */
     public List<Address> getAllAddresses() {
-        return jdbcAddressDao.getAll();
+        return addressDao.getAll();
     }
 
     /**
@@ -85,14 +85,14 @@ public class AddressService {
     * @param  address   The updated address to be stored.
     * @return           1 in case the address is updated successfully, 0 otherwise.
     */
-    public int updateAddress(Address address) { return jdbcAddressDao.updateOne(address); }
+    public int updateAddress(Address address) { return addressDao.updateOne(address); }
 
     /**
     * Deletes a customer address from the database.
     * @param  id        Id value of the address to be deleted.
     * @return           1 in case the address is deleted successfully, 0 otherwise.
     */
-    public int deleteAddress(int id) { return jdbcAddressDao.deleteOne(id); }
+    public int deleteAddress(int id) { return addressDao.deleteOne(id); }
 
     /**
     * Checks if a customer address contains values for all of the required fields. In case of missing values, it returns
@@ -121,7 +121,7 @@ public class AddressService {
     *                  does not yet exist in the database.
     */
     public int checkForUniqueAddress(Address address) {
-        Address match = jdbcAddressDao.getAll().stream()
+        Address match = addressDao.getAll().stream()
                 .filter(item -> address.getPostalCode().equals(item.getPostalCode()))
                 .filter(item -> address.getHouseNo() == item.getHouseNo())
                 .filter(item -> address.getHouseAdd() == null ||

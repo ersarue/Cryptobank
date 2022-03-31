@@ -16,13 +16,13 @@ import static org.assertj.core.api.Fail.fail;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class JdbcCustomerDaoTest {
+class CustomerDaoTest {
 
-    private GenericDao<Customer> jdbcCustomerDao;
+    private GenericDao<Customer> customerDao;
 
     @Autowired
-    public JdbcCustomerDaoTest(GenericDao<Customer> jdbcCustomerDao) {
-        this.jdbcCustomerDao = jdbcCustomerDao;
+    public CustomerDaoTest(GenericDao<Customer> customerDao) {
+        this.customerDao = customerDao;
     }
 
 
@@ -35,7 +35,7 @@ class JdbcCustomerDaoTest {
     void findById() {
         Customer expected = new Customer("firstName", "namePrefix", "lastName",
                 LocalDate.parse("2000-01-01"), "182358197", "0612345678");
-        Customer actual = jdbcCustomerDao.findById(1);
+        Customer actual = customerDao.findById(1);
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
 

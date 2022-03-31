@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class JdbcWalletDao implements GenericDao<Map<String, Double>> {
+public class WalletDao implements GenericDao<Map<String, Double>> {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcWalletDao(JdbcTemplate jdbcTemplate) {
+    public WalletDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

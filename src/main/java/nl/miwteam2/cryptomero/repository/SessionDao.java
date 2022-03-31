@@ -2,7 +2,7 @@ package nl.miwteam2.cryptomero.repository;
 
 import java.util.List;
 
-public class JdbcSessionDao implements GenericDao{
+public class SessionDao implements GenericDao{
     @Override
     public Object findById(int id) {
         return null;

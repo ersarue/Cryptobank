@@ -14,11 +14,11 @@ import java.util.List;
 public class TransactionRepository {
 
     private TransactionDao transactionDao;
-    private JdbcCustomerDao customerDao;
-    private JdbcAssetDao assetDao;
+    private CustomerDao customerDao;
+    private AssetDao assetDao;
 
     @Autowired
-    public TransactionRepository(TransactionDao transactionDao, JdbcCustomerDao customerDao, JdbcAssetDao assetDao) {
+    public TransactionRepository(TransactionDao transactionDao, CustomerDao customerDao, AssetDao assetDao) {
         this.transactionDao = transactionDao;
         this.customerDao = customerDao;
         this.assetDao = assetDao;

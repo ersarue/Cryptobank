@@ -1,7 +1,7 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.BankAccount;
-import nl.miwteam2.cryptomero.repository.JdbcBankAccountDao;
+import nl.miwteam2.cryptomero.repository.BankAccountDao;
 import nl.miwteam2.cryptomero.repository.RootRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.util.Random;
  */
 @Service
 public class BankAccountService {
-    private JdbcBankAccountDao jdbcBankAccountDao;
+    private BankAccountDao bankAccountDao;
     private RootRepository rootRepository;
     @Autowired
-    public BankAccountService(JdbcBankAccountDao jdbcBankAccountDao, RootRepository rootRepository){
-        this.jdbcBankAccountDao=jdbcBankAccountDao;
+    public BankAccountService(BankAccountDao bankAccountDao, RootRepository rootRepository){
+        this.bankAccountDao = bankAccountDao;
         this.rootRepository=rootRepository;
     }
     public List<BankAccount> getAll(){
@@ -30,16 +30,16 @@ public class BankAccountService {
         return rootRepository.findBankaccountById(id);
     }
     public BankAccount storeOne(BankAccount bankAccount) {
-        jdbcBankAccountDao.storeOne(bankAccount);
+        bankAccountDao.storeOne(bankAccount);
         return bankAccount;
     }
     public BankAccount updateOne(BankAccount bankAccount) {
-        jdbcBankAccountDao.updateOne(bankAccount);
+        bankAccountDao.updateOne(bankAccount);
         return bankAccount;
     }
 
     public int deleteOne(int id) {
-        return jdbcBankAccountDao.deleteOne(id);
+        return bankAccountDao.deleteOne(id);
 
     }
 
