@@ -42,7 +42,7 @@ public class JdbcOfferDao {
             preparedStatement.setInt(1, offer.getUserOffer().getIdAccount());
             preparedStatement.setString(2, offer.getAssetOffer().getAssetName());
             preparedStatement.setDouble(3, offer.getAmountOffer());
-            preparedStatement.setDouble(4, offer.getRateOffer());
+            preparedStatement.setDouble(4, offer.getPriceOffer());
             preparedStatement.setString(5, offer.getTimestampOffer().toString());
             return preparedStatement;
         }, keyHolder);

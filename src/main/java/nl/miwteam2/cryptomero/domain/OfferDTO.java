@@ -7,15 +7,15 @@ public class OfferDTO {
     private int idAccountOffer;
     private String assetNameOffer;
     private double amountOffer;
-    private double rateOffer;
+    private double priceOffer;
     private Timestamp timestampOffer;
 
-    public OfferDTO(int idOffer, int idAccountOffer, String assetNameOffer, double amountOffer, double rateOffer, Timestamp timestampOffer) {
+    public OfferDTO(int idOffer, int idAccountOffer, String assetNameOffer, double amountOffer, double priceOffer, Timestamp timestampOffer) {
         this.idOffer = idOffer;
         this.idAccountOffer = idAccountOffer;
         this.assetNameOffer = assetNameOffer;
         this.amountOffer = amountOffer;
-        this.rateOffer = rateOffer;
+        this.priceOffer = priceOffer;
         this.timestampOffer = timestampOffer;
     }
 
@@ -47,12 +47,12 @@ public class OfferDTO {
         this.amountOffer = amountOffer;
     }
 
-    public double getRateOffer() {
-        return rateOffer;
+    public double getPriceOffer() {
+        return priceOffer;
     }
 
-    public void setRateOffer(double rateOffer) {
-        this.rateOffer = rateOffer;
+    public void setPriceOffer(double priceOffer) {
+        this.priceOffer = priceOffer;
     }
 
     public Timestamp getTimestampOffer() {
@@ -70,7 +70,7 @@ public class OfferDTO {
                 ", idAccountOffer=" + idAccountOffer +
                 ", assetNameOffer='" + assetNameOffer + '\'' +
                 ", amountOffer=" + amountOffer +
-                ", rateOffer=" + rateOffer +
+                ", priceOffer=" + priceOffer +
                 ", timestampOffer=" + timestampOffer +
                 '}';
     }

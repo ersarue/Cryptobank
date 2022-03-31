@@ -7,16 +7,16 @@ public class Offer {
     private UserAccount userOffer;
     private Asset assetOffer;
     private double amountOffer;
-    private double rateOffer;
+    private double priceOffer;
     private Timestamp timestampOffer;
 
     // all args constructor
-    public Offer(int idOffer, UserAccount userOffer, Asset assetOffer, double amountOffer, double rateOffer, Timestamp timestampOffer) {
+    public Offer(int idOffer, UserAccount userOffer, Asset assetOffer, double amountOffer, double priceOffer, Timestamp timestampOffer) {
         this.idOffer = idOffer;
         this.userOffer = userOffer;
         this.assetOffer = assetOffer;
         this.amountOffer = amountOffer;
-        this.rateOffer = rateOffer;
+        this.priceOffer = priceOffer;
         this.timestampOffer = timestampOffer;
     }
 
@@ -26,7 +26,7 @@ public class Offer {
         this.userOffer = userOffer;
         this.assetOffer = assetOffer;
         this.setAmountOffer(offerDTO.getAmountOffer());
-        this.setRateOffer(offerDTO.getRateOffer());
+        this.setPriceOffer(offerDTO.getPriceOffer());
         this.setTimestampOffer(offerDTO.getTimestampOffer());
     }
 
@@ -62,12 +62,12 @@ public class Offer {
         this.amountOffer = amountOffer;
     }
 
-    public double getRateOffer() {
-        return rateOffer;
+    public double getPriceOffer() {
+        return priceOffer;
     }
 
-    public void setRateOffer(double rateOffer) {
-        this.rateOffer = rateOffer;
+    public void setPriceOffer(double priceOffer) {
+        this.priceOffer = priceOffer;
     }
 
     public Timestamp getTimestampOffer() {
@@ -85,7 +85,7 @@ public class Offer {
                 ", userOffer=" + userOffer.getIdAccount() +
                 ", assetOffer=" + assetOffer.getAssetName() +
                 ", amountOffer=" + amountOffer +
-                ", rateOffer=" + rateOffer +
+                ", priceOffer=" + priceOffer +
                 ", timestampOffer=" + timestampOffer +
                 '}';
     }
