@@ -10,7 +10,7 @@ public class TradeBankDto {
 
     private int idAccountTrade;
     private String assetNameTrade;
-    private double amountTrade;
+    private double amountTrade; //positief = kopen  3 , negatief = verkopen  -3
 
     public int getIdAccountTrade() {
         return idAccountTrade;
