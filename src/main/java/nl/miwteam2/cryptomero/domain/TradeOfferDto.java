@@ -44,4 +44,13 @@ public class TradeOfferDto {
         this.rateOffer = rateOffer;
     }
 
+    @Override
+    public String toString() {
+        return "TradeOfferDto{" +
+                "idAccountOffer=" + idAccountOffer +
+                ", assetNameOffer='" + assetNameOffer + '\'' +
+                ", amountOffer=" + amountOffer +
+                ", rateOffer=" + rateOffer +
+                '}';
+    }
 }
