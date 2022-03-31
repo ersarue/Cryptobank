@@ -22,7 +22,7 @@ public class Transaction {
         this.asset = asset;
         this.assetAmount = assetAmount;
         this.eurAmount = eurAmount;
-        this.eurFee = eurAmount;
+        this.eurFee = eurFee;
     }
 
     public Transaction(LocalDateTime transactionTime, Customer assetGiver, Customer assetRecipient, Asset asset,
