@@ -8,16 +8,16 @@ import java.sql.Timestamp;
  */
 public class TradeBankDto {
 
-    private int idAccountTrade;
+    private Customer customer;
     private String assetNameTrade;
-    private double amountTrade; //positief = kopen  3 , negatief = verkopen  -3
+    private double amountTrade;
 
-    public int getIdAccountTrade() {
-        return idAccountTrade;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setIdAccountTrade(int idAccountTrade) {
-        this.idAccountTrade = idAccountTrade;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getAssetNameTrade() {
@@ -39,9 +39,8 @@ public class TradeBankDto {
     @Override
     public String toString() {
         return "TradeBankDto{" +
-                "idAccountTrade=" + idAccountTrade +
+                "customer=" + customer +
                 ", assetNameTrade='" + assetNameTrade + '\'' +
-                ", amountTrade=" + amountTrade +
-                '}';
+                ", amountTrade=" + amountTrade + '}';
     }
 }

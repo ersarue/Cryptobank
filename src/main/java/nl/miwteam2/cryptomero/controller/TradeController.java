@@ -52,9 +52,9 @@ public class TradeController {
     @CrossOrigin
     @PostMapping("/bank")
     public ResponseEntity<?> tradeWithBank(@RequestBody TradeBankDto tradeBankDto, @RequestHeader ("Authorization") String jwt) {
-        int IdAccount = authenticationService.getAuthenticatedIdAccount(jwt);
-        tradeBankDto.setIdAccountTrade(IdAccount);
-        if (IdAccount != 0) {
+        Customer customer = authenticationService.getAuthenticatedCustomer(jwt);
+        tradeBankDto.setCustomer(customer);
+        if (customer != null) {
             try {
                 return new ResponseEntity<>(transactionService.tradeWithBank(tradeBankDto), HttpStatus.CREATED);
             } catch (Exception e) {
