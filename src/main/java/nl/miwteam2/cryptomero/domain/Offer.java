@@ -30,6 +30,12 @@ public class Offer {
         this.setTimestampOffer(offerDTO.getTimestampOffer());
     }
 
+    public Offer(TradeOfferDto tradeOfferDto) {
+        this.setAmountOffer(tradeOfferDto.getAmountOffer());
+        this.setPriceOffer(tradeOfferDto.getRateOffer());
+    }
+
+
     public int getIdOffer() {
         return idOffer;
     }

@@ -35,4 +35,13 @@ public class TradeBankDto {
     public void setAmountTrade(double amountTrade) {
         this.amountTrade = amountTrade;
     }
+
+    @Override
+    public String toString() {
+        return "TradeBankDto{" +
+                "idAccountTrade=" + idAccountTrade +
+                ", assetNameTrade='" + assetNameTrade + '\'' +
+                ", amountTrade=" + amountTrade +
+                '}';
+    }
 }
