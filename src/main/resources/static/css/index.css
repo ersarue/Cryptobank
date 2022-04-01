@@ -40,6 +40,20 @@ h2 {
   background: #6009ef;
 }
 
+.btn-register{
+  margin-top: 10px;
+  color: #6009ef;
+  border: hsl(0, 0%, 100%) 1px solid;
+  border-radius: 0.25em;
+  box-shadow: inset 0 0 0.5em 0 #6009ef, 0 0 0.5em 0 #6009ef;
+  transition: all 0.5s
+}
+
+.btn-register:hover {
+  background-color: #6009ef;
+  color: white;
+}
+
 #invalid-combination {
   background-color: #f6e4e4;
   color: #b80202;
