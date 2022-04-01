@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<img src="../images/btc-logo.png" id="bitcoinPicture"  width="5%" height="5%">
+<img src="../images/ethereum-logo.png" id="ethereumPicture"  width="5%" height="5%">
+<img src="../images/tether-logo.png" id="tetherPicture"  width="5%" height="5%">
+
+<script src="../js/grafiekenGenerator.js"></script>
+<div class="w3-container">
+  <br> 
+  <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-black">Koers Informatie</button>
+  <div id="id01" class="w3-modal" >
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <p>Koersen</p>
+        <p>
+          <div id="koers1"></div>
+          <div id="koers2"></div>
+          <div id="koers3"></div>
+          <div id="koers4"></div>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
