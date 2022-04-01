@@ -38,7 +38,7 @@ public class RateController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
+    @CrossOrigin
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(@RequestParam String name, @RequestParam String interval, @RequestParam int datapoints) {
         try {
