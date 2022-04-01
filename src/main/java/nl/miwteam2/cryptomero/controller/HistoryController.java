@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/history")
 public class HistoryController {
 
     private HistoryService historyService;
@@ -29,10 +28,11 @@ public class HistoryController {
         this.authService = authService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Transaction>> getAllHistory(@PathVariable int id, @RequestHeader("Authorization") String token) {
-        if (authService.isValidToken(token)) {
-            List<Transaction> history = historyService.getAllHistory(id);
+    @GetMapping("/history")
+    public ResponseEntity<List<Transaction>> getAllHistory(@RequestHeader("Authorization") String token) {
+        int idUserAccount = authService.getAuthenticatedIdAccount(token);
+        if (idUserAccount != 0) {
+            List<Transaction> history = historyService.getAllHistory(idUserAccount);
             return new ResponseEntity<>(history, HttpStatus.OK);
         } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
