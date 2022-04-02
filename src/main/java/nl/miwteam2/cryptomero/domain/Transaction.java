@@ -74,6 +74,11 @@ public class Transaction {
                 '}';
     }
 
+    public double totalPrice() {
+        return assetAmount * eurAmount;
+    }
+
+
     public int getIdTransaction() { return idTransaction; }
 
     public LocalDateTime getTransactionTime() { return transactionTime; }
