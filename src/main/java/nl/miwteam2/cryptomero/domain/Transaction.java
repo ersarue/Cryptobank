@@ -102,4 +102,20 @@ public class Transaction {
     public void setAssetRecipient(Customer assetRecipient) { this.assetRecipient = assetRecipient; }
 
     public void setAsset(Asset asset) { this.asset = asset; }
+
+    public void setTransactionTime(LocalDateTime transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    public void setAssetAmount(double assetAmount) {
+        this.assetAmount = assetAmount;
+    }
+
+    public void setEurAmount(double eurAmount) {
+        this.eurAmount = eurAmount;
+    }
+
+    public void setEurFee(double eurFee) {
+        this.eurFee = eurFee;
+    }
 }
