@@ -5,9 +5,7 @@ import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProfileController {
@@ -19,9 +17,10 @@ public class ProfileController {
         this.authenticationService = authenticationService;
     }
 
+    // TODO: 25-03-22 change url when ready
     @GetMapping("/portfolio/assets")
-    public ResponseEntity<?> getPortfolio(@RequestHeader ("Authorization") String jwt) {
-        Customer authenticatedCustomer = authenticationService.getAuthenticatedCustomer(jwt);
+    public ResponseEntity<?> getPortfolio(@RequestHeader ("Authorization") String authorizationHeader) {
+        Customer authenticatedCustomer = authenticationService.getAuthenticatedCustomer(authorizationHeader);
         if (authenticatedCustomer != null) {
             return new ResponseEntity<> (authenticatedCustomer, HttpStatus.OK);
         } else {

@@ -21,12 +21,12 @@ import java.util.Objects;
  */
 
 @Repository
-public class JdbcUserAccountDao implements GenericDao<UserAccount> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(JdbcUserAccountDao.class);
+public class UserAccountDao implements GenericDao<UserAccount> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserAccountDao.class);
   JdbcTemplate jdbcTemplate;
 
   @Autowired
-  public JdbcUserAccountDao(JdbcTemplate jdbcTemplate) {
+  public UserAccountDao(JdbcTemplate jdbcTemplate) {
 	this.jdbcTemplate = jdbcTemplate;
 	LOGGER.info("New JdbcUserAccountDao");
   }
@@ -59,7 +59,8 @@ public class JdbcUserAccountDao implements GenericDao<UserAccount> {
   @Override
   public List<UserAccount> getAll() {
 	String sql = "SELECT * FROM user_account;";
-	return jdbcTemplate.query(sql, new UserAccountRowMapper(), (Object) null);
+	List<UserAccount> userAccountList = jdbcTemplate.query(sql, new UserAccountRowMapper(), null);
+	return (userAccountList.size() != 0) ? userAccountList : null;
   }
 
   @Override
