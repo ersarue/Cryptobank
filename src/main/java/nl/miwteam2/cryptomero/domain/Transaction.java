@@ -34,6 +34,16 @@ public class Transaction {
         this(idTransaction, transactionTime, null, null, null, assetAmount, eurAmount, eurFee);
     }
 
+    public Transaction(TransactionDto transactionDto){
+        this.transactionTime = transactionDto.getTransactionTime();
+        this.assetGiver = transactionDto.getAssetGiver();
+        this.assetRecipient = transactionDto.getAssetRecipient();
+        this.asset = transactionDto.getAsset();
+        this.assetAmount = transactionDto.getAssetAmount();
+        this.eurAmount = transactionDto.getEurAmount();
+    };
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,6 +74,11 @@ public class Transaction {
                 '}';
     }
 
+    public double totalPrice() {
+        return assetAmount * eurAmount;
+    }
+
+
     public int getIdTransaction() { return idTransaction; }
 
     public LocalDateTime getTransactionTime() { return transactionTime; }
@@ -87,4 +102,20 @@ public class Transaction {
     public void setAssetRecipient(Customer assetRecipient) { this.assetRecipient = assetRecipient; }
 
     public void setAsset(Asset asset) { this.asset = asset; }
+
+    public void setTransactionTime(LocalDateTime transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    public void setAssetAmount(double assetAmount) {
+        this.assetAmount = assetAmount;
+    }
+
+    public void setEurAmount(double eurAmount) {
+        this.eurAmount = eurAmount;
+    }
+
+    public void setEurFee(double eurFee) {
+        this.eurFee = eurFee;
+    }
 }

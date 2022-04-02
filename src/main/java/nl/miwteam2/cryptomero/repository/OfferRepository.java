@@ -13,21 +13,21 @@ import java.util.List;
 @Repository
 public class OfferRepository {
 
-    private UserAccountDao jdbcUserAccountDao;
-    private AssetDao jdbcAssetDao;
+    private UserAccountDao UserAccountDao;
+    private AssetDao AssetDao;
     private OfferDao offerDao;
 
     @Autowired
     public OfferRepository(UserAccountDao UserAccountDao, AssetDao AssetDao, OfferDao offerDao) {
-        this.jdbcUserAccountDao = jdbcUserAccountDao;
-        this.jdbcAssetDao = jdbcAssetDao;
+        this.UserAccountDao = UserAccountDao;
+        this.AssetDao = AssetDao;
         this.offerDao = offerDao;
     }
 
     public Offer findById(int id) {
         OfferDTO offer = offerDao.findById(id);
-        UserAccount userOffer = jdbcUserAccountDao.findById(offer.getIdAccountOffer());
-        Asset assetOffer = jdbcAssetDao.findByName(offer.getAssetNameOffer());
+        UserAccount userOffer = UserAccountDao.findById(offer.getIdAccountOffer());
+        Asset assetOffer = AssetDao.findByName(offer.getAssetNameOffer());
         return new Offer(userOffer, assetOffer, offer);
     }
 
@@ -44,8 +44,8 @@ public class OfferRepository {
     public List<Offer> fillOfferList(List<OfferDTO> offerDTOs) {
         List<Offer> offers = new ArrayList<Offer>();
         for (OfferDTO offer:offerDTOs) {
-            UserAccount userOffer = jdbcUserAccountDao.findById(offer.getIdAccountOffer());
-            Asset assetOffer = jdbcAssetDao.findByName(offer.getAssetNameOffer());
+            UserAccount userOffer = UserAccountDao.findById(offer.getIdAccountOffer());
+            Asset assetOffer = AssetDao.findByName(offer.getAssetNameOffer());
             offers.add(new Offer(userOffer, assetOffer, offer));
         }
         return offers;

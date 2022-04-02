@@ -7,17 +7,17 @@ import java.sql.Timestamp;
 */
 public class TradeOfferDto {
 
-    private int idAccountOffer;
+    private Customer customer;
     private String assetNameOffer;
     private double amountOffer;
     private double rateOffer;
 
-    public int getIdAccountOffer() {
-        return idAccountOffer;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setIdAccountOffer(int idAccountOffer) {
-        this.idAccountOffer = idAccountOffer;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getAssetNameOffer() {
@@ -47,7 +47,7 @@ public class TradeOfferDto {
     @Override
     public String toString() {
         return "TradeOfferDto{" +
-                "idAccountOffer=" + idAccountOffer +
+                "customer=" + customer +
                 ", assetNameOffer='" + assetNameOffer + '\'' +
                 ", amountOffer=" + amountOffer +
                 ", rateOffer=" + rateOffer +

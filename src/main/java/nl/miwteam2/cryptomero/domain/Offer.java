@@ -34,6 +34,15 @@ public class Offer {
         this.setAmountOffer(tradeOfferDto.getAmountOffer());
         this.setPriceOffer(tradeOfferDto.getRateOffer());
     }
+    //a constructor to make a deep copy of an Offer object
+    public Offer(Offer offer){
+        this.idOffer = offer.getIdOffer();
+        this.userOffer = offer.getUserOffer();
+        this.assetOffer = offer.getAssetOffer();
+        this.amountOffer = offer.getAmountOffer();
+        this.priceOffer = offer.getPriceOffer();
+        this.timestampOffer = offer.getTimestampOffer();
+    }
 
 
     public int getIdOffer() {

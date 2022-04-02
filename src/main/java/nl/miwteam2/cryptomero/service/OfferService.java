@@ -1,9 +1,15 @@
 package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.*;
+import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import nl.miwteam2.cryptomero.repository.OfferDao;
+import nl.miwteam2.cryptomero.repository.OfferRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,88 +21,110 @@ import java.util.List;
 /**
  * checked offer op match en vraagt eventueel transactie aan
  * @author: Samuel Geurts en Stijn Klijn
- * Version 1.1
+ * Version 1.2
 */
 @Service
 public class OfferService {
 
     private CustomerService customerService;
     private AssetService assetService;
+    private CustomerRepository customerRepository;
+    private TransactionService transactionService;
+    private OfferRepository offerRepository;
 
-    public OfferService(CustomerService customerService,AssetService assetService) {
+    @Autowired
+    public OfferService(CustomerService customerService,AssetService assetService, CustomerRepository customerRepository, TransactionService transactionService, OfferRepository offerRepository) {
         this.customerService = customerService;
         this.assetService = assetService;
+        this.customerRepository = customerRepository;
+        this.transactionService = transactionService;
+        this.offerRepository = offerRepository;
     }
 
     //methode die alles afhandelt
-    public Offer tradeOffer(TradeOfferDto tradeOfferDto) {
-        //todo handel offer af
+    public int tradeOffer(TradeOfferDto tradeOfferDto) throws Exception {
 
-        List<Offer> matchList = null;
-        Transaction transaction;
-
+        System.out.println(0);
         Offer offer = getOffer(tradeOfferDto);
-        List<Offer> offerList = getAll();
+        boolean isSeller = offer.getAmountOffer() > 0;
+        int numberOfPerformedTransactions = 0;
 
-        //bij positief amount wil je verkopen
-        if (offer.getAmountOffer() > 0){
-            matchList = findBuyers(offer);
-        } else if (offer.getAmountOffer() < 0) {
-            matchList = findSellers(offer);
-        } else {
-            //todo return iets als de amount nul is
+        System.out.println(1);
+
+        //verkopen of kopen
+        Offer offerClone = new Offer(offer); //to prevent changes to this offer
+        List<Offer> matchList = isSeller? findBuyers(offerClone):findSellers(offerClone);
+
+        for (Offer counterOffer: matchList){
+            //todo maak Transaction met informatie offer en counteroffer;
+            TransactionDto transactionDto;
+
+            if (isSeller) {
+                transactionDto = new TransactionDto(LocalDateTime.now(), tradeOfferDto.getCustomer(),
+                        customerRepository.findById(counterOffer.getUserOffer().getIdAccount()),
+                        counterOffer.getAssetOffer(),counterOffer.getAmountOffer(),counterOffer.getPriceOffer());
+            } else {
+                transactionDto = new TransactionDto(LocalDateTime.now(),
+                        customerRepository.findById(counterOffer.getUserOffer().getIdAccount()), tradeOfferDto.getCustomer(),
+                        counterOffer.getAssetOffer(),counterOffer.getAmountOffer(),counterOffer.getPriceOffer());
+            }
+            //todo spreek TransactionService aan en doe transactie attempt
+            System.out.println(2);
+            try {
+                Transaction transaction = transactionService.tradeWithUser(transactionDto);
+            } catch (Exception e) {
+                //todo als het niet lukt - break - sla offer op in offerTabel
+                System.out.println(e.getMessage());
+                int offerId = offerRepository.storeOne(offer);
+                System.out.println(matchList.toString());
+                throw e;
+            }
+
+            //todo als het wel lukt - offertabel updaten - offer model updaten
+
+            /**
+             * Update offer tabel(entry counter offer) als de koop/verkoop partitieel is
+             * Delete offer tabel(entry counter offer) als de koop/verkoop compleet is
+             * */
+            Offer storedCounterOffer  = offerRepository.findById(counterOffer.getIdOffer());
+            if (storedCounterOffer.getAmountOffer() != counterOffer.getAmountOffer()){
+                storedCounterOffer.setAmountOffer(storedCounterOffer.getAmountOffer() - counterOffer.getAmountOffer());
+                offerRepository.updateOne(storedCounterOffer);
+            } else {
+                offerRepository.deleteOne(storedCounterOffer.getIdOffer());
+            }
+            System.out.println(3);
+            /**
+             * Update offer voor gebruik in de loop
+             * omdat voor offer en counterOffer het getAmountOffer() een tegengesteld sign heeft moet een optelling plaats vinden.
+             */
+            offer.setAmountOffer(offer.getAmountOffer() + counterOffer.getAmountOffer());
+            numberOfPerformedTransactions++;
+            System.out.println(offer);
         }
 
-        //herhaal de function totdat offer.getmount leeg is of wanneer de matchlist leeg is.
-        do {
-            transaction = ComputeTransaction(matchList,offer);
-        }
-        while ((offer.getAmountOffer() != 0) || !matchList.isEmpty());
-
-        //als er nog een deel van het offer over is, dan moet deze toegevoegd worden aan de database
-        if (offer.getAmountOffer() != 0) {
-            //todo store offer
+        if (offer.getAmountOffer() > 0) {
+            //todo schrijf offer naar database
+            offerRepository.storeOne(offer);
         }
 
-        return null;
+        //todo iets terug geven
+        return numberOfPerformedTransactions;
     }
 
     //maakt een offer van trade Offer Dto
     public Offer getOffer(TradeOfferDto tradeOfferDto) {
         Offer offer = new Offer(tradeOfferDto);
-        Customer customer = customerService.findById(tradeOfferDto.getIdAccountOffer());
         Asset asset = assetService.findByName(tradeOfferDto.getAssetNameOffer());
-        offer.setUserOffer(customer);
+        offer.setUserOffer(tradeOfferDto.getCustomer());
         offer.setAssetOffer(asset);
         offer.setTimestampOffer(new Timestamp(System.currentTimeMillis()));
-        return null;
+        return offer;
     }
 
     public List<Offer> getAll() {
         //todo haal alle offers op uit de database
-        return new ArrayList<>();
-    }
-
-    //deze functie moet waarschijnlijk nug in stukje opgeknipt worden.
-    public Transaction ComputeTransaction(List<Offer> matchList, Offer offer) {
-        // todo - maakt een transactie object tussen offer en het eerste aanbod in de matchlist.
-
-        // todo - probeer transactie te doen (TransactionService.....)
-        // todo - als het niet goed gaat return null
-        // todo - als het wel goed gaat update matchlist (ofwel een entry verwijdern of updaten)
-        // todo -     en update/delete OfferTable (OfferDao.update(...)) - van de opponent
-        // todo - update offer (ofwel er is nog een deel van de aanvraag over of amountOffer wordt op nul gezet.
-
-        // spreekt transactie service aan
-        // als het goed is gegaan dan update of delete offer in offerDatabase.
-
-        return null;
-    }
-
-
-
-    public Offer storeOne(TradeOfferDto tradeOfferDto) {
-        return null;
+        return offerRepository.getAll();
     }
 
     public List<Offer> findSellers(Offer buyer) {
