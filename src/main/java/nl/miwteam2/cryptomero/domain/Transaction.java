@@ -34,6 +34,16 @@ public class Transaction {
         this(idTransaction, transactionTime, null, null, null, assetAmount, eurAmount, eurFee);
     }
 
+    public Transaction(TransactionDto transactionDto){
+        this.transactionTime = transactionDto.getTransactionTime();
+        this.assetGiver = transactionDto.getAssetGiver();
+        this.assetRecipient = transactionDto.getAssetRecipient();
+        this.asset = transactionDto.getAsset();
+        this.assetAmount = transactionDto.getAssetAmount();
+        this.eurAmount = transactionDto.getEurAmount();
+    };
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
