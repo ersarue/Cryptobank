@@ -51,8 +51,8 @@ public class Transaction {
         Transaction that = (Transaction) o;
         return idTransaction == that.idTransaction && Double.compare(that.assetAmount, assetAmount) == 0 &&
                 Double.compare(that.eurAmount, eurAmount) == 0 && Double.compare(that.eurFee, eurFee) == 0 &&
-                transactionTime.equals(that.transactionTime) && assetGiver.equals(that.assetGiver) &&
-                assetRecipient.equals(that.assetRecipient) && asset.equals(that.asset);
+                transactionTime.equals(that.transactionTime) && Objects.equals(assetGiver, that.assetGiver) &&
+                Objects.equals(assetRecipient, that.assetRecipient) && Objects.equals(asset, that.asset);
     }
 
     @Override
