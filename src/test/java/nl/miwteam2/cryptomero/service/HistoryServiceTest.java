@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HistoryServiceTest {
 
     private HistoryService serviceUnderTest;
+
     private TransactionRepository transactionRepositoryMock = Mockito.mock(TransactionRepository.class);
 
     private Customer jan;
@@ -31,7 +32,7 @@ class HistoryServiceTest {
     private List<Transaction> sellerHistoryJan;
     private List<Transaction> buyerHistoryJan;
     private List<Transaction> allTransactions;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public HistoryServiceTest() {
         super();
@@ -46,9 +47,9 @@ class HistoryServiceTest {
                 "457506064", "06-12345777");
         bitcoin = new Asset("Bitcoin", "BTC");
         ethereum = new Asset("Ethereum", "ETH");
-        transaction1 = new Transaction(1, LocalDateTime.parse("2022-03-31 12:15:24", formatter), jan,
+        transaction1 = new Transaction(1, LocalDateTime.parse("2022-03-31 12:15:24", FORMATTER), jan,
                 piet, bitcoin, 0.6, 25555.37, 16.50);
-        transaction2 = new Transaction(2, LocalDateTime.parse("2022-03-31 12:20:45", formatter), piet,
+        transaction2 = new Transaction(2, LocalDateTime.parse("2022-03-31 12:20:45", FORMATTER), piet,
                 jan, ethereum, 2.4, 7383.42, 3.75);
 
         sellerHistoryJan = new ArrayList<>();
@@ -68,7 +69,7 @@ class HistoryServiceTest {
     @Test
     void storeOne() {
         int expected = 0;
-        int actual = serviceUnderTest.storeOne(new Transaction(LocalDateTime.parse("2022-03-31 13:04:10", formatter), jan, piet,
+        int actual = serviceUnderTest.storeOne(new Transaction(LocalDateTime.parse("2022-03-31 13:04:10", FORMATTER), jan, piet,
                 bitcoin, 4, 170341.34, 160.34));
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
