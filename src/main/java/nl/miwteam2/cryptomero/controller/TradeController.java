@@ -36,9 +36,9 @@ public class TradeController {
     @CrossOrigin
     @PostMapping("/offer")
     public ResponseEntity<?> storeOneOffer(@RequestBody TradeOfferDto tradeOfferDto, @RequestHeader ("Authorization") String jwt) {
-        int IdAccount = authenticationService.getAuthenticatedIdAccount(jwt);
-        tradeOfferDto.setIdAccountOffer(IdAccount);
-        if (IdAccount != 0) {
+        Customer customer = authenticationService.getAuthenticatedCustomer(jwt);
+        tradeOfferDto.setCustomer(customer);
+        if (customer != null) {
             try {
                 return new ResponseEntity<>(offerService.tradeOffer(tradeOfferDto), HttpStatus.CREATED);
             } catch (Exception e) {
