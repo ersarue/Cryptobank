@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Petra Coenen
- * @version 1.1
  */
 
 class AddressTest {

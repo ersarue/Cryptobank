@@ -14,6 +14,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.assertj.core.api.Assertions.*;
 
+/**
+* @author Petra Coenen
+*/
+
 @WebMvcTest(HistoryController.class)
 class HistoryControllerTest {
 
@@ -30,6 +34,7 @@ class HistoryControllerTest {
         this.mockServer = mockServer;
     }
 
+//    TODO: Check test setup (PC)
     @Test
     void testGetAllHistory() {
         MockHttpServletRequestBuilder request;

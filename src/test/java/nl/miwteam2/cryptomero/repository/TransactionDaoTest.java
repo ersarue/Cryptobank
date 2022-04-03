@@ -15,6 +15,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
+/**
+* @author Petra Coenen
+*/
+
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
