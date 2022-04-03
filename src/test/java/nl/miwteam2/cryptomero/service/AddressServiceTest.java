@@ -2,9 +2,7 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Address;
 import nl.miwteam2.cryptomero.repository.AddressDao;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
@@ -17,11 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Contains unit tests for methods in the AddressService class.
  * @author Petra Coenen
- * @version 1.3
  */
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AddressServiceTest {
 
     private AddressService serviceUnderTest;
@@ -37,7 +34,7 @@ class AddressServiceTest {
         this.serviceUnderTest = new AddressService(daoMock);
     }
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
         Collections.addAll(allAddresses, addressZutphen, addressTiel);
         Mockito.when(daoMock.findById(14)).thenReturn(addressZutphen);

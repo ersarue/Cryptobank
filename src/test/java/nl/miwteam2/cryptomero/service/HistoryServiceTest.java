@@ -4,8 +4,9 @@ import nl.miwteam2.cryptomero.domain.Asset;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.Transaction;
 import nl.miwteam2.cryptomero.repository.TransactionRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -17,6 +18,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+* @author Petra Coenen
+*/
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HistoryServiceTest {
 
     private HistoryService serviceUnderTest;
@@ -39,7 +45,7 @@ class HistoryServiceTest {
         this.serviceUnderTest = new HistoryService(transactionRepositoryMock);
     }
 
-    @BeforeEach
+    @BeforeAll
     public void fillMocks() {
         jan = new Customer("Jan", "de", "Vries", LocalDate.parse("1970-03-04"),
                 "418809458", "06-12345678");
