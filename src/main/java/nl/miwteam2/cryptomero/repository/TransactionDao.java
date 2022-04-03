@@ -34,7 +34,7 @@ public class TransactionDao {
             r.getDouble("eur_fee"));
 
     public int storeOne(Transaction t) {
-        String sql = "INSERT INTO transaction VALUES(?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO transaction(datetime, asset_giver, asset_recipient, asset_name, asset_amount, eur_amount, eur_fee) VALUES(?, ?, ?, ?, ?, ?, ?);";
         return jdbcTemplate.update(sql, t.getTransactionTime(), t.getAssetGiver().getIdAccount(),
                 t.getAssetRecipient().getIdAccount(), t.getAsset().getAssetName(), t.getAssetAmount(),
                 t.getEurAmount(), t.getEurFee());
