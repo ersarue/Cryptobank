@@ -1,0 +1,44 @@
+body {
+    background-image: url("../images/crypto-background.jpeg");
+    background-size: cover;
+}
+
+/* START navbar css */
+.navbar {
+    background-color: #6610f2;
+}
+
+.cryptomero-logo {
+    width: 60px;
+    height: 60px;
+    transition: 0.70s;
+    display: block;
+}
+
+.cryptomero-logo:hover {
+    transition: 0.90s;
+    transform: rotate(360deg);
+}
+
+.go-home {
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 1.1em;
+    transform: skewY(-3deg);
+}
+
+#logout-btn {
+    background: #6009ef;
+    border-color: white;
+    color: white;
+}
+/* END navbar css */
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 0.2em;
+    color: #616161;
+    background-color: #F6F6F6;
+}
+

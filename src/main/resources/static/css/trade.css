@@ -1,0 +1,53 @@
+body {
+    background-image: url("../images/crypto-background.jpeg");
+    background-size: cover;
+}
+
+/* START table container css */
+.table-container {
+    display: flex;
+    justify-content: left;
+    text-align: left;
+}
+
+/* START table */
+#asset-catalogue {
+    background-color: #F6F6F6;
+    color: #6610f2;
+    margin-top: 60px;
+    margin-bottom: 5%;
+    margin-left: 10%;
+    width: 50%;
+}
+
+#asset-card {
+    display: inline-flex;
+    flex-flow: row;
+}
+
+.asset-logo {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    transition: 0.70s;
+    display: block;
+}
+
+.asset-graph {
+    width: 300px;
+    height: 300px;
+    margin-top: 60px;
+    margin-bottom: 5%;
+    margin-right: 10%;
+    display: inline-flex;
+}
+/* END table */
+
+/* END table container css */
+
+/* START general css */
+img {display: flex;
+    width: 60px;
+    height: 60px;
+}
+
