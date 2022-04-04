@@ -59,7 +59,8 @@ public class TransactionService {
 		throw new Exception("Insufficient asset");
 	  }
 	}
-	updateBankAccount(trade); // update bank account
+	updateBankAccount(transaction); // update bank account
+//	updateWallet(transaction); todo
 	storeTransaction(transaction); // store transaction
 	return transaction;
   }
@@ -87,7 +88,7 @@ public class TransactionService {
 	System.out.println(4);
 	System.out.println("asset_amount: " + transaction.getAssetRecipient().getWallet().get(assetName));
 
-	double assetAmountRecipient = walletAssetRecipient.get(assetName); //asset_amount assetRecipient
+	//double assetAmountRecipient = walletAssetRecipient.get(assetName); //asset_amount assetRecipient
 	double assetAmountGiver = walletAssetGiver.get(assetName); //asset_amount assetGiver
 	double BalanceEurGiver = bankAccountAssetGiver.getBalanceEur(); //BalanceEur assetGiver
 	double BalanceEurRecipient = bankAccountAssetRecipient.getBalanceEur(); //BalanceEur assetGiver
@@ -130,13 +131,37 @@ public class TransactionService {
 	return amount * rateService.getLatestByName(assetName).getRate();
   }
 
-  // update bank balance with user input
-  private void updateBankAccount(TradeBankDto trade) {
-	if (!isCustomerBuying(trade.getAmountTrade())) {
-	  updateWallet(trade);
-	  bankAccountService.updateOne(trade.getCustomer().getBankAccount());
+//  // update bank balance with user input
+//  private void updateBankAccount(TradeBankDto trade) {
+//	if (!isCustomerBuying(trade.getAmountTrade())) {
+//	  updateWallet(trade);
+//	  //bankaccount bevat zelf nog geen customer die de bankaccountService nodig heeft
+//	  BankAccount bankAccount = trade.getCustomer().getBankAccount();
+//	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + calculateEuroByAmountTrade(trade.getAmountTrade(),trade.getAssetNameTrade()) - );
+//
+//	  bankAccount.setUserAccount(trade.getCustomer());
+//	  bankAccountService.updateOne(bankAccount);
+//	}
+//  }
+
+	// update bank balance with user input
+	private void updateBankAccount(Transaction transaction) {
+		BankAccount bankAccount;
+		if (transaction.getAssetGiver().getIdAccount() != 1) { //idaccount 1 is de bank, client verkoopt assets aan de bank en betaalt fee
+			//updateWallet(transaction);
+			bankAccount = transaction.getAssetGiver().getBankAccount();
+		    bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.totalPrice() - transaction.getEurFee() );
+			bankAccount.setUserAccount(transaction.getAssetGiver());
+		} else { //client koopt assets van de bank en betaald assets prijs + fee
+			//updateWallet(transaction);
+			bankAccount = transaction.getAssetRecipient().getBankAccount();
+			bankAccount.setBalanceEur(bankAccount.getBalanceEur() - transaction.totalPrice() - transaction.getEurFee() );
+			bankAccount.setUserAccount(transaction.getAssetRecipient());
+		}
+		bankAccountService.updateOne(bankAccount);
 	}
-  }
+
+
 
   // loop over Wallet, if asset in wallet then update, if not then add
   private void updateWallet(TradeBankDto trade) {
@@ -150,12 +175,12 @@ public class TransactionService {
 //	walletDao.updateOne(trade.getCustomer().getWallet());
   }
 
-  private boolean isCustomerBuying(double amountTrade) { return amountTrade > 0; }
+  private boolean isCustomerBuying(double amountTrade) { return amountTrade < 0; }
 
-  private boolean isBalanceEnoughToBuy(double balance, double amount) { return (balance > amount); }
+  private boolean isBalanceEnoughToBuy(double balance, double amount) { return (balance >= amount); }
 
   private boolean isAssetEnoughToSell(TradeBankDto trade) {
-	return trade.getCustomer().getWallet().get(trade.getAssetNameTrade()) > Math.abs(trade.getAmountTrade());
+	return trade.getCustomer().getWallet().get(trade.getAssetNameTrade()) >= Math.abs(trade.getAmountTrade());
   }
 
   private boolean isAssetInWallet(String assetName, Map<String, Double> customerWallet) {
