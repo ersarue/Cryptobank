@@ -92,3 +92,31 @@ CREATE TABLE `session`
     REFERENCES `cryptomero`.`user_account`(`id_account`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+
+CREATE TABLE `transaction`
+(
+    `id_transaction` INT NOT NULL AUTO_INCREMENT,
+    `datetime` DATETIME NOT NULL,
+    `asset_giver` INT NOT NULL,
+    `asset_recipient` INT NOT NULL,
+    `asset_name` VARCHAR(45) NOT NULL,
+    `asset_amount` DECIMAL(13,4) NOT NULL,
+    `eur_amount` DECIMAL(13,4) NOT NULL,
+    `eur_fee` DECIMAL(13,4) NOT NULL,
+    PRIMARY KEY (`id_transaction`),
+    CONSTRAINT `transactionFrom_account`
+    FOREIGN KEY (`asset_giver`)
+        REFERENCES `cryptomero`.`customer` (`id_account`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `transactionTo_account`
+    FOREIGN KEY (`asset_recipient`)
+        REFERENCES `cryptomero`.`customer` (`id_account`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `transaction_asset`
+    FOREIGN KEY (`asset_name`)
+        REFERENCES `cryptomero`.`asset` (`asset_name`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION);

@@ -36,4 +36,11 @@ public class HistoryController {
             return new ResponseEntity<>(history, HttpStatus.OK);
         } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
+
+//    DO NOT USE IN CRYPTOMERO PROJECT! Method included for testing purposes (portfolio) only!
+    @GetMapping("/testHistory/{id}")
+    public ResponseEntity<List<Transaction>> testGetAllHistory(@PathVariable int id) {
+            List<Transaction> history = historyService.getAllHistory(id);
+            return new ResponseEntity<>(history, HttpStatus.OK);
+    }
 }

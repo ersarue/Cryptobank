@@ -1,9 +1,8 @@
-package nl.miwteam2.cryptomero.service;
+package nl.miwteam2.cryptomero.repository;
 
 import nl.miwteam2.cryptomero.domain.Asset;
 import nl.miwteam2.cryptomero.domain.Customer;
 import nl.miwteam2.cryptomero.domain.Transaction;
-import nl.miwteam2.cryptomero.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -13,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,36 +21,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 */
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class HistoryServiceTest {
+class TransactionRepositoryTest {
 
-    private HistoryService serviceUnderTest;
+    private TransactionRepository repositoryUnderTest;
 
-    private TransactionRepository transactionRepositoryMock = Mockito.mock(TransactionRepository.class);
+    private TransactionDao transactionDaoMock = Mockito.mock(TransactionDao.class);
+    private CustomerDao customerDaoMock = Mockito.mock(CustomerDao.class);
+    private AssetDao assetDaoMock = Mockito.mock(AssetDao.class);
 
-    private Customer jan;
-    private Customer piet;
-    private Asset bitcoin;
-    private Asset ethereum;
     private Transaction transaction1;
     private Transaction transaction2;
     private List<Transaction> sellerHistoryJan;
     private List<Transaction> buyerHistoryJan;
-    private List<Transaction> allTransactions;
     private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public HistoryServiceTest() {
+    public TransactionRepositoryTest() {
         super();
-        this.serviceUnderTest = new HistoryService(transactionRepositoryMock);
+        this.repositoryUnderTest = new TransactionRepository(transactionDaoMock, customerDaoMock, assetDaoMock);
     }
 
     @BeforeAll
-    public void fillMocks() {
-        jan = new Customer("Jan", "de", "Vries", LocalDate.parse("1970-03-04"),
+    void setup() {
+        Customer jan = new Customer("Jan", "de", "Vries", LocalDate.parse("1970-03-04"),
                 "418809458", "06-12345678");
-        piet = new Customer("Piet", null, "Jansen", LocalDate.parse("1959-10-23"),
+        Customer piet = new Customer("Piet", null, "Jansen", LocalDate.parse("1959-10-23"),
                 "457506064", "06-12345777");
-        bitcoin = new Asset("Bitcoin", "BTC");
-        ethereum = new Asset("Ethereum", "ETH");
+        Asset bitcoin = new Asset("Bitcoin", "BTC");
+        Asset ethereum = new Asset("Ethereum", "ETH");
         transaction1 = new Transaction(1, LocalDateTime.parse("2022-03-31 12:15:24", FORMATTER), jan,
                 piet, bitcoin, 0.6, 25555.37, 16.50);
         transaction2 = new Transaction(2, LocalDateTime.parse("2022-03-31 12:20:45", FORMATTER), piet,
@@ -62,42 +57,46 @@ class HistoryServiceTest {
         sellerHistoryJan.add(transaction1);
         buyerHistoryJan = new ArrayList<>();
         buyerHistoryJan.add(transaction2);
-        allTransactions = new ArrayList<>();
-        Collections.addAll(allTransactions, transaction1, transaction2);
 
-        Mockito.when(transactionRepositoryMock.findById(1)).thenReturn(transaction1);
-        Mockito.when(transactionRepositoryMock.findById(2)).thenReturn(transaction2);
-        Mockito.when(transactionRepositoryMock.getSellerHistory(1)).thenReturn(sellerHistoryJan);
-        Mockito.when(transactionRepositoryMock.getBuyerHistory(1)).thenReturn(buyerHistoryJan);
+        Mockito.when(transactionDaoMock.findById(1)).thenReturn(transaction1);
+        Mockito.when(transactionDaoMock.findById(2)).thenReturn(transaction2);
+        Mockito.when(transactionDaoMock.getSellerHistory(1)).thenReturn(sellerHistoryJan);
+        Mockito.when(transactionDaoMock.getBuyerHistory(1)).thenReturn(buyerHistoryJan);
+        Mockito.when(customerDaoMock.findById(1)).thenReturn(jan);
+        Mockito.when(customerDaoMock.findById(2)).thenReturn(jan);
+        Mockito.when(assetDaoMock.findByName("bitcoin")).thenReturn(bitcoin);
     }
 
-    // TODO: Check return values! Test might not be correct. (PC)
     @Test
     void storeOne() {
+//        TODO: Double check returns of the storeOne() method (PC)
+        int actual = repositoryUnderTest.storeOne(transaction1);
         int expected = 0;
-        int actual = serviceUnderTest.storeOne(new Transaction(LocalDateTime.parse("2022-03-31 13:04:10", FORMATTER), jan, piet,
-                bitcoin, 4, 170341.34, 160.34));
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
 
     @Test
-    void getAllHistory() {
-        List<Transaction> expected = allTransactions;
-        List<Transaction> actual = serviceUnderTest.getAllHistory(1);
+    void findById() {
+        Transaction actual = repositoryUnderTest.findById(1);
+        Transaction expected = transaction1;
+        assertThat(actual).isNotNull().isEqualTo(expected);
+
+        actual = repositoryUnderTest.findById(2);
+        expected = transaction2;
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
 
     @Test
     void getSellerHistory() {
+        List<Transaction> actual = repositoryUnderTest.getSellerHistory(1);
         List<Transaction> expected = sellerHistoryJan;
-        List<Transaction> actual = serviceUnderTest.getSellerHistory(1);
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
 
     @Test
     void getBuyerHistory() {
+        List<Transaction> actual = repositoryUnderTest.getBuyerHistory(1);
         List<Transaction> expected = buyerHistoryJan;
-        List<Transaction> actual = serviceUnderTest.getBuyerHistory(1);
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
 }

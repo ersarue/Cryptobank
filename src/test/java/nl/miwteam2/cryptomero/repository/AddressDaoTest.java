@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
 * @author Petra Coenen
-* @version 1.0
 */
 
 @SpringBootTest
@@ -29,6 +28,7 @@ public class AddressDaoTest {
 
     @Autowired
     public AddressDaoTest(GenericDao<Address> AddressDao) {
+        super();
         this.daoUnderTest = AddressDao;
     }
 
@@ -40,11 +40,11 @@ public class AddressDaoTest {
 
     @Test
     void storeOne() {
-        int expected = 3;
+        int expected = 4;
         int actual = daoUnderTest.storeOne(addressAdam);
         assertThat(actual).isNotNull().isEqualTo(expected);
 
-        expected = 4;
+        expected = 5;
         actual = daoUnderTest.storeOne(addressHague);
         assertThat(actual).isNotNull().isEqualTo(expected);
     }
@@ -55,6 +55,13 @@ public class AddressDaoTest {
                 "1000CC", "Duckstad");
         Address actual = daoUnderTest.findById(2);
         assertThat(actual).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
+    void getAll() {
+        List<Address> allAdresses = daoUnderTest.getAll();
+        assertThat(allAdresses).isNotNull().isNotEmpty();
+        assertThat(allAdresses.size()).isEqualTo(3);
     }
 
     @Test
@@ -71,9 +78,9 @@ public class AddressDaoTest {
     }
 
     @Test
-    void testGetAll() {
-        List<Address> klanten = daoUnderTest.getAll();
-        assertThat(klanten).isNotNull().isNotEmpty();
-        assertThat(klanten.size()).isEqualTo(2);
+    void deleteOne() {
+        int expectedReturn = 1;
+        int actualReturn = daoUnderTest.deleteOne(3);
+        assertThat(actualReturn).isNotNull().isEqualTo(expectedReturn);
     }
 }
