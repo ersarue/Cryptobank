@@ -103,7 +103,7 @@ public class OfferService {
             System.out.println(offer);
         }
 
-        if (offer.getAmountOffer() > 0) {
+        if (offer.getAmountOffer() != 0) {
             //todo schrijf offer naar database
             offerRepository.storeOne(offer);
         }
