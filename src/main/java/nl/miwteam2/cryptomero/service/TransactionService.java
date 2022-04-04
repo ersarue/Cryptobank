@@ -104,10 +104,10 @@ public class TransactionService {
 
 	// change wallet balance Giver and store
 	walletAssetGiver.put(assetName, walletAssetGiver.get(assetName) - transaction.getAssetAmount());
-	walletDao.updateOne(walletAssetGiver);
+	walletDao.update(transaction.getAssetGiver().getIdAccount(), walletAssetGiver);
 	// change wallet balance Recipient
 	walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
-	walletDao.updateOne(walletAssetRecipient);
+	walletDao.update(transaction.getAssetRecipient().getIdAccount(), walletAssetRecipient);
 
 	System.out.println(6);
 	// change saldo Giver

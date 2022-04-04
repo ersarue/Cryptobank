@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class WalletDao implements GenericDao<Map<String, Double>> {
+public class WalletDao {
 
     private JdbcTemplate jdbcTemplate;
 
@@ -19,7 +19,6 @@ public class WalletDao implements GenericDao<Map<String, Double>> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public Map<String, Double> findById(int id) {
         String sql = "SELECT asset_name, amount FROM wallet WHERE id_account = ?;";
         List<Object[]> list = jdbcTemplate.query(sql, new WalletRowMapper(), id);
@@ -30,24 +29,16 @@ public class WalletDao implements GenericDao<Map<String, Double>> {
         return map;
     }
 
-    @Override
-    public int storeOne(Map<String, Double> assetDoubleMap) {
-        return 0;
-    }
+    public void update(int id, Map<String, Double> map) {
+        //First delete the previous situation
+        String sql = "DELETE FROM wallet WHERE id_account = ?;";
+        jdbcTemplate.update(sql, id);
 
-    @Override
-    public List<Map<String, Double>> getAll() {
-        return null;
-    }
-
-    @Override
-    public int updateOne(Map<String, Double> stringDoubleMap) {
-        return 0;
-    }
-
-    @Override
-    public int deleteOne(int id) {
-        return 0;
+        //Then write current situation to database
+        for (String asset : map.keySet()) {
+            sql = "INSERT INTO wallet VALUES (?, ?, ?);";
+            jdbcTemplate.update(sql, id, asset, map.get(asset));
+        }
     }
 
     private class WalletRowMapper implements RowMapper<Object[]> {
