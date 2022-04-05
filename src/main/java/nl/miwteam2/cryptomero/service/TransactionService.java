@@ -52,7 +52,8 @@ public class TransactionService {
 	  throw new Exception("Trade must be made with a bank or other client");
 	} else {
 	  if (isCustomerBuying(trade.getAmountTrade())) { // buying from bank
-		if (!isBalanceEnoughToBuy(trade.getCustomer().getBankAccount().getBalanceEur(), trade.getAmountTrade())) {
+		if (!isBalanceEnoughToBuy(trade.getCustomer().getBankAccount().getBalanceEur(),
+				calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()))) {
 		  throw new Exception("Cannot buy from bank. Insufficient balance");
 		}
 	  } else {  // selling to bank
@@ -142,7 +143,7 @@ public class TransactionService {
 	  bankAccount.setUserAccount(transaction.getAssetGiver());
 	} else { //client koopt assets van de bank en betaald assets prijs + fee
 	  bankAccount = transaction.getAssetRecipient().getBankAccount();
-	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() - transaction.totalPrice() - transaction.getEurFee());
+	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.totalPrice() - transaction.getEurFee());
 	  bankAccount.setUserAccount(transaction.getAssetRecipient());
 	}
 	bankAccountService.updateOne(bankAccount);
@@ -154,7 +155,10 @@ public class TransactionService {
 	Map<String, Double> wallet = trade.getCustomer().getWallet();
 	if (wallet.containsKey(trade.getAssetNameTrade())) {
 	  wallet.put(trade.getAssetNameTrade(),
-			  (wallet.get(trade.getAssetNameTrade()) + Math.abs(trade.getAmountTrade())));
+			  (wallet.get(trade.getAssetNameTrade()) - trade.getAmountTrade()));
+	  if (wallet.get(trade.getAssetNameTrade()) == 0) {
+		  wallet.remove(trade.getAssetNameTrade());
+	  }
 	} else {
 	  wallet.put(trade.getAssetNameTrade(), Math.abs(trade.getAmountTrade()));
 	}
