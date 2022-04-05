@@ -4,21 +4,21 @@ function onLoad(){
   let yValues = [0,23,1,19,33,4];
   grafiek(xValues,yValues,0,50)
 }
-document.querySelector('#bitcoinPicture').addEventListener('click', ()=>{
-  maakGrafiek("Bitcoin")
+document.querySelector('#dag').addEventListener('click', ()=>{
+  maakGrafiek(document.querySelector("#naamCrypto").innerHTML, 4, "daypart")
 })
-document.querySelector('#ethereumPicture').addEventListener('click', ()=>{
-  maakGrafiek("Ethereum")
+document.querySelector('#week').addEventListener('click', ()=>{
+  maakGrafiek(document.querySelector("#naamCrypto").innerHTML, 7, "day")
 })
-document.querySelector('#tetherPicture').addEventListener('click', ()=>{
-  maakGrafiek("Tether")
+document.querySelector('#maand').addEventListener('click', ()=>{
+  maakGrafiek(document.querySelector("#naamCrypto").innerHTML, 28, "day")
 })
-
-function maakGrafiek(naamCrypto) {
-    let aantalDataPoints=document.querySelector('#aantalDagen').value
-    let datapointsAantal=`datapoints=${aantalDataPoints}`
+function maakGrafiek(naamCrypto, aantalDagen, interval) {
+    let datapointsAantal=`datapoints=${aantalDagen}`
     let nameCryptomunt = `name=${naamCrypto}`
-    fetch('http://localhost:8080/rates/history?'+nameCryptomunt+'&interval=day&'+datapointsAantal, {
+    let intervalKeuze = `&interval=${interval}&`
+   
+    fetch('http://localhost:8080/rates/history?'+nameCryptomunt+intervalKeuze+datapointsAantal, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -42,6 +42,7 @@ function maakGrafiek(naamCrypto) {
               xValues.push(data2[i].substring(0,10))
             }
             grafiek(xValues,yValues,schaal[0],schaal[1])
+            document.querySelector("#naamCrypto").innerHTML=naamCrypto
         });
 }
 
@@ -78,7 +79,7 @@ function schaalYasBerekenen(hoogsteWaarde, laagsteWaarde){
     maxYscale=Math.round(hoogsteWaarde/1)*1+1
   }
   else if (hoogsteWaarde<100){
-    minYscale=Math.max(Math.round(laagsteWaarde/10)*10-1,0);
+    minYscale=Math.max(Math.round(laagsteWaarde/10)*10-10,0);
     maxYscale=Math.round(hoogsteWaarde/10)*10+10
   }
   else if (hoogsteWaarde<1000){
