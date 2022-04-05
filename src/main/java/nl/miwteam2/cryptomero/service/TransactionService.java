@@ -45,7 +45,7 @@ public class TransactionService {
 	Transaction transaction = new Transaction(LocalDateTime.now(),
 			isCustomerBuying(trade.getAmountTrade()) ? bank : trade.getCustomer(),
 			isCustomerBuying(trade.getAmountTrade()) ? trade.getCustomer() : bank,
-			assetService.findByName(trade.getAssetNameTrade()), trade.getAmountTrade(),
+			assetService.findByName(trade.getAssetNameTrade()), Math.abs(trade.getAmountTrade()),
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()),
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()*TRANSACTION_FEE), trade.getAssetNameTrade()));
 	if (bank == trade.getCustomer()) { // making sure that client makes trade with bank
