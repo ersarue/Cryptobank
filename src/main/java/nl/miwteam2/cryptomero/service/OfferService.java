@@ -122,9 +122,29 @@ public class OfferService {
         return offer;
     }
 
+    public List<Offer> findAllByIdAccount(int accountId ) {
+        return offerRepository.findAllByIdAccount(accountId);
+    }
+
     public List<Offer> getAll() {
-        //todo haal alle offers op uit de database
         return offerRepository.getAll();
+    }
+
+    public int deleteOne(int accoundId, int offerId) throws Exception {
+        //todo check of offer id wel hoort bij de betreffende customer
+
+        Offer offer;
+        try {
+            offer = offerRepository.findById(offerId);
+        } catch(Exception e) {
+            throw new Exception("offer can not found in database");
+        }
+
+        if (offer.getUserOffer().getIdAccount()==accoundId){
+            return offerRepository.deleteOne(offerId);
+        } else {
+            throw new Exception("account id does not match with offer id");
+        }
     }
 
     public List<Offer> findSellers(Offer buyer) {
