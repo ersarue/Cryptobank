@@ -65,6 +65,38 @@ public class TradeController {
         }
     }
 
+    // todo get /trade/getoffers (persoonlijk offer)
+    @CrossOrigin
+    @GetMapping("/getoffers")
+    public ResponseEntity<?> getAll(@RequestHeader ("Authorization") String jwt) {
+        int accountId = authenticationService.getAuthenticatedIdAccount(jwt);
 
+        if (accountId != 0) {
+            try {
+                return new ResponseEntity<>(offerService.findAllByIdAccount(accountId), HttpStatus.FOUND);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    // todo delete /trade/deleteoffer (persoonlijk offer deleten)
+    @CrossOrigin
+    @DeleteMapping("/deleteoffer/{offerId}")
+    public ResponseEntity<?> deleteOffers(@PathVariable int offerId, @RequestHeader ("Authorization") String jwt) {
+        int accountId = authenticationService.getAuthenticatedIdAccount(jwt);
+
+        if (accountId != 0) {
+            try {
+                return new ResponseEntity<>(offerService.deleteOne(accountId,offerId), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 
 }
