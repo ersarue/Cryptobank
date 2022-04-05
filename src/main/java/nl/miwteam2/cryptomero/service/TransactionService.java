@@ -147,11 +147,11 @@ public class TransactionService {
 	BankAccount bankAccount;
 	if (transaction.getAssetGiver().getIdAccount() != 1) { //IdAccount = 1 is de bank, client verkoopt assets aan de bank en betaalt fee
 	  bankAccount = transaction.getAssetGiver().getBankAccount();
-	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.totalPrice() - transaction.getEurFee());
+	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.getEurAmount() - transaction.getEurFee());
 	  bankAccount.setUserAccount(transaction.getAssetGiver());
 	} else { //client koopt assets van de bank en betaald assets prijs + fee
 	  bankAccount = transaction.getAssetRecipient().getBankAccount();
-	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.totalPrice() - transaction.getEurFee());
+	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() - transaction.getEurAmount() - transaction.getEurFee());
 	  bankAccount.setUserAccount(transaction.getAssetRecipient());
 	}
 	bankAccountService.updateOne(bankAccount);
