@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>  
 <body>
+  <div id="naamCrypto">Bitcoin</div>
   <canvas id="myChart" style="width:100%;max-width:600px" ></canvas>
-  <img src="../images/btc-logo.png" id="bitcoinPicture"  width="3%" height="3%">
-  <img src="../images/ethereum-logo.png" id="ethereumPicture"  width="3%" height="3%">
-  <img src="../images/tether-logo.png" id="tetherPicture"  width="3%" height="3%">
-  <label for="aantalDagen">aantal dagen</label>
-  <input id="aantalDagen" type="number" value=6 min=3 max=20 step=1 style="width:3%">
+  <button id="dag"> 1 DAG </button>
+  <button id="week"> 1 WEEK </button>
+  <button id="maand"> 4 weken </button>
   <script src="../js/grafiekenGenerator.js"></script>
 </body>
 </html>
