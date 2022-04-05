@@ -41,7 +41,6 @@ img:hover {
 
 .welcome-container {
     margin: 10%;
-    opacity: 1;
     background-color: var(--paars);
     border-radius: 10px;
 }
@@ -52,13 +51,13 @@ img:hover {
     text-align: center;
 }
 
-#asset-table {
+/*ID's used because element and class selectors do not seem to override bootstrap styling*/
+#asset-table, #offer-table {
     background-color: var(--lichtgrijs);
     color: var(--paars);
-    margin-top: 60px;
-    width: 70%;
+    margin-top: 2.5em;
+    width: 90%;
     align-content: center;
-    align-self: center;
 }
 
 h1, h2 {

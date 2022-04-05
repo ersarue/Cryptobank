@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uw Cryptomero</title>
+    <title>Mijn Cryptomero</title>
     <link rel="shortcut icon" type="image/jpg" href="../images/chickie_icon.png"/>
+    <!-- Custom css -->
     <link rel="stylesheet" href="../css/profile.css">
-    <!--Bootstrap css-->
+    <!-- Bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
@@ -21,7 +22,7 @@
 <nav class="navbar navbar-expand-md navbar-dark">
     <div class="container-fluid">
         <img class="cryptomero-logo" src="../images/chickie_klein.png" alt="Cryptomero logo">
-        <!--Button alleen zichbaar bij klein scherm-->
+        <!--Button alleen zichtbaar bij klein scherm-->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +47,7 @@
     </div>
 </nav>
 
-<div class="card-deck">
+<!--Personal information container (name, bank account, balance)-->
     <div class="card w-50 bg-transparent container-fluid border-0">
         <div class="card-body welcome-container">
             <h1 id="welkomLayout">Welkom <span id="welkom"></span></h1>
@@ -54,28 +55,56 @@
             <h2 id="saldoLayout">Saldo: <span class="symbol"></span> <span id="saldo"></span></h2>
         </div>
     </div>
-    <div class="card bg-transparent container-fluid border-0">
-        <div class="card-body table-container w-100">
-            <table id="asset-table" class="table table-light table-striped table-hover table-responsive">
-                <thead>
-                <tr>
-                    <th scope="col">Coin</th>
-                    <th scope="col">Aantal</th>
-                    <th scope="col">Koers</th>
-                    <th scope="col">Waarde</th>
-                </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+
+<!--Tables container-->
+<div class="container-fluid">
+    <div class="row d-flex .flex-row justify-content-center align-items-center border-0">
+<!--        First grid column-->
+        <div class="col-lg-6">
+            <div class="card border-0 bg-transparent border-0">
+                <div class="card-body table-container">
+                    <table id="asset-table" class="table table-light table-striped table-hover table-responsive rounded">
+                        <thead>
+                        <tr>
+                            <th scope="col">Coin</th>
+                            <th scope="col">Aantal</th>
+                            <th scope="col">Koers</th>
+                            <th scope="col">Waarde</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+<!--        Second grid column-->
+        <div class="col-lg-6">
+            <div class="card border-0 bg-transparent border-0">
+                <div class="card-body table-container">
+                    <table id="offer-table" class="table table-light table-striped table-hover table-responsive">
+                        <thead>
+                        <tr>
+                            <th scope="col">Datum</th>
+                            <th scope="col">Coin</th>
+                            <th scope="col">Aantal</th>
+                            <th scope="col">Prijs</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
+<!--Footer-->
 <div class="text-center" id="footer">SSMMEP &copy; 2022</div>
 
+<!-- Bootstrap script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+<!--Custom JS scripts-->
 <script type="module" src="../js/profile.js"></script>
 <script type="module" src="../js/tokenUtils.js"></script>
 </body>
