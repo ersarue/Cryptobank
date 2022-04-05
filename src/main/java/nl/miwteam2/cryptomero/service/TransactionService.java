@@ -45,7 +45,7 @@ public class TransactionService {
 	Transaction transaction = new Transaction(LocalDateTime.now(),
 			isCustomerBuying(trade.getAmountTrade()) ? bank : trade.getCustomer(),
 			isCustomerBuying(trade.getAmountTrade()) ? trade.getCustomer() : bank,
-			assetService.findByName(trade.getAssetNameTrade()), trade.getAmountTrade(),
+			assetService.findByName(trade.getAssetNameTrade()), Math.abs(trade.getAmountTrade()),
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()),
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()*TRANSACTION_FEE), trade.getAssetNameTrade()));
 	if (bank == trade.getCustomer()) { // making sure that client makes trade with bank
@@ -109,7 +109,15 @@ public class TransactionService {
 	walletAssetGiver.put(assetName, walletAssetGiver.get(assetName) - transaction.getAssetAmount());
 	walletDao.update(transaction.getAssetGiver().getIdAccount(), walletAssetGiver);
 	// change wallet balance Recipient
-	walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
+	// check of asset al bestaat in wallet van recipient
+	if (walletAssetRecipient.containsKey(assetName)) {
+		walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
+	} else {
+		walletAssetRecipient.put(assetName, transaction.getAssetAmount());
+	}
+
+
+
 	walletDao.update(transaction.getAssetRecipient().getIdAccount(), walletAssetRecipient);
 
 	System.out.println(6);
@@ -139,11 +147,11 @@ public class TransactionService {
 	BankAccount bankAccount;
 	if (transaction.getAssetGiver().getIdAccount() != 1) { //IdAccount = 1 is de bank, client verkoopt assets aan de bank en betaalt fee
 	  bankAccount = transaction.getAssetGiver().getBankAccount();
-	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.totalPrice() - transaction.getEurFee());
+	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.getEurAmount() - transaction.getEurFee());
 	  bankAccount.setUserAccount(transaction.getAssetGiver());
 	} else { //client koopt assets van de bank en betaald assets prijs + fee
 	  bankAccount = transaction.getAssetRecipient().getBankAccount();
-	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() + transaction.totalPrice() - transaction.getEurFee());
+	  bankAccount.setBalanceEur(bankAccount.getBalanceEur() - transaction.getEurAmount() - transaction.getEurFee());
 	  bankAccount.setUserAccount(transaction.getAssetRecipient());
 	}
 	bankAccountService.updateOne(bankAccount);
