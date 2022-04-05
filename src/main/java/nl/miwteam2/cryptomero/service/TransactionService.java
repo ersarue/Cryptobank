@@ -109,7 +109,15 @@ public class TransactionService {
 	walletAssetGiver.put(assetName, walletAssetGiver.get(assetName) - transaction.getAssetAmount());
 	walletDao.update(transaction.getAssetGiver().getIdAccount(), walletAssetGiver);
 	// change wallet balance Recipient
-	walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
+	// check of asset al bestaat in wallet van recipient
+	if (walletAssetRecipient.containsKey(assetName)) {
+		walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
+	} else {
+		walletAssetRecipient.put(assetName, transaction.getAssetAmount());
+	}
+
+
+
 	walletDao.update(transaction.getAssetRecipient().getIdAccount(), walletAssetRecipient);
 
 	System.out.println(6);
