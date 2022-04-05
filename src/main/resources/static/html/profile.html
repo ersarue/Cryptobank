@@ -62,35 +62,50 @@
 <!--        First grid column-->
         <div class="col-lg-6">
             <div class="card border-0 bg-transparent border-0">
-                <div class="card-body table-container">
+<!--                Asset table (shown only when user has crypto assets)-->
+                <div class="card-body table-container d-flex flex-column justify-content-center">
+                    <div class="d-flex justify-content-center table-title-container">
+                        <h5>Mijn coins</h5>
+                    </div>
                     <table id="asset-table" class="table table-light table-striped table-hover table-responsive rounded">
                         <thead>
                         <tr>
-                            <th scope="col">Coin</th>
-                            <th scope="col">Aantal</th>
-                            <th scope="col">Koers</th>
-                            <th scope="col">Waarde</th>
+                            <th scope="col">coin</th>
+                            <th scope="col">aantal</th>
+                            <th scope="col">koers</th>
+                            <th scope="col">waarde</th>
                         </tr>
                         </thead>
-                        <tbody class="tableBody"></tbody>
+                        <tbody id="asset-table-body"></tbody>
                     </table>
+<!--                    Box shown when user has no crypto assets-->
+                    <div id="no-asset-box">
+                    <h5>Je hebt op dit moment geen cryptovaluta in bezit</h5>
+                    <div class="d-flex justify-content-center align-items-center buy-button-container">
+                        <a class="btn btn-primary" id="buy-btn" href="#" role="button">Koop cryptocoins!</a>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
 <!--        Second grid column-->
         <div class="col-lg-6">
             <div class="card border-0 bg-transparent border-0">
-                <div class="card-body table-container">
+                <div class="card-body table-container d-flex flex-column justify-content-center">
+                    <div class="d-flex justify-content-center table-title-container">
+                        <h5>Mijn aanbiedingen</h5>
+                    </div>
                     <table id="offer-table" class="table table-light table-striped table-hover table-responsive">
                         <thead>
                         <tr>
-                            <th scope="col">Datum</th>
-                            <th scope="col">Coin</th>
-                            <th scope="col">Aantal</th>
-                            <th scope="col">Prijs</th>
+                            <th scope="col">datum</th>
+                            <th scope="col">coin</th>
+                            <th scope="col">aantal</th>
+                            <th scope="col">prijs</th>
+                            <th scope="col"></th>
                         </tr>
                         </thead>
-                        <tbody class="tableBody"></tbody>
+                        <tbody  id="offer-table-body"></tbody>
                     </table>
                 </div>
             </div>

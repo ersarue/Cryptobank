@@ -33,10 +33,16 @@ img:hover {
     transform: skewY(-3deg);
 }
 
-#logout-btn {
+#logout-btn, #buy-btn {
     background: #6009ef;
     border-color: white;
     color: white;
+}
+
+/*TODO: animatie*/
+#buy-btn {
+    box-shadow: inset 0 0 0.5em 0 #6009ef, 0 0 0.5em 0 #6009ef;
+    transition: all 0.5s;
 }
 
 .welcome-container {
@@ -51,13 +57,30 @@ img:hover {
     text-align: center;
 }
 
+h5 {
+    color: var(--paars);
+    padding-top: 1rem;
+}
+
+.table-title-container {
+    background-color: var(--lichtgrijs);
+    width: 90%;
+}
+
+.buy-button-container {
+    width: 90%;
+}
 /*ID's used because element and class selectors do not seem to override bootstrap styling*/
-#asset-table, #offer-table {
+#asset-table, #offer-table, #no-asset-box {
+    margin-bottom: 2.5rem;
     background-color: var(--lichtgrijs);
     color: var(--paars);
-    margin-top: 2.5em;
     width: 90%;
     align-content: center;
+}
+
+#no-asset-box {
+    padding: 1rem;
 }
 
 h1, h2 {
