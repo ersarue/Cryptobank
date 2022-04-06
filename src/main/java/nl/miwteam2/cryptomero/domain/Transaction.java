@@ -74,9 +74,9 @@ public class Transaction {
                 '}';
     }
 
-    public double totalPrice() {
-        return assetAmount * eurAmount;
-    }
+//    public double totalPrice() {
+//        return assetAmount * eurAmount;
+//    }
 
 
     public int getIdTransaction() { return idTransaction; }
