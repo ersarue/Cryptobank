@@ -100,7 +100,7 @@ public class TransactionService {
 	double BalanceEurRecipient = bankAccountAssetRecipient.getBalanceEur(); //BalanceEur assetGiver
 
 	  if (assetAmountGiver < transaction.getAssetAmount()) {
-		  throw new Exception("Cannot trade Asset. Insufficient Asset balance");
+		  throw new Exception("Cannot trade Asset. Insufficient Asset balance Giver");
 	  } else if (BalanceEurGiver < transaction.getEurFee() / 2) {
 		  throw new Exception("Cannot trade Asset. Insufficient balance Giver to pay fee");
 	  } else if (BalanceEurRecipient < transaction.getEurAmount() + transaction.getEurFee() / 2) {
