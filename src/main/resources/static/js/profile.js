@@ -8,12 +8,12 @@ import { includeNoAssetsBox } from "./includeNoAssetsBox.js";
 
 const url = new URL(window.location.href)
 
-window.addEventListener( "DOMContentLoaded",  () => {
+window.addEventListener( "DOMContentLoaded",  async () => {
     // Include navbar and footer
     includeHTML();
     addLogout();
     // Load the marketplace offers from the db
-    getOffers();
+    await getOffers();
 });
 
 //todo rate zonder token op te halen?
@@ -56,7 +56,7 @@ Promise.all([
 // Retrieves all of the user's marketplace orders from the db
 const getOffers = async () => {
     try {
-        const response = await  fetch('http://localhost:8080/trade/getoffers', {
+        const response = await  fetch(`${url.origin}/trade/getoffers`, {
             method: 'GET',
             headers: {
                 'Authorization': getToken(),
@@ -191,33 +191,29 @@ const createDeleteBtn = (idOffer) => {
 
 // Adds event listener to a 'verwijder' button in the offer table so that it deletes the corresponding offer
 const addDeleteEventListener = (button, idOffer) => {
-    button.addEventListener('click', (e) => {
-        deleteOffer(idOffer);
+    button.addEventListener('click', async (e) => {
+        await deleteOffer(idOffer);
         const parentNode = e.target.parentNode.parentNode;
         parentNode.parentNode.removeChild(parentNode);
-        setTimeout(() => {
-            return getOffers();
-        },200);
     })
 }
 
 // Deletes an offer from the db
 const deleteOffer = async (idOffer) => {
     try {
-        const response = await fetch(`http://localhost:8080/trade/deleteoffer/${idOffer}`, {
+        const response = await fetch(`${url.origin}/trade/deleteoffer/${idOffer}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': getToken(),
                 'Content-Type': 'application/json'
             }
         });
-        // const result = await response.json();
         if (response.status === 200) {
             console.log("Verwijderen aanbieding gelukt!") // TODO: verwijder
         } else if (response.status === 401) {
             alert("Sessie verlopen. U moet opnieuw inloggen.")
         } else {
-            throw new Error("Er is iets fout gegaan bij het verwijderen van de aanbieding")
+            alert("Er is iets fout gegaan bij het verwijderen van de aanbieding. Probeer het later nog eens.")
         }
     } catch (e) {
         console.log(e);
