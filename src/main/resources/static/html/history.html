@@ -19,39 +19,50 @@
           rel="stylesheet">
     <!-- Custom CSS-->
     <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/history.css">
 </head>
 <body>
 <div includehtml="partials/navbar.html"></div>
 <div includehtml="partials/footer.html"></div>
-
-
 <div class="card-deck">
-    <div class="card container-fluid border-0 bg-transparent border-0">
+    <div class="card container-fluid bg-transparent border-0">
         <div class="card-body table-container w-100">
-            <table class="table table-hover table-responsive text-white transaction-container">
+            <table id="transactionsCatalogue"
+                   class="table table-light table-striped table-hover table-responsive">
                 <thead id="transactionHead">
-                <tr>
+                <tr class="column">
                     <th scope="col">Transactienummer</th>
                     <th scope="col">Datum</th>
                     <th scope="col">Gever</th>
                     <th scope="col">Ontvanger</th>
                     <th scope="col">Assetnaam</th>
                     <th scope="col">Hoeveelheid</th>
-                    <th scope="col">Bedrag in Euro</th>
-                    <th scope="col">Transactie Kost</th>
+                    <th scope="col">Totaalbedrag</th>
+                    <th scope="col">Transactiekosten</th>
                 </tr>
                 </thead>
                 <tbody id="transactionContent">
+                <tr class="bodyRow">
+                    <td>2</td>
+                    <td>woensdag 30 maart 2022 11:21:50</td>
+                    <td>firstName2 lastName2</td>
+                    <td>Cryptomero Bank</td>
+                    <td>Ethereum</td>
+                    <td>2</td>
+                    <td>6099.62</td>
+                    <td>4.25</td>
+                </tr>
+                <tr class="bodyRow">
+                    <td>1</td>
+                    <td>woensdag 30 maart 2022 11:20:34</td>
+                    <td>Cryptomero Bank</td>
+                    <td>firstName2 lastName2</td>
+                    <td>Bitcoin</td>
+                    <td>0.5</td>
+                    <td>21409.61</td>
+                    <td>30.5</td>
+                </tr>
                 </tbody>
-<!--                <tbody>-->
-<!--                <tr>-->
-<!--                    <th>3234456</th>-->
-<!--                    <td class="column"><img src="../images/btc-logo.png">BTCBitcoin</td>-->
-<!--                    <td class="p-3 mb-2 bg-success text-white">Afgerond</td>-->
-<!--                    <td>11-12-2021 14:34</td>-->
-<!--                    <td>€27.03 B</td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
             </table>
         </div>
     </div>
