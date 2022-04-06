@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
  * version 1.0
 */
 
-@CrossOrigin
 @RestController
 @RequestMapping("/trade")
 public class TradeController {
@@ -33,7 +32,6 @@ public class TradeController {
         this.authenticationService = authenticationService;
     }
 
-    @CrossOrigin
     @PostMapping("/offer")
     public ResponseEntity<?> storeOneOffer(@RequestBody TradeOfferDto tradeOfferDto, @RequestHeader ("Authorization") String jwt) {
         Customer customer = authenticationService.getAuthenticatedCustomer(jwt);
@@ -49,7 +47,6 @@ public class TradeController {
         }
     }
 
-    @CrossOrigin
     @PostMapping("/bank")
     public ResponseEntity<?> tradeWithBank(@RequestBody TradeBankDto tradeBankDto, @RequestHeader ("Authorization") String jwt) {
         Customer customer = authenticationService.getAuthenticatedCustomer(jwt);
@@ -66,14 +63,13 @@ public class TradeController {
     }
 
     // todo get /trade/getoffers (persoonlijk offer)
-    @CrossOrigin
     @GetMapping("/getoffers")
     public ResponseEntity<?> getAll(@RequestHeader ("Authorization") String jwt) {
         int accountId = authenticationService.getAuthenticatedIdAccount(jwt);
 
         if (accountId != 0) {
             try {
-                return new ResponseEntity<>(offerService.findAllByIdAccount(accountId), HttpStatus.FOUND);
+                return new ResponseEntity<>(offerService.findAllByIdAccount(accountId), HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
