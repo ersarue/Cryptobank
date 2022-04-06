@@ -35,7 +35,7 @@ public class OfferDao {
     }
 
     public int storeOne(Offer offer) {
-        String sql = "INSERT INTO offer(id_account, asset_name, amount, rate_offer, timestamp)" + "VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO offer(id_account, asset_name, amount, rate_offer, timestamp) VALUES (?, ?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -61,8 +61,7 @@ public class OfferDao {
 
     // MTK: you can only update amount and timestamp of an offer
     public int updateOne(Offer offer) {
-        String sql = "UPDATE offer" + "SET amount = ?, timestamp = ?" +
-                "WHERE id_offer = ?";
+        String sql = "UPDATE offer SET amount = ?, timestamp = ? WHERE id_offer = ?";
 
         return jdbcTemplate.update(sql, offer.getAmountOffer(), offer.getTimestampOffer().toString(), offer.getIdOffer());
     }
