@@ -9,8 +9,8 @@ import {getToken} from "./tokenUtils.js";
 
 export const addModalDropDown = () => {
 //als de gebruiker klikt op dropdownmenu wordt de juiste koers opgehaald
-    document.querySelector('#inputGroupSelect01').addEventListener('click', () => {
-        zoekKoers(document.querySelector("#inputGroupSelect01").value)
+    document.querySelector('#inputGroupSelect01').addEventListener('change', async () => {
+       await zoekKoers(document.querySelector("#inputGroupSelect01").value)
     })
 }
 
@@ -23,7 +23,6 @@ export const addModalSubmitButton = () => {
         } else {
             storeOffer()
         }
-
     })
 }
 //er wordt gecheckt of er een koopooffer of verkoopoffer geplaatst wil worden
@@ -108,22 +107,24 @@ function storeBankTransactie(){
 
 
 //wordt opgeroepen als klant klikt op dropdownmenu
-function zoekKoers(naamCrypto) {
-    fetch('http://localhost:8080/rates/latest/'+naamCrypto, {
+async function zoekKoers(naamCrypto) {
+    const response = await fetch(`http://localhost:8080/rates/latest/${naamCrypto}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-    })
-        .then(response => {
-                return response.json()
-            }
-        )
-        .then(data => {
-            document.querySelector("#koersMunt").value=data.rate
-        });
+    });
+    const result = await response.json();
+    document.querySelector("#koersMunt").value = `€ ${round(result.rate)}`;
 }
+
+// Rounds the rate amounts to a precise two decimals
+const round = (num) => {
+    const number = Number((Math.abs(num) * 100).toPrecision(15));
+    return Math.round(number) / 100 * Math.sign(num);
+}
+
 //zoekt alle 20 crypto's uit de tabel 'rate'.
 Promise.resolve(
     fetch('http://localhost:8080/rates/latest', {
@@ -159,16 +160,38 @@ export const addTradeButtonsEventListeners = () => {
     const marketPlaceTradeBtn = document.getElementById('btnradio2');
     const priceMarketPlaceTitle = document.getElementById('priceMarketPlaceTitle');
     const priceMarketPlace = document.querySelector('.price-market-place');
+    const buyBtn = document.getElementById('btnradio3');
+    const sellBtn = document.getElementById('btnradio4');
+    const buyOrSellQuestion = document.getElementById('buyOrSellQuestion');
     bankTradeBtn.addEventListener('click', (e) => {
         if (e.target.checked) {
             priceMarketPlaceTitle.classList.add('invisible');
             priceMarketPlace.classList.add('invisible');
+            buyOrSellQuestion.innerHTML = 'Wil je cryptocoins kopen of verkopen aan de bank?';
+            setTextSubmitBtn();
         }
     });
     marketPlaceTradeBtn.addEventListener('click', (e) => {
         if (e.target.checked) {
             priceMarketPlaceTitle.classList.remove('invisible');
             priceMarketPlace.classList.remove('invisible');
+            buyOrSellQuestion.innerHTML = 'Wil je cryptocoins kopen of verkopen op de marktplaats?';
+            setTextSubmitBtn();
         }
     });
+    buyBtn.addEventListener('click', () => {
+        priceMarketPlaceTitle.innerHTML = 'Voor welke maximumprijs per hele munt wil je deze cryptomunt kopen?';
+    })
+    sellBtn.addEventListener('click', () => {
+        priceMarketPlaceTitle.innerHTML = 'Voor welke minimumprijs per hele munt wil je deze cryptomunt verkopen?';
+    })
+}
+
+const setTextSubmitBtn = () => {
+    const bankTradeBtn = document.getElementById('btnradio1');
+    const marketPlaceTradeBtn = document.getElementById('btnradio2');
+    const submitBtn = document.getElementById('actieButton');
+    bankTradeBtn.checked
+    ? submitBtn.innerHTML = 'Sluit deal met de bank'
+    : submitBtn.innerHTML = 'Plaats aanvraag op de marktplaats';
 }

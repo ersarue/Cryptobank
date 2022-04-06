@@ -10,28 +10,28 @@
             <div class="modal-content">
                 <form>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Handelen</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Handelen in cryptomunten</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
 <!--                        Select coin-->
-                        <h6 class="text" id=cryptoQuestion">Selecteer cryptocoin. </h6>
+                        <h6 class="text" id=cryptoQuestion">Selecteer cryptomunt</h6>
                         <div class="input-group mb-3">
                             <select class="form-select" id="inputGroupSelect01"></select>
                         </div>
 <!--                        Select trade partner-->
-                        <h6 class="text" id=radio1Question">Selecteer Bank om direct met de bank te handelen of Marktplaats om met een andere klant te handelen</h6>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <h6 class="text" id=radio1Question">Selecteer handelsoptie</h6>
+                        <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group">
 <!--                            Choose to trade with bank-->
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="btnradio1">Bank</label>
+                            <label class="btn btn-outline-primary" for="btnradio1">Handel met bank</label>
 <!--                            Choose market place trade-->
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnradio2">Marktplaats</label>
+                            <label class="btn btn-outline-primary" for="btnradio2">Handel op marktplaats</label>
                         </div>
 <!--                        Select buying or selling-->
-                        <h6 class="text" id=radio2Question">Selecteer Kopen of Verkopen</h6>
-                        <div class="btn-group" role="group2" aria-label="Basic radio toggle button group">
+                        <h6 class="text" id="buyOrSellQuestion">Wil je cryptomunten kopen of verkopen aan de bank?</h6>
+                        <div class="btn-group mb-3" role="group2" aria-label="Basic radio toggle button group">
 <!--                            Choose to buy -->
                             <input type="radio" class="btn-check" name="btnradio2" id="btnradio3" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio3">Kopen</label>
@@ -40,33 +40,36 @@
                             <label class="btn btn-outline-primary" for="btnradio4">Verkopen</label>
                         </div>
 <!--                        Indicate amount to buy or sell-->
-                        <h6 class="text" >Geef de hoeveelheid aan</h6>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Asset</span>
-                            <input type="text" id="amountAsset" class="form-control">
-                        </div>
+                        <h6 class="text" >Om hoeveel munten gaat het?</h6>
+                        <input class="form-control mb-3" id="amountAsset" type="text">
 <!--                        Current coin price-->
-                        <h6 class="text" id=koers">Huidige prijs:</h6>
-                        <input class="form-control" id="koersMunt" type="text" value="0.00" aria-label="readonly input example" readonly>
+                        <h6 class="text" id=koers">De huidige prijs per hele munt voor de gekozen valuta is:</h6>
+                        <input class="form-control mb-3" id="koersMunt" type="text" value="0.00" readonly>
 <!--                        Bank fee-->
-                        <h6 class="text" id=fee">Percentage voor de bank:</h6>
-                        <input class="form-control" type="text" value="0.00" aria-label="readonly input example" readonly>
+<!--                        TODO: Add bank fee-->
+                        <h6 class="text" id=fee">Transactiekosten</h6>
+                        <input class="form-control mb-3" type="text" value="0.00" readonly>
+<!--                        Total price-->
+<!--                        TODO: Add total price-->
+                        <h6 class="text" id=total-price">Totaalprijs</h6>
+                        <input class="form-control mb-3" type="text" value="0.00" readonly>
 <!--                        Price per coin in case of market place trade-->
-                        <h6 class="text invisible" id="priceMarketPlaceTitle">Prijs per coin bij handelen met marktplaats</h6>
+                        <h6 class="text invisible" id="priceMarketPlaceTitle">
+                            Voor welke maximumprijs per hele munt wil je deze cryptomunt kopen?</h6>
                         <div class="input-group mb-3 price-market-place invisible">
                             <span class="input-group-text">€</span>
                             <input type="text" id="offerPrijs" class="form-control" >
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" id="actieButton" class="btn btn-primary">Sluit deal met de bank</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
-                        <button type="button" id="actieButton" class="btn btn-primary">Actie</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- Button trigger modal -->
+    <!-- Button trigger modal TODO: REMOVE FOR FINAL PROJECT-->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Handel in crypto's
     </button>
