@@ -34,7 +34,7 @@ Promise.all([
     })
 ]).then(responses => {
     if (responses[0].status === 401){
-        alert('Sessie verlopen. U moet opnieuw inloggen.');
+        alert('Ongeldige sessie. U moet (opnieuw) inloggen.');
         logout()
     } else if (responses[0].status === 200 && responses[1].status === 200) {
         return Promise.all(responses.map(function (response) {
@@ -67,7 +67,7 @@ const getOffers = async () => {
         if (response.status === 200) {
             displayOfferInfo(result);
         } else if (response.status === 401) {
-            alert('Sessie verlopen. U moet opnieuw inloggen.');
+            alert('Ongeldige sessie. U moet (opnieuw) inloggen.');
             logout();
         } else {
             throw new Error('Er is iets fout gegaan bij het ophalen van de offerdata');
@@ -232,7 +232,7 @@ const deleteOffer = async (idOffer) => {
         if (response.status === 200) {
             console.log('Verwijderen aanbieding gelukt!') // TODO: verwijder
         } else if (response.status === 401) {
-            alert('Sessie verlopen. U moet opnieuw inloggen.')
+            alert('Ongeldige sessie. U moet (opnieuw) inloggen.')
         } else {
             alert('Er is iets fout gegaan bij het verwijderen van de aanbieding. Probeer het later nog eens.')
         }
