@@ -10,12 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +36,33 @@ public class OfferService {
         this.customerRepository = customerRepository;
         this.transactionService = transactionService;
         this.offerRepository = offerRepository;
+    }
+
+    public void checkOfferValidity(TradeOfferDto tradeOfferDto) throws Exception {
+        Map<String, Double> wallet = tradeOfferDto.getCustomer().getWallet();
+        BankAccount bankAccount = tradeOfferDto.getCustomer().getBankAccount();
+        String assetName = tradeOfferDto.getAssetNameOffer();
+        boolean isSeller = tradeOfferDto.getAmountOffer() > 0;
+
+        if (tradeOfferDto.getAmountOffer() == 0){
+            throw new Exception(" Jonguh!!! Dit kan niet. ");
+        }
+        if (isSeller){
+            //als de wallet het asset bevat en als het meer of gelijk is dan het offer
+            if (!wallet.containsKey(assetName)) {
+                throw new Exception("U heeft de asset" + assetName + " niet in uw portefeuille");
+            }
+            if (wallet.get(assetName) < tradeOfferDto.getAmountOffer()){
+                throw new Exception("U heeft onvoldoende " + assetName + " in uw portefeuille om dit offer te doen.");
+            }
+            System.out.println(transactionService.TRANSACTION_FEE * tradeOfferDto.getAmountOffer() * tradeOfferDto.getRateOffer() * (0.5));
+            System.out.println(bankAccount.getBalanceEur());
+            if (bankAccount.getBalanceEur() < transactionService.TRANSACTION_FEE * tradeOfferDto.getAmountOffer() * tradeOfferDto.getRateOffer() * (0.5)) {
+                throw new Exception("Uw saldo is onvoldoende om de transactiekosten te kunnen betalen.");
+            }
+        } else if (bankAccount.getBalanceEur() < (1 + transactionService.TRANSACTION_FEE) * -1 * tradeOfferDto.getAmountOffer() * tradeOfferDto.getRateOffer()) {
+            throw new Exception("Uw saldo is onvoldoende om uw vraag op de marktplaats te plaatsen.");
+        }
     }
 
     //methode die alles afhandelt

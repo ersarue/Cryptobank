@@ -74,7 +74,7 @@ public class TransactionService {
 	// make transaction from transactionDto
 	Transaction transaction = new Transaction(transactionDto);
 	// compute fee and add to transaction object
-	double fee = transaction.getEurAmount() * 0.0165; //todo use final
+	double fee = transaction.getEurAmount() * TRANSACTION_FEE;
 	transaction.setEurFee(fee);
 
 	String assetName = transaction.getAsset().getAssetName();

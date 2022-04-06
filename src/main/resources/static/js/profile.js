@@ -1,14 +1,14 @@
 // Author: Samuel, Stijn, Mink, Petra
 'use strict'
 
-import { getToken, removeToken } from "./tokenUtils.js";
-import { includeHTML, addLogout } from "./includeHTML.js";
-import { includeNoOffersBox } from "./includeNoOffersBox.js";
-import { includeNoAssetsBox } from "./includeNoAssetsBox.js";
+import { getToken, removeToken } from './tokenUtils.js';
+import { includeHTML, addLogout } from './includeHTML.js';
+import { includeNoOffersBox } from './includeNoOffersBox.js';
+import { includeNoAssetsBox } from './includeNoAssetsBox.js';
 
 const url = new URL(window.location.href)
 
-window.addEventListener( "DOMContentLoaded",  async () => {
+window.addEventListener( 'DOMContentLoaded',  async () => {
     // Include navbar and footer
     includeHTML();
     addLogout();
@@ -34,14 +34,14 @@ Promise.all([
     })
 ]).then(responses => {
     if (responses[0].status === 401){
-        alert("Sessie verlopen. U moet opnieuw inloggen.")
+        alert('Sessie verlopen. U moet opnieuw inloggen.');
         logout()
     } else if (responses[0].status === 200 && responses[1].status === 200) {
         return Promise.all(responses.map(function (response) {
             return response.json();
         }));
     } else {
-        throw new Error("something is wrong")
+        throw new Error('something is wrong')
     }
 })
     .then(data => {
@@ -67,10 +67,10 @@ const getOffers = async () => {
         if (response.status === 200) {
             displayOfferInfo(result);
         } else if (response.status === 401) {
-            alert("Sessie verlopen. U moet opnieuw inloggen.");
+            alert('Sessie verlopen. U moet opnieuw inloggen.');
             logout();
         } else {
-            throw new Error("Er is iets fout gegaan bij het ophalen van de offerdata");
+            throw new Error('Er is iets fout gegaan bij het ophalen van de offerdata');
         }
     } catch (e) {
         console.log(e);
@@ -78,9 +78,9 @@ const getOffers = async () => {
 }
 
 function fillHeaders(json) {
-    document.getElementById("welkom").innerHTML = json.firstName
-    document.getElementById("iban").innerHTML = json.bankAccount.iban
-    document.getElementById("saldo").innerHTML = `&#8364 ${json.bankAccount.balanceEur.toFixed(2)}`
+    document.getElementById('welkom').innerHTML = json.firstName
+    document.getElementById('iban').innerHTML = json.bankAccount.iban
+    document.getElementById('saldo').innerHTML = `&#8364 ${json.bankAccount.balanceEur.toFixed(2)}`
 }
 
 // Displays box with 'trade' button when the user has no crypto assets
@@ -98,7 +98,7 @@ const displayOfferInfo = (data) => {
 }
 
 function fillAssetTable(data) {
-    const table = document.getElementById("asset-table-body")
+    const table = document.getElementById('asset-table-body')
 
     for (let asset in data[0].wallet) {
 
@@ -106,48 +106,54 @@ function fillAssetTable(data) {
         const rate = data[1].find(e => e.asset.assetName === asset).rate;
         const value = amount * rate;
 
-        const rowNode = document.createElement("tr");
+        const rowNode = document.createElement('tr');
         
-        const cellNode1 = document.createElement("td");
+        const cellNode1 = document.createElement('td');
+        cellNode1.classList.add('align-middle');
         cellNode1.innerHTML = asset;
-        const cellNode2 = document.createElement("td")
+        const cellNode2 = document.createElement('td')
+        cellNode2.classList.add('align-middle');
         cellNode2.innerHTML = amount;
-        const cellNode3 = document.createElement("td")
+        const cellNode3 = document.createElement('td')
+        cellNode3.classList.add('align-middle');
         cellNode3.innerHTML = `&#8364 ${rate.toFixed(2)}`;
-        const cellNode4 = document.createElement("td")
+        const cellNode4 = document.createElement('td')
+        cellNode4.classList.add('align-middle');
         cellNode4.innerHTML = `&#8364 ${value.toFixed(2)}`;
+        const cellNode5 = document.createElement('td');
 
         rowNode.appendChild(cellNode1)
         rowNode.appendChild(cellNode2)
         rowNode.appendChild(cellNode3)
         rowNode.appendChild(cellNode4)
-
+        cellNode5.appendChild(createTradeBtn(asset));
+        rowNode.appendChild(cellNode5);
         table.appendChild(rowNode)
     }
 }
 
 // Fills the offer table with the user's offers from the db
 const fillOfferTable = (data) => {
-    const table = document.getElementById("offer-table-body");
+    const table = document.getElementById('offer-table-body');
 
     for (let offer of data) {
-        const rowNode = document.createElement("tr");
-        const cellNode1 = document.createElement("td");
+        const rowNode = document.createElement('tr');
+        const cellNode1 = document.createElement('td');
         cellNode1.innerHTML = toLocaleDate(offer.timestampOffer);
-        cellNode1.classList.add("align-middle");
-        const cellNode2 = document.createElement("td");
+        cellNode1.classList.add('align-middle');
+        const cellNode2 = document.createElement('td');
         cellNode2.innerHTML = determineOfferType(offer.amountOffer);
-        cellNode2.classList.add("align-middle");
-        const cellNode3 = document.createElement("td")
+        cellNode2.classList.add('align-middle');
+        const cellNode3 = document.createElement('td')
         cellNode3.innerHTML = offer.assetOffer.assetName;
-        cellNode3.classList.add("align-middle");
-        const cellNode4 = document.createElement("td")
+        cellNode3.classList.add('align-middle');
+        const cellNode4 = document.createElement('td')
         cellNode4.innerHTML = `${Math.abs(offer.amountOffer.toFixed(2))}`;
-        cellNode4.classList.add("align-middle");
-        const cellNode5 = document.createElement("td")
+        cellNode4.classList.add('align-middle');
+        const cellNode5 = document.createElement('td')
         cellNode5.innerHTML = `&#8364 ${offer.priceOffer.toFixed(2)}`;
-        cellNode5.classList.add("align-middle");
-        const cellNode6 = document.createElement("td");
+        cellNode5.classList.add('align-middle');
+        const cellNode6 = document.createElement('td');
 
         rowNode.appendChild(cellNode1);
         rowNode.appendChild(cellNode2);
@@ -176,15 +182,30 @@ const determineOfferType = (data) => {
     return offerType;
 }
 
+// Creates a 'koers' button for a row in the asset table
+const createTradeBtn = (assetName) => {
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-primary');
+    button.setAttribute('id','trade-btn');
+    button.innerHTML = 'bekijk koers';
+    addTradeEventListener(button, assetName);
+    return button;
+}
+
+// Adds event listener to a 'koers' button in the asset table
+const addTradeEventListener = (button, assetName) => {
+    button.addEventListener('click', () => {
+        sessionStorage.setItem('assetName', assetName);
+        window.location = '../html/trade.html';
+    })
+}
+
 // Creates a delete button for a row in the offer table
 const createDeleteBtn = (idOffer) => {
-    const button = document.createElement("button");
-    button.classList.add("btn", "btn-primary");
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-primary');
     button.setAttribute('id','delete-btn');
-    button.innerHTML = "verwijder";
-    // const trashBinIcon = document.createElement("i");
-    // trashBinIcon.classList.add("bi", "bi-trash3");
-    // button.appendChild(trashBinIcon);
+    button.innerHTML = 'verwijder';
     addDeleteEventListener(button, idOffer);
     return button;
 }
@@ -209,11 +230,11 @@ const deleteOffer = async (idOffer) => {
             }
         });
         if (response.status === 200) {
-            console.log("Verwijderen aanbieding gelukt!") // TODO: verwijder
+            console.log('Verwijderen aanbieding gelukt!') // TODO: verwijder
         } else if (response.status === 401) {
-            alert("Sessie verlopen. U moet opnieuw inloggen.")
+            alert('Sessie verlopen. U moet opnieuw inloggen.')
         } else {
-            alert("Er is iets fout gegaan bij het verwijderen van de aanbieding. Probeer het later nog eens.")
+            alert('Er is iets fout gegaan bij het verwijderen van de aanbieding. Probeer het later nog eens.')
         }
     } catch (e) {
         console.log(e);
@@ -222,7 +243,7 @@ const deleteOffer = async (idOffer) => {
 
 // Logs out the current user and redirects user to landing page
 function logout() {
-    console.log("logout");
+    console.log('logout');
     removeToken();
-    window.location = "../index.html";
+    window.location = '../index.html';
 }
