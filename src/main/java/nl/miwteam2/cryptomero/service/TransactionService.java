@@ -74,7 +74,7 @@ public class TransactionService {
 	// make transaction from transactionDto
 	Transaction transaction = new Transaction(transactionDto);
 	// compute fee and add to transaction object
-	double fee = transaction.totalPrice() * 0.0165; //todo use final
+	double fee = transaction.getEurAmount() * 0.0165; //todo use final
 	transaction.setEurFee(fee);
 
 	String assetName = transaction.getAsset().getAssetName();
@@ -91,18 +91,22 @@ public class TransactionService {
 	System.out.println(4);
 	System.out.println("asset_amount: " + transaction.getAssetRecipient().getWallet().get(assetName));
 
-	//double assetAmountRecipient = walletAssetRecipient.get(assetName); //asset_amount assetRecipient
-	double assetAmountGiver = walletAssetGiver.get(assetName); //asset_amount assetGiver
+	//get asset balance asset Giver
+	  double assetAmountGiver = 0;
+	  if (walletAssetGiver.containsKey(assetName)) {
+		  assetAmountGiver = walletAssetGiver.get(assetName);
+	  }
 	double BalanceEurGiver = bankAccountAssetGiver.getBalanceEur(); //BalanceEur assetGiver
 	double BalanceEurRecipient = bankAccountAssetRecipient.getBalanceEur(); //BalanceEur assetGiver
 
-	if (!isBalanceEnoughToBuy(assetAmountGiver, transaction.getAssetAmount())) {
-	  throw new Exception("Cannot trade Asset. Insufficient Asset balance");
-	} else if (!isBalanceEnoughToBuy(BalanceEurGiver, transaction.getEurFee() / 2)) {
-	  throw new Exception("Cannot trade Asset. Insufficient balance Giver to pay fee");
-	} else if (!isBalanceEnoughToBuy(BalanceEurRecipient, transaction.totalPrice() + transaction.getEurFee() / 2)) {
-	  throw new Exception("Cannot trade Asset. Insufficient balance Recipient");
-	}
+	  if (assetAmountGiver < transaction.getAssetAmount()) {
+		  throw new Exception("Cannot trade Asset. Insufficient Asset balance");
+	  } else if (BalanceEurGiver < transaction.getEurFee() / 2) {
+		  throw new Exception("Cannot trade Asset. Insufficient balance Giver to pay fee");
+	  } else if (BalanceEurRecipient < transaction.getEurAmount() + transaction.getEurFee() / 2) {
+		  throw new Exception("Cannot trade Asset. Insufficient balance Recipient");
+	  }
+
 	System.out.println(5);
 
 	// change wallet balance Giver and store
@@ -122,10 +126,10 @@ public class TransactionService {
 
 	System.out.println(6);
 	// change saldo Giver
-	bankAccountAssetGiver.setBalanceEur(bankAccountAssetGiver.getBalanceEur() + transaction.totalPrice() - fee / 2);
+	bankAccountAssetGiver.setBalanceEur(bankAccountAssetGiver.getBalanceEur() + transaction.getEurAmount() - fee / 2);
 	bankAccountService.updateOne(bankAccountAssetGiver);
 	// change saldo Recipient
-	bankAccountAssetRecipient.setBalanceEur(bankAccountAssetRecipient.getBalanceEur() - (transaction.totalPrice() + fee / 2));
+	bankAccountAssetRecipient.setBalanceEur(bankAccountAssetRecipient.getBalanceEur() - (transaction.getEurAmount() + fee / 2));
 	bankAccountService.updateOne(bankAccountAssetRecipient);
 	// store transaction
 	int transactionId = transactionRepository.storeOne(transaction);
