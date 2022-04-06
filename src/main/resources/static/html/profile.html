@@ -38,54 +38,51 @@
     </div>
 <!--Tables container-->
 <div class="container-fluid">
-    <div class="row d-flex .flex-row justify-content-center border-0">
+    <div class="row d-flex .flex-row justify-content-center">
 <!--        First grid column-->
         <div class="col-lg-6">
-            <div class="card border-0 bg-transparent border-0">
-<!--                Asset table (shown only when user has crypto assets)-->
-                <div class="card-body table-container d-flex flex-column justify-content-center">
-                    <div class="d-flex justify-content-center table-title-container">
-                        <h5>Mijn coins</h5>
-                    </div>
-                    <table id="asset-table" class="table table-light table-striped table-hover table-responsive visible">
-                        <thead>
-                        <tr>
-                            <th scope="col">coin</th>
-                            <th scope="col">aantal</th>
-                            <th scope="col">koers</th>
-                            <th scope="col">waarde</th>
-                        </tr>
-                        </thead>
-                        <tbody id="asset-table-body"></tbody>
-                    </table>
-<!--                    Box shown when user has no crypto assets-->
-                    <div id="assets-box" includeassetsbox="./partials/noAssetsBox.html"></div>
+<!--          Asset table-->
+            <div class="table-container d-flex flex-column justify-content-center">
+                <div class="d-flex justify-content-center table-title-container">
+                    <h5>Mijn coins</h5>
                 </div>
+                <table id="asset-table" class="table table-light table-striped table-hover table-responsive visible">
+                    <thead>
+                    <tr>
+                        <th scope="col">coin</th>
+                        <th scope="col">aantal</th>
+                        <th scope="col">koers</th>
+                        <th scope="col">waarde</th>
+                    </tr>
+                    </thead>
+                    <tbody id="asset-table-body"></tbody>
+                </table>
+<!--               Box shown when user has no crypto assets-->
+                <div id="assets-box" includeassetsbox="./partials/noAssetsBox.html"></div>
             </div>
         </div>
 <!--        Second grid column-->
         <div class="col-lg-6">
-            <div class="card border-0 bg-transparent border-0">
-                <div class="card-body table-container d-flex flex-column justify-content-center">
-                    <div class="d-flex justify-content-center table-title-container">
-                        <h5>Mijn orders op de marktplaats</h5>
-                    </div>
-                    <table id="offer-table" class="table table-light table-striped table-hover table-responsive visible">
-                        <thead>
-                        <tr>
-                            <th scope="col">datum</th>
-                            <th scope="col">soort</th>
-                            <th scope="col">coin</th>
-                            <th scope="col">aantal</th>
-                            <th scope="col">prijs</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody id="offer-table-body"></tbody>
-                    </table>
-<!--                    Box shown when user has no marketplace orders-->
-                    <div id="offers-box" includeoffersbox="./partials/noOffersBox.html"></div>
+<!--          Offer table-->
+            <div class="table-container d-flex flex-column justify-content-center">
+                <div class="d-flex justify-content-center table-title-container">
+                    <h5>Mijn orders op de marktplaats</h5>
                 </div>
+                <table id="offer-table" class="table table-light table-striped table-hover table-responsive visible">
+                    <thead>
+                    <tr>
+                        <th scope="col">datum</th>
+                        <th scope="col">soort</th>
+                        <th scope="col">coin</th>
+                        <th scope="col">aantal</th>
+                        <th scope="col">prijs</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="offer-table-body"></tbody>
+                </table>
+<!--               Box shown when user has no marketplace orders-->
+                <div id="offers-box" includeoffersbox="./partials/noOffersBox.html"></div>
             </div>
         </div>
     </div>
