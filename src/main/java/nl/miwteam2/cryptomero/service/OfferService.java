@@ -79,7 +79,10 @@ public class OfferService {
                 System.out.println(e.getMessage());
                 int offerId = offerRepository.storeOne(offer);
                 System.out.println(matchList.toString());
-                throw e;
+                throw new Exception("the offer is partially matched\n"
+                        +numberOfPerformedTransactions +" transactions are performed\n"
+                        +"last match is rejected because of the following reason:\n" + e.getMessage()
+                        +"But the resulting offer is stored.");
             }
 
             //todo als het wel lukt - offertabel updaten - offer model updaten
