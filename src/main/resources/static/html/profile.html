@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/jpg" href="../images/chickie_icon.png"/>
     <!-- Custom css -->
     <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/common.css">
     <!-- Bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
@@ -16,37 +17,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap"
           rel="stylesheet">
+    <!--Bootstrap script-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous" defer></script>
+    <!--Custom JS scripts-->
+    <script type="module" src="../js/profile.js" defer></script>
+    <script type="module" src="../js/tokenUtils.js" defer></script>
 </head>
 <body>
-<!--Navigation bar-->
-<nav class="navbar navbar-expand-md navbar-dark">
-    <div class="container-fluid">
-        <img class="cryptomero-logo" src="../images/chickie_klein.png" alt="Cryptomero logo">
-        <!--Button alleen zichtbaar bij klein scherm-->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active go-home" aria-current="page" href="../html/profile.html">Cryptomero</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../html/transactions.html">Transacties</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Assets</a>
-                </li>
-            </ul>
-            <button class="btn btn-outline-primary btn-block border-1 fa-lg mb-0" id="logout-btn"
-                    type="button">Uitloggen
-            </button>
-        </div>
-    </div>
-</nav>
-
+<div includehtml="./partials/navbar.html"></div>
+<div includehtml="./partials/footer.html"></div>
 <!--Personal information container (name, bank account, balance)-->
     <div class="card w-50 bg-transparent container-fluid border-0">
         <div class="card-body welcome-container">
@@ -55,57 +36,59 @@
             <h2 id="saldoLayout">Saldo: <span class="symbol"></span> <span id="saldo"></span></h2>
         </div>
     </div>
-
 <!--Tables container-->
 <div class="container-fluid">
-    <div class="row d-flex .flex-row justify-content-center align-items-center border-0">
+    <div class="row d-flex .flex-row justify-content-center border-0">
 <!--        First grid column-->
         <div class="col-lg-6">
             <div class="card border-0 bg-transparent border-0">
-                <div class="card-body table-container">
-                    <table id="asset-table" class="table table-light table-striped table-hover table-responsive rounded">
+<!--                Asset table (shown only when user has crypto assets)-->
+                <div class="card-body table-container d-flex flex-column justify-content-center">
+                    <div class="d-flex justify-content-center table-title-container">
+                        <h5>Mijn coins</h5>
+                    </div>
+                    <table id="asset-table" class="table table-light table-striped table-hover table-responsive visible">
                         <thead>
                         <tr>
-                            <th scope="col">Coin</th>
-                            <th scope="col">Aantal</th>
-                            <th scope="col">Koers</th>
-                            <th scope="col">Waarde</th>
+                            <th scope="col">coin</th>
+                            <th scope="col">aantal</th>
+                            <th scope="col">koers</th>
+                            <th scope="col">waarde</th>
                         </tr>
                         </thead>
-                        <tbody class="tableBody"></tbody>
+                        <tbody id="asset-table-body"></tbody>
                     </table>
+<!--                    Box shown when user has no crypto assets-->
+                    <div id="assets-box" includeassetsbox="./partials/noAssetsBox.html"></div>
                 </div>
             </div>
         </div>
 <!--        Second grid column-->
         <div class="col-lg-6">
             <div class="card border-0 bg-transparent border-0">
-                <div class="card-body table-container">
-                    <table id="offer-table" class="table table-light table-striped table-hover table-responsive">
+                <div class="card-body table-container d-flex flex-column justify-content-center">
+                    <div class="d-flex justify-content-center table-title-container">
+                        <h5>Mijn orders op de marktplaats</h5>
+                    </div>
+                    <table id="offer-table" class="table table-light table-striped table-hover table-responsive visible">
                         <thead>
                         <tr>
-                            <th scope="col">Datum</th>
-                            <th scope="col">Coin</th>
-                            <th scope="col">Aantal</th>
-                            <th scope="col">Prijs</th>
+                            <th scope="col">datum</th>
+                            <th scope="col">soort</th>
+                            <th scope="col">coin</th>
+                            <th scope="col">aantal</th>
+                            <th scope="col">prijs</th>
+                            <th scope="col"></th>
                         </tr>
                         </thead>
-                        <tbody class="tableBody"></tbody>
+                        <tbody id="offer-table-body"></tbody>
                     </table>
+<!--                    Box shown when user has no marketplace orders-->
+                    <div id="offers-box" includeoffersbox="./partials/noOffersBox.html"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!--Footer-->
-<div class="text-center" id="footer">SSMMEP &copy; 2022</div>
-
-<!-- Bootstrap script -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-<!--Custom JS scripts-->
-<script type="module" src="../js/profile.js"></script>
-<script type="module" src="../js/tokenUtils.js"></script>
 </body>
 </html>

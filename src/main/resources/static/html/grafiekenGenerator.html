@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>  
+<head>
+  <meta charset="UTF-8">
+  <title>graphs</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="../js/grafiekenGenerator.js" defer></script>
 <body>
-  <div id="naamCrypto">Bitcoin</div>
+  <div id="naamCrypto">Koersverloop<br>(selecteer een munt)</div>
   <canvas id="myChart" style="width:100%;max-width:600px" ></canvas>
-  <button id="dag"> 1 DAG </button>
-  <button id="week"> 1 WEEK </button>
-  <button id="maand"> 4 weken </button>
-  <script src="../js/grafiekenGenerator.js"></script>
+  <div id="button-block">
+    <button id="dag" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 1 DAG </button>
+    <button id="week" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 1 WEEK </button>
+    <button id="maand" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 4 weken </button>
+  </div>
 </body>
 </html>
-
-

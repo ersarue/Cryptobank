@@ -3,51 +3,95 @@ body {
     background-size: cover;
 }
 
-/* START table container css */
-.table-container {
+/* START handel-modal-knop */
+#handelButton-container {
     display: flex;
     justify-content: left;
-    text-align: left;
+    margin: 3em;
+    margin-left: 5em;
+}
+/* END handel-modal-knop */
+
+/* START content container css "id=contentcontainer"*/
+#contentContainer {
+    margin-left: 10em;
+    margin-right: 10em;
+    margin-bottom: 5em;
+}
+/* START column1 "class=col-lg-6*/
+/* START table-container "id=asset-container" "class=cryptomero-table-container"*/
+/* START asset-table "id=asset-table"*/
+.table-light {
+    --bs-table-striped-bg: #6610f2;
 }
 
-/* START table */
-#asset-catalogue {
-    background-color: #F6F6F6;
+.table-light:hover {
+    --bs-table-hover-bg: #f5aaeb;
+}
+
+#asset-table {
     color: #6610f2;
-    margin-top: 60px;
-    margin-bottom: 5%;
-    margin-left: 10%;
-    width: 50%;
 }
 
-#asset-card {
-    display: inline-flex;
-    flex-flow: row;
+#tableBody:hover {
+    cursor: pointer;
+}
+/* END asset-table "id=asset-table"*/
+/* END table-container "id=asset-container" "class=cryptomero-table-container"*/
+/* END column1 "class=col-lg-6*/
+
+/* START column2 "class=col-lg-6*/
+/* START table-container "id=graph-container" "class=cryptomero-table-container"*/
+/* START graph-table "id=graphGenerator"*/
+#graphGenerator {
+    background-color: #F6F6F6;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
-.asset-logo {
-    width: 60px;
-    height: 60px;
-    padding: 10px;
-    transition: 0.70s;
-    display: block;
+/*title*/
+#naamCrypto {
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 1.5em;
+    transform: skewY(-3deg);
+    margin: 3%;
+}
+/*buttons*/
+#button-block {
+    margin: 3%
+}
+#dag, #week, #maand {
+    background: #f8f9fa;
+    border-color: #6610f2;
+    color: #6610f2;
 }
 
-.asset-graph {
-    width: 300px;
-    height: 300px;
-    margin-top: 60px;
-    margin-bottom: 5%;
-    margin-right: 10%;
-    display: inline-flex;
+#btn-trade {
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 1.5em;
+    color: #6009ef;
+    text-decoration: skewY(-3deg);
+    background-color: white;
 }
-/* END table */
+
+.btn-register{
+    color: #6009ef;
+    border: hsl(0, 0%, 100%) 10px solid;
+    border-radius: 0.25em;
+    box-shadow: inset 0 0 1.5em 0 white, 0 0 1.5em 0 white;
+    transition: all 0.5s;
+
+}
+
+.btn-register:hover {
+    color: #F6F6F6;
+    box-shadow: inset 0 0 0.5em 0 #F6F6F6, 0 0 0.5em 0 #F6F6F6;
+    background-color: #f5aaeb;
+}
+/* END graph-table "id=graphGenerator"*/
+/* END table-container "id=graph-container" "class=cryptomero-table-container"*/
+/* END column2 "class=col-lg-6*/
 
 /* END table container css */
-
-/* START general css */
-img {display: flex;
-    width: 60px;
-    height: 60px;
-}
 

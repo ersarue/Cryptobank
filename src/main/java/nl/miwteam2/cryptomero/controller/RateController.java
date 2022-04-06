@@ -1,5 +1,6 @@
 package nl.miwteam2.cryptomero.controller;
 
+import nl.miwteam2.cryptomero.service.Authentication.AuthenticationService;
 import nl.miwteam2.cryptomero.service.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class RateController {
 
     private RateService rateService;
+    private AuthenticationService authenticationService;
 
     @Autowired
-    public RateController(RateService rateService) {
+    public RateController(RateService rateService, AuthenticationService authenticationService) {
         this.rateService = rateService;
+        this.authenticationService = authenticationService;
     }
     @CrossOrigin
     @GetMapping("/latest")
@@ -47,4 +50,16 @@ public class RateController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    // MTK overview endpoint voor ingelogde gebruikers
+    @CrossOrigin
+    @GetMapping("/latest/overview")
+    public ResponseEntity<?> getOverview(@RequestHeader ("Authorization") String authorizationHeader) {
+        if (authenticationService.isValidToken(authorizationHeader)) {
+            return new ResponseEntity<>(rateService.getLatest(), HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
 }
