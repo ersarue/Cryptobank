@@ -20,7 +20,7 @@ body {
 }
 
 /*Uses ID's because element and class selectors do not seem to override bootstrap styling*/
-#logout-btn, #buy-btn, #offer-btn, #delete-btn {
+#logout-btn, #buy-btn, #offer-btn, #delete-btn, #trade-btn {
     background: #6009ef;
     border-color: white;
     color: white;
@@ -31,7 +31,6 @@ body {
     background: var(--hover-paars)
 }
 
-/*!*TODO: animatie*!*/
 #buy-btn, #offer-btn {
     margin: 0.5rem 0 0.5rem 0;
 }
