@@ -20,7 +20,7 @@ public class RateController {
     public RateController(RateService rateService) {
         this.rateService = rateService;
     }
-
+    @CrossOrigin
     @GetMapping("/latest")
     public ResponseEntity<?> getLatest() {
         try {
@@ -29,7 +29,7 @@ public class RateController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
+    @CrossOrigin
     @GetMapping("/latest/{name}")
     public ResponseEntity<?> getLatestByName(@PathVariable String name) {
         try {
