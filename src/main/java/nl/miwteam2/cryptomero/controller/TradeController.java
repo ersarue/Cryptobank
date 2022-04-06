@@ -38,6 +38,7 @@ public class TradeController {
         tradeOfferDto.setCustomer(customer);
         if (customer != null) {
             try {
+                offerService.checkOfferValidity(tradeOfferDto);
                 return new ResponseEntity<>(offerService.tradeOffer(tradeOfferDto), HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
