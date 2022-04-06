@@ -53,7 +53,7 @@ public class OfferService {
                 throw new Exception("U heeft de asset" + assetName + " niet in uw portefeuille");
             }
             if (wallet.get(assetName) < tradeOfferDto.getAmountOffer()){
-                throw new Exception("U heeft onvoldoende " + assetName + " in uw portefeuille om dit offer te doen2.");
+                throw new Exception("U heeft onvoldoende " + assetName + " in uw portefeuille om dit offer te doen.");
             }
             System.out.println(transactionService.TRANSACTION_FEE * tradeOfferDto.getAmountOffer() * tradeOfferDto.getRateOffer() * (0.5));
             System.out.println(bankAccount.getBalanceEur());
