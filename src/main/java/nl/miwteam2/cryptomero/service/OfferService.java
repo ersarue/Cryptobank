@@ -62,16 +62,18 @@ public class OfferService {
             if (isSeller) {
                 transactionDto = new TransactionDto(LocalDateTime.now(), tradeOfferDto.getCustomer(),
                         customerRepository.findById(counterOffer.getUserOffer().getIdAccount()),
-                        counterOffer.getAssetOffer(),counterOffer.getAmountOffer(),counterOffer.getPriceOffer());
+                        counterOffer.getAssetOffer(),-1 * counterOffer.getAmountOffer(),
+                        ((offer.getPriceOffer() + counterOffer.getPriceOffer())/2) *-1 * counterOffer.getAmountOffer());
             } else {
                 transactionDto = new TransactionDto(LocalDateTime.now(),
                         customerRepository.findById(counterOffer.getUserOffer().getIdAccount()), tradeOfferDto.getCustomer(),
-                        counterOffer.getAssetOffer(),counterOffer.getAmountOffer(),counterOffer.getPriceOffer());
+                        counterOffer.getAssetOffer(),counterOffer.getAmountOffer(),
+                        ((offer.getPriceOffer() + counterOffer.getPriceOffer())/2) * counterOffer.getAmountOffer());
             }
             //todo spreek TransactionService aan en doe transactie attempt
             System.out.println(2);
             try {
-                Transaction transaction = transactionService.tradeWithUser(transactionDto);
+                transactionService.tradeWithUser(transactionDto);
             } catch (Exception e) {
                 //todo als het niet lukt - break - sla offer op in offerTabel
                 System.out.println(e.getMessage());
@@ -168,16 +170,16 @@ public class OfferService {
     public List<Offer> findBuyers(Offer seller) {
         List<Offer> buyers = getAll().stream().filter(e -> e.getAssetOffer().equals(seller.getAssetOffer()) && e.getAmountOffer() < 0)
                 .sorted(Comparator.comparing(Offer::getPriceOffer).reversed()).toList();
-        buyers.forEach(e -> e.setAmountOffer(-1 * e.getAmountOffer()));
+        //buyers.forEach(e -> e.setAmountOffer(-1 * e.getAmountOffer()));
 
         List<Offer> matches = new ArrayList<>();
 
         for (Offer buyer : buyers) {
-            if (buyer.getAmountOffer() > 0 && seller.getAmountOffer() > 0 && seller.getPriceOffer() <= buyer.getPriceOffer()) {
-                double number = Math.min(seller.getAmountOffer(), buyer.getAmountOffer());
-                matches.add(new Offer(buyer.getIdOffer(), buyer.getUserOffer(), buyer.getAssetOffer(), number, buyer.getPriceOffer(), buyer.getTimestampOffer()));
+            if (buyer.getAmountOffer() < 0 && seller.getAmountOffer() > 0 && seller.getPriceOffer() <= buyer.getPriceOffer()) {
+                double number = Math.min(seller.getAmountOffer(), -1 * buyer.getAmountOffer());
+                matches.add(new Offer(buyer.getIdOffer(), buyer.getUserOffer(), buyer.getAssetOffer(), -1 * number, buyer.getPriceOffer(), buyer.getTimestampOffer()));
                 seller.setAmountOffer(seller.getAmountOffer() - number);
-                buyer.setAmountOffer(buyer.getAmountOffer() - number);
+                //buyer.setAmountOffer(buyer.getAmountOffer() + number);
             }
         }
         return matches;
