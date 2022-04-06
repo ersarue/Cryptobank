@@ -3,64 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>doTrade</title>
-    <script type="module" src="../js/doTrade.js" defer></script>
 <body>
-
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Handel in cryptos </h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Handelen</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+<!--                        Select coin-->
                         <h6 class="text" id=cryptoQuestion">Selecteer cryptocoin. </h6>
-
                         <div class="input-group mb-3">
                             <select class="form-select" id="inputGroupSelect01"></select>
                         </div>
-
-                        <h6 class="text" id=radio1Question">Selecteer Bank om direct met de bank te handelen of Marktplaats om met een andere klant te handelen. </h6>
+<!--                        Select trade partner-->
+                        <h6 class="text" id=radio1Question">Selecteer Bank om direct met de bank te handelen of Marktplaats om met een andere klant te handelen</h6>
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+<!--                            Choose to trade with bank-->
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio1">Bank</label>
-
+<!--                            Choose market place trade-->
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
                             <label class="btn btn-outline-primary" for="btnradio2">Marktplaats</label>
                         </div>
-
-                        <h6 class="text" id=radio2Question">Selecteer Kopen of Verkopen. </h6>
+<!--                        Select buying or selling-->
+                        <h6 class="text" id=radio2Question">Selecteer Kopen of Verkopen</h6>
                         <div class="btn-group" role="group2" aria-label="Basic radio toggle button group">
+<!--                            Choose to buy -->
                             <input type="radio" class="btn-check" name="btnradio2" id="btnradio3" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio3">Kopen</label>
-
+<!--                            Choose to sell-->
                             <input type="radio" class="btn-check" name="btnradio2" id="btnradio4" autocomplete="off">
                             <label class="btn btn-outline-primary" for="btnradio4">Verkopen</label>
                         </div>
-
-                        <h6 class="text" >Geef de hoeveelheid aan. </h6>
-
+<!--                        Indicate amount to buy or sell-->
+                        <h6 class="text" >Geef de hoeveelheid aan</h6>
                         <div class="input-group mb-3">
                             <span class="input-group-text">Asset</span>
                             <input type="text" id="amountAsset" class="form-control">
                         </div>
-
+<!--                        Current coin price-->
                         <h6 class="text" id=koers">Huidige prijs:</h6>
                         <input class="form-control" id="koersMunt" type="text" value="0.00" aria-label="readonly input example" readonly>
-
-                        <h6 class="text" id=fee">Percentage voor de bank: . </h6>
+<!--                        Bank fee-->
+                        <h6 class="text" id=fee">Percentage voor de bank:</h6>
                         <input class="form-control" type="text" value="0.00" aria-label="readonly input example" readonly>
-
-
-                        <h6 class="text" id=prijs">Prijs per coin bij handelen met marktplaats . </h6>
-
-                        <div class="input-group mb-3">
+<!--                        Price per coin in case of market place trade-->
+                        <h6 class="text invisible" id="priceMarketPlaceTitle">Prijs per coin bij handelen met marktplaats</h6>
+                        <div class="input-group mb-3 price-market-place invisible">
                             <span class="input-group-text">€</span>
                             <input type="text" id="offerPrijs" class="form-control" >
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
@@ -70,10 +66,10 @@
             </div>
         </div>
     </div>
-
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Handel in crypto's
     </button>
+    <script type="module" src="../js/doTrade.js"></script>
 </body>
 </html>

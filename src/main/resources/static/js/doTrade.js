@@ -152,3 +152,23 @@ function fillDropDownMenu(data) {
     }
     document.querySelector("#koersMunt").value=data[0].rate
 }
+
+export const addTradeButtonsEventListeners = () => {
+    // Note: html-elements need to be selected inside this method for the export to work
+    const bankTradeBtn = document.getElementById('btnradio1');
+    const marketPlaceTradeBtn = document.getElementById('btnradio2');
+    const priceMarketPlaceTitle = document.getElementById('priceMarketPlaceTitle');
+    const priceMarketPlace = document.querySelector('.price-market-place');
+    bankTradeBtn.addEventListener('click', (e) => {
+        if (e.target.checked) {
+            priceMarketPlaceTitle.classList.add('invisible');
+            priceMarketPlace.classList.add('invisible');
+        }
+    });
+    marketPlaceTradeBtn.addEventListener('click', (e) => {
+        if (e.target.checked) {
+            priceMarketPlaceTitle.classList.remove('invisible');
+            priceMarketPlace.classList.remove('invisible');
+        }
+    });
+}
