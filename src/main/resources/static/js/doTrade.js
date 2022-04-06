@@ -5,29 +5,27 @@
 
 'use strict'
 
-import {includeHTML, addLogout} from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
 
-const url = new URL(window.location.href)
-
-document.addEventListener('DOMContentLoaded', () => {
-    includeHTML()
-    addLogout()
-})
+export const addModalDropDown = () => {
 //als de gebruiker klikt op dropdownmenu wordt de juiste koers opgehaald
-document.querySelector('#inputGroupSelect01').addEventListener('click', ()=>{
-    zoekKoers(document.querySelector("#inputGroupSelect01").value)
-})
+    document.querySelector('#inputGroupSelect01').addEventListener('click', () => {
+        zoekKoers(document.querySelector("#inputGroupSelect01").value)
+    })
+}
+
+export const addModalSubmitButton = () => {
 //bepaalt eerst BANK of Marktplaats , alleen bank werkt 
-document.querySelector('#actieButton').addEventListener('click', ()=>{
-    const radiobuttonBank = document.querySelector('#btnradio1')
-    if (radiobuttonBank.checked){
-        storeBankTransactie()
-    }else{
-        storeOffer()
-    }
-        
-})
+    document.querySelector('#actieButton').addEventListener('click', () => {
+        const radiobuttonBank = document.querySelector('#btnradio1')
+        if (radiobuttonBank.checked) {
+            storeBankTransactie()
+        } else {
+            storeOffer()
+        }
+
+    })
+}
 //er wordt gecheckt of er een koopooffer of verkoopoffer geplaatst wil worden
 function samenstellenOffer(){
     const radiobuttonKoop = document.querySelector('#btnradio3')
@@ -51,7 +49,7 @@ function storeOffer(){
     fetch('http://localhost:8080/trade/offer', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBY2NvdW50IjoyLCJpc3MiOiJDcnlwdG9tZXJvIiwiZXhwIjoxNjQ5MjU2MjY3fQ.dSa7JY646zNv-SRZd7xIrA3NptYBd3X54SCKQoYtq2g',
+                'Authorization': getToken(),
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -69,9 +67,6 @@ function storeOffer(){
             });
     }
 
-
-
-
 //er wordt gecheckt of er een koop of verkoop met de bank plaatsvindt
 function samenstellenDataBankTransactie(){
     const radiobuttonKoop = document.querySelector('#btnradio3')
@@ -86,13 +81,14 @@ function samenstellenDataBankTransactie(){
         };
     return data
 }
+
 //de transactie met de bank wordt gestored, ER zijn geen checks
 function storeBankTransactie(){
     let data = samenstellenDataBankTransactie()
     fetch('http://localhost:8080/trade/bank', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBY2NvdW50IjoyLCJpc3MiOiJDcnlwdG9tZXJvIiwiZXhwIjoxNjQ5MjU2MjY3fQ.dSa7JY646zNv-SRZd7xIrA3NptYBd3X54SCKQoYtq2g',
+                'Authorization': getToken(),
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
