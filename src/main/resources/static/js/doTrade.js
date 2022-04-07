@@ -147,7 +147,7 @@ export async function zoekKoers(naamCrypto) {
 }
 
 // Rounds the rate amounts to a precise two decimals
-const round = (num) => {
+export const round = (num) => {
     if (num >= 1){
         return num.toFixed(2)
     } else {
@@ -181,7 +181,7 @@ function fillDropDownMenu(data) {
         option.text = option.value = assetName;
         dropDownMenu.add(option, 0);
     }
-    // document.querySelector("#koersMunt").value=data[0].rate
+    document.querySelector("#koersMunt").value=data[0].rate
 }
 
 export const addTradeButtonsEventListeners = () => {
@@ -192,14 +192,12 @@ export const addTradeButtonsEventListeners = () => {
     const priceMarketPlace = document.querySelector('.price-market-place');
     const buyBtn = document.getElementById('btnradio3');
     const sellBtn = document.getElementById('btnradio4');
-    const feeInput = document.getElementById('feeInput');
     const totalPriceInput = document.getElementById('totalPriceInput');
     const buyOrSellQuestion = document.getElementById('buyOrSellQuestion');
     bankTradeBtn.addEventListener('click', (e) => {
         if (e.target.checked) {
             priceMarketPlaceTitle.classList.add('invisible');
             priceMarketPlace.classList.add('invisible');
-            feeInput.value = '1,65%';
             buyOrSellQuestion.innerHTML = 'Wil je cryptocoins kopen of verkopen aan de bank?';
             calculateTotalPrice();
             setTextSubmitBtn();
@@ -209,7 +207,6 @@ export const addTradeButtonsEventListeners = () => {
         if (e.target.checked) {
             priceMarketPlaceTitle.classList.remove('invisible');
             priceMarketPlace.classList.remove('invisible');
-            feeInput.value = 'Let op: 1,65% van het uiteindelijke bedrag aan munten';
             totalPriceInput.value = "Wordt bepaald zodra er een marktplaatsmatch is";
             buyOrSellQuestion.innerHTML = 'Wil je cryptocoins kopen of verkopen op de marktplaats?';
             setTextSubmitBtn();
