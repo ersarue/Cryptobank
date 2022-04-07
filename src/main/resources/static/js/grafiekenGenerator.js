@@ -22,7 +22,7 @@ export const maakGrafiek = (naamCrypto, aantalDagen, interval) => {
     let nameCryptomunt = `name=${naamCrypto}`
     let intervalKeuze = `&interval=${interval}&`
 
-    fetch('http://localhost:8080/rates/history?'+nameCryptomunt+intervalKeuze+datapointsAantal, {
+    fetch(`${url.origin}/rates/history?`+nameCryptomunt+intervalKeuze+datapointsAantal, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',

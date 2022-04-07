@@ -112,7 +112,7 @@ function storeBankTransactie(){
 
 
 //wordt opgeroepen als klant klikt op dropdownmenu
-async function zoekKoers(naamCrypto) {
+export async function zoekKoers(naamCrypto) {
     const response = await fetch(`${url.origin}/rates/latest/${naamCrypto}`, {
         method: 'GET',
         headers: {
