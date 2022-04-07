@@ -35,7 +35,12 @@ img {
   margin-right: 1rem;
 }
 
-.btn {
-  background: #6009ef;
+#submitBtn {
+  background: #6610f2;
+  border-color: white;
+}
+
+#submitBtn:hover {
+  background-color: #792ff1;
 }
 
