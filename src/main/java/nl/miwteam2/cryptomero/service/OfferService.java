@@ -185,7 +185,7 @@ public class OfferService {
     }
 
     public List<Offer> findSellers(Offer buyer) {
-        List<Offer> sellers = getAll().stream().filter(e -> e.getAssetOffer().equals(buyer.getAssetOffer()) && e.getAmountOffer() > 0)
+        List<Offer> sellers = getAll().stream().filter(e -> !e.getUserOffer().equals(buyer.getUserOffer()) && e.getAssetOffer().equals(buyer.getAssetOffer()) && e.getAmountOffer() > 0)
                 .sorted(Comparator.comparing(Offer::getPriceOffer)).toList();
         buyer.setAmountOffer(-1 * buyer.getAmountOffer());
 
@@ -203,7 +203,7 @@ public class OfferService {
     }
 
     public List<Offer> findBuyers(Offer seller) {
-        List<Offer> buyers = getAll().stream().filter(e -> e.getAssetOffer().equals(seller.getAssetOffer()) && e.getAmountOffer() < 0)
+        List<Offer> buyers = getAll().stream().filter(e -> !e.getUserOffer().equals(seller.getUserOffer()) && e.getAssetOffer().equals(seller.getAssetOffer()) && e.getAmountOffer() < 0)
                 .sorted(Comparator.comparing(Offer::getPriceOffer).reversed()).toList();
         //buyers.forEach(e -> e.setAmountOffer(-1 * e.getAmountOffer()));
 
