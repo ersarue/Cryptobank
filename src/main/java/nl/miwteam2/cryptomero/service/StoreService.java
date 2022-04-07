@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -56,11 +57,13 @@ public class StoreService {
         }
         return customerDto;
     }
+
     private CustomerDto setAddress(ArrayList<Address> addressesList, CustomerDto customerDto, Random rng){
         Address adres = addressesList.get(rng.nextInt(addressesList.size()));
         customerDto.setAddress(adres);
         return customerDto;
     }
+
     private CustomerDto setOverigeGegevens(CustomerDto customerDto, Random rng){
         String voornaam = firstNames[rng.nextInt(firstNames.length)];
         String achternaam = lastNames[rng.nextInt(lastNames.length)];
@@ -76,14 +79,14 @@ public class StoreService {
 
     private ArrayList<Address> addressListStore(){
         ArrayList<String> regelsUitBestandAdres = new ArrayList<>();
-        File adresBestand = new File("src/main/resources/adressenLijst.csv");
+        InputStream in = getClass().getResourceAsStream("/adressenLijst.csv");
         try {
-            Scanner invoer = new Scanner(adresBestand);
+            Scanner invoer = new Scanner(in);
             while (invoer.hasNextLine()) {
                 regelsUitBestandAdres.add(invoer.nextLine());
             }
-        } catch (FileNotFoundException nietGevonden) {
-            System.out.println("Het bestand is niet gevonden.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         ArrayList<Address> adressen = new ArrayList<>();
         if (regelsUitBestandAdres.size() > 0) {
@@ -116,15 +119,12 @@ public class StoreService {
     private ArrayList<String> inlezenBsnNummers(){
         ArrayList<String> regelsUitBestand = new ArrayList<>();
         ArrayList<String> bsnLijst = new ArrayList<>();
-        File bsnBestand = new File("src/main/resources/bsnLijst.csv");
-        try {
-            Scanner invoer = new Scanner(bsnBestand);
-            while (invoer.hasNextLine()) {
-                regelsUitBestand.add(invoer.nextLine());
-            }
-        } catch (FileNotFoundException nietGevonden) {
-            System.out.println("Het bestand is niet gevonden.");
+        InputStream in = getClass().getResourceAsStream("/bsnLijst.csv");
+        Scanner invoer = new Scanner(in);
+        while (invoer.hasNextLine()) {
+            regelsUitBestand.add(invoer.nextLine());
         }
+
         if (regelsUitBestand.size() > 0) {
             for (int i = 0; i < regelsUitBestand.size(); i++) {
                 bsnLijst.add(regelsUitBestand.get(i));
