@@ -41,7 +41,7 @@ public class TransactionService {
 	this.walletDao = walletDao;
   }
 
-  public Transaction tradeWithBank(TradeBankDto trade) throws Exception {
+  public String tradeWithBank(TradeBankDto trade) throws Exception {
 	Transaction transaction = new Transaction(LocalDateTime.now(),
 			isCustomerBuying(trade.getAmountTrade()) ? bank : trade.getCustomer(),
 			isCustomerBuying(trade.getAmountTrade()) ? trade.getCustomer() : bank,
@@ -49,26 +49,26 @@ public class TransactionService {
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()),
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()*TRANSACTION_FEE), trade.getAssetNameTrade()));
 	if (bank == trade.getCustomer()) { // making sure that client makes trade with bank
-	  throw new Exception("Trade must be made with a bank or other client");
+	  throw new Exception("U kunt alleen handelen met de bank of met een andere klant");
 	} else {
 	  if (isCustomerBuying(trade.getAmountTrade())) { // buying from bank
 		if (!isBalanceEnoughToBuy(trade.getCustomer().getBankAccount().getBalanceEur(),
 				calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()))) {
-		  throw new Exception("Cannot buy from bank. Insufficient balance");
+		  throw new Exception("U kunt niet kopen van de bank wegens onvoldoende saldo");
 		}
 	  } else {  // selling to bank
 		if (!(isAssetInWallet(trade.getAssetNameTrade(), trade.getCustomer().getWallet()) && isAssetEnoughToSell(trade))) {
-		  throw new Exception("Insufficient asset");
+		  throw new Exception("U heeft onvoldoende cryptomunten in portefeuille om te verkopen aan de bank");
 		}
 	  }
 	  updateBankAccount(transaction); // update bank account
 	  updateWallet(trade);            // update wallet
 	  storeTransaction(transaction); // store transaction
-	  return transaction;
+		return "Transactie verwerkt";
 	}
   }
 
-  public Transaction tradeWithUser(TransactionDto transactionDto) throws Exception {
+  public String tradeWithUser(TransactionDto transactionDto) throws Exception {
 	//todo cut method in pieces
 
 	// make transaction from transactionDto
@@ -100,11 +100,11 @@ public class TransactionService {
 	double BalanceEurRecipient = bankAccountAssetRecipient.getBalanceEur(); //BalanceEur assetGiver
 
 	  if (assetAmountGiver < transaction.getAssetAmount()) {
-		  throw new Exception("Cannot trade Asset. Insufficient Asset balance Giver");
+		  throw new Exception("De verkoper heeft onvoldoende cryptomunten in portefeuille");
 	  } else if (BalanceEurGiver < transaction.getEurFee() / 2) {
-		  throw new Exception("Cannot trade Asset. Insufficient balance Giver to pay fee");
+		  throw new Exception("De verkoper heeft onvoldoende saldo om de transactiekosten te betalen");
 	  } else if (BalanceEurRecipient < transaction.getEurAmount() + transaction.getEurFee() / 2) {
-		  throw new Exception("Cannot trade Asset. Insufficient balance Recipient");
+		  throw new Exception("De koper heeft onvoldoende saldo");
 	  }
 
 	System.out.println(5);
@@ -134,7 +134,7 @@ public class TransactionService {
 	// store transaction
 	int transactionId = transactionRepository.storeOne(transaction);
 
-	return transaction;
+	return "Transactie verwerkt";
   }
 
   private void storeTransaction(Transaction transaction) {

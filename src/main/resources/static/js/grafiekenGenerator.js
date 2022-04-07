@@ -1,4 +1,7 @@
 // window.addEventListener('load', onLoad)
+
+const url = new URL(window.location.href)
+
 export const getCryptomeroGrafiek = () => {
     let xValues = ["","","","","",""];
     let yValues = [0,23,1,19,33,4];
