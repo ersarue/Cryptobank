@@ -1,0 +1,20 @@
+:root {
+    --paars: #6610f2;
+    --hover-paars: #792ff1;
+}
+
+.modal-title {
+    font-family: 'Gloria Hallelujah', cursive;
+    color: var(--paars);
+    font-size: 1.8rem;
+    border-color: white;
+}
+
+#actieButton {
+    background: var(--paars);
+    color: white;
+}
+
+#actieButton:hover {
+    background: var(--hover-paars);
+}

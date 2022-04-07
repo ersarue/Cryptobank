@@ -3,6 +3,8 @@
  * @author: Samuel Geurts, studentnr: 500893275 - MIW Cohort 26
  */
 
+// TODO: clean up code! (last minute hurries got in the way of nice code)
+
 'use strict'
 
 import {getToken} from "./tokenUtils.js";
@@ -13,6 +15,7 @@ export const addModalDropDown = () => {
 //als de gebruiker klikt op dropdownmenu wordt de juiste koers opgehaald
     document.querySelector('#inputGroupSelect01').addEventListener('change', async () => {
        await zoekKoers(document.querySelector("#inputGroupSelect01").value)
+        calculateTotalPrice()
     })
 }
 
@@ -41,7 +44,6 @@ function samenstellenOffer(){
         "amountOffer": amount,
         "rateOffer": prijsOffer
         };
-    console.log(data)
     return data
 }
 //de offer op marktplaats wordt gestored, ER zijn geen checks
@@ -63,9 +65,6 @@ function storeOffer(){
                     return response.json()
                 }
             )
-            .then(data => {
-                console.log(data)
-            });
     }
 
 //er wordt gecheckt of er een koop of verkoop met de bank plaatsvindt
@@ -121,7 +120,7 @@ export async function zoekKoers(naamCrypto) {
         },
     });
     const result = await response.json();
-    document.querySelector("#koersMunt").value = `€ ${round(result.rate)}`;
+    document.querySelector("#koersMunt").value = round(result.rate);
 }
 
 // Rounds the rate amounts to a precise two decimals
@@ -167,12 +166,16 @@ export const addTradeButtonsEventListeners = () => {
     const priceMarketPlace = document.querySelector('.price-market-place');
     const buyBtn = document.getElementById('btnradio3');
     const sellBtn = document.getElementById('btnradio4');
+    const feeInput = document.getElementById('feeInput');
+    const totalPriceInput = document.getElementById('totalPriceInput');
     const buyOrSellQuestion = document.getElementById('buyOrSellQuestion');
     bankTradeBtn.addEventListener('click', (e) => {
         if (e.target.checked) {
             priceMarketPlaceTitle.classList.add('invisible');
             priceMarketPlace.classList.add('invisible');
+            feeInput.value = '1,65%';
             buyOrSellQuestion.innerHTML = 'Wil je cryptocoins kopen of verkopen aan de bank?';
+            calculateTotalPrice();
             setTextSubmitBtn();
         }
     });
@@ -180,6 +183,8 @@ export const addTradeButtonsEventListeners = () => {
         if (e.target.checked) {
             priceMarketPlaceTitle.classList.remove('invisible');
             priceMarketPlace.classList.remove('invisible');
+            feeInput.value = 'Let op: 1,65% van het uiteindelijke bedrag aan munten';
+            totalPriceInput.value = "Wordt bepaald zodra er een marktplaatsmatch is";
             buyOrSellQuestion.innerHTML = 'Wil je cryptocoins kopen of verkopen op de marktplaats?';
             setTextSubmitBtn();
         }
@@ -194,9 +199,31 @@ export const addTradeButtonsEventListeners = () => {
 
 const setTextSubmitBtn = () => {
     const bankTradeBtn = document.getElementById('btnradio1');
-    const marketPlaceTradeBtn = document.getElementById('btnradio2');
     const submitBtn = document.getElementById('actieButton');
     bankTradeBtn.checked
     ? submitBtn.innerHTML = 'Sluit deal met de bank'
     : submitBtn.innerHTML = 'Plaats aanvraag op de marktplaats';
+}
+
+const calculateTotalPrice = () => {
+    const coinAmount = document.getElementById('amountAsset');
+    const coinRate = document.getElementById('koersMunt');
+    const totalPriceInput = document.getElementById('totalPriceInput');
+    let total;
+    if (coinAmount) {
+        const bankTradeBtn = document.getElementById('btnradio1');
+        bankTradeBtn.checked
+            ? totalPriceInput.value = round((coinAmount.value * coinRate.value) * 1.0165)
+            : totalPriceInput.value = "Wordt bepaald zodra er een marktplaatsmatch is";
+        return total;
+    }
+}
+
+export const addTradeFieldEventListeners = () => {
+    const coinAmount = document.getElementById('amountAsset');
+    // const coinRate = document.getElementById('koersMunt');
+    const totalPriceInput = document.getElementById('totalPriceInput');
+    coinAmount.addEventListener('blur', () => {
+        calculateTotalPrice();
+    });
 }
