@@ -21,14 +21,14 @@ body {
 
 /*Uses ID's because element and class selectors do not seem to override bootstrap styling*/
 #logout-btn, #buy-btn, #offer-btn, #delete-btn, #trade-btn {
-    background: #6009ef;
+    background: var(--paars);
     border-color: white;
     color: white;
 }
 
 /*Uses ID's because element and class selectors do not seem to override bootstrap styling*/
 #logout-btn:hover, #buy-btn:hover, #offer-btn:hover, #delete-btn:hover, #trade-btn:hover {
-    background: var(--hover-paars)
+    background: var(--hover-paars);
 }
 
 #buy-btn, #offer-btn {
