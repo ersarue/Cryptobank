@@ -47,7 +47,7 @@ function retrieveTransactions(transactions) {
     for (let transaction in transactions) {
         const transactiedatum = transactions[transaction].transactionTime;
         const gever = transactions[transaction].assetGiver;
-        const geverVolledigeNaam = gever.firstName + " " + gever.namePrefix+ " " + gever.lastName;
+        const geverVolledigeNaam = gever.firstName + " " + gever.namePrefix + " " + gever.lastName;
         const ontvanger = transactions[transaction].assetRecipient
         const ontvangerVolledigeNaam = ontvanger.firstName + " " + ontvanger.lastName;
         const assetnaam = transactions[transaction].asset.assetName;
