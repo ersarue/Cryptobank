@@ -45,7 +45,6 @@ const getDutchDateFormat = (dateString) => {
 function retrieveTransactions(transactions) {
     const transactionsTable = document.querySelector("#transactionContent")
     for (let transaction in transactions) {
-        console.log(transactions);
         const transactiedatum = transactions[transaction].transactionTime;
         const gever = transactions[transaction].assetGiver;
         const geverVolledigeNaam = gever.firstName + " " + gever.namePrefix+ " " + gever.lastName;
@@ -53,8 +52,8 @@ function retrieveTransactions(transactions) {
         const ontvangerVolledigeNaam = ontvanger.firstName + " " + ontvanger.lastName;
         const assetnaam = transactions[transaction].asset.assetName;
         const hoeveelheid = transactions[transaction].assetAmount;
-        const bedrag = transactions[transaction].eurAmount;
-        const transactiekost = transactions[transaction].eurFee;
+        const bedrag = `€ ${transactions[transaction].eurAmount}`;
+        const transactiekost = `€ ${transactions[transaction].eurFee}`;
 
         const rowElement = createNode("tr");
         const cellElement2 = createNode("td");
@@ -97,5 +96,6 @@ Promise.resolve(
     .then(response => response.json())
     .then(transactions => {
         retrieveTransactions(transactions)
+        console.log(transactions);
     })
     .catch(error => console.error("Something went wrong. Transactions cannot be loaded!", error));
