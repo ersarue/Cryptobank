@@ -45,7 +45,7 @@ public class OfferService {
         boolean isSeller = tradeOfferDto.getAmountOffer() > 0;
 
         if (tradeOfferDto.getAmountOffer() == 0){
-            throw new Exception(" Jonguh!!! Dit kan niet. ");
+            throw new Exception("Jonguh!!! Dit kan niet.");
         }
         if (isSeller){
             //als de wallet het asset bevat en als het meer of gelijk is dan het offer
@@ -53,7 +53,7 @@ public class OfferService {
                 throw new Exception("U heeft de asset" + assetName + " niet in uw portefeuille");
             }
             if (wallet.get(assetName) < tradeOfferDto.getAmountOffer()){
-                throw new Exception("U heeft onvoldoende " + assetName + " in uw portefeuille om dit offer te doen.");
+                throw new Exception("U heeft onvoldoende " + assetName + " in uw portefeuille om deze order te plaatsen.");
             }
             System.out.println(transactionService.TRANSACTION_FEE * tradeOfferDto.getAmountOffer() * tradeOfferDto.getRateOffer() * (0.5));
             System.out.println(bankAccount.getBalanceEur());
@@ -61,12 +61,12 @@ public class OfferService {
                 throw new Exception("Uw saldo is onvoldoende om de transactiekosten te kunnen betalen.");
             }
         } else if (bankAccount.getBalanceEur() < (1 + transactionService.TRANSACTION_FEE) * -1 * tradeOfferDto.getAmountOffer() * tradeOfferDto.getRateOffer()) {
-            throw new Exception("Uw saldo is onvoldoende om uw vraag op de marktplaats te plaatsen.");
+            throw new Exception("Uw saldo is onvoldoende om uw order te plaatsen.");
         }
     }
 
     //methode die alles afhandelt
-    public int tradeOffer(TradeOfferDto tradeOfferDto) throws Exception {
+    public String tradeOffer(TradeOfferDto tradeOfferDto) throws Exception {
 
         System.out.println(0);
         Offer offer = getOffer(tradeOfferDto);
@@ -103,10 +103,10 @@ public class OfferService {
                 System.out.println(e.getMessage());
                 int offerId = offerRepository.storeOne(offer);
                 System.out.println(matchList.toString());
-                throw new Exception("the offer is partially matched\n"
-                        +numberOfPerformedTransactions +" transactions are performed\n"
-                        +"last match is rejected because of the following reason:\n" + e.getMessage()
-                        +"But the resulting offer is stored.");
+                throw new Exception("Het order is gedeeltelijk verwerkt\n"
+                        +"Er werden " + numberOfPerformedTransactions + " transacties verricht"
+                        +"De laatste match kon niet verwerkt worden om de volgende reden:\n" + e.getMessage()
+                        +"Het resulterende order werd opgeslagen.");
             }
 
             //todo als het wel lukt - offertabel updaten - offer model updaten
@@ -138,7 +138,15 @@ public class OfferService {
         }
 
         //todo iets terug geven
-        return numberOfPerformedTransactions;
+        if (numberOfPerformedTransactions == 0) {
+            return "Uw order is op de marktplaats gezet";
+        }
+        else if (numberOfPerformedTransactions == 1) {
+            return "Uw order is gematched. Er werd " + numberOfPerformedTransactions + " transactie verricht";
+        }
+        else {
+            return "Uw order is gematched. Er werden " + numberOfPerformedTransactions + " transacties verricht";
+        }
     }
 
     //maakt een offer van trade Offer Dto
