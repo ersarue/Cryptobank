@@ -78,7 +78,11 @@ function grafiek(xWaarden, yWaarden, schaalMin, schaalMax){
 function schaalYasBerekenen(hoogsteWaarde, laagsteWaarde){
     let minYscale=0
     let maxYscale=0
-    if (hoogsteWaarde<1){
+    if (hoogsteWaarde<0.0001){
+        minYscale=0
+        maxYscale=Math.round(hoogsteWaarde/0.00001)*0.00001+0.00001
+    }
+    else if (hoogsteWaarde<1){
         minYscale=0
         maxYscale=Math.round(hoogsteWaarde/0.1)*0.1+0.1
     }else if (hoogsteWaarde<10){
