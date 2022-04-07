@@ -29,14 +29,25 @@ const fillContent = (elem, content) => {
 // change date time format to Dutch local format
 const getDutchDateFormat = (dateString) => {
     const date = new Date(dateString);
-    const options = { weekday:'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    };
     return date.toLocaleDateString('nl-NL', options);
 }
 
 // retrieve transactions data from database
 function retrieveTransactions(transactions) {
+    const transactionsTable = document.querySelector("#transactionContent")
     for (let transaction in transactions) {
-        const transactienummer = transactions[transaction].idTransaction;
+
+        // const transactienummer = transactions[transaction].idTransaction;
+        console.log(transactions[transaction]);
         const transactiedatum = transactions[transaction].transactionTime;
         const gever = transactions[transaction].assetGiver;
         const geverVolledigeNaam = gever.firstName + " " + gever.lastName;
@@ -48,9 +59,8 @@ function retrieveTransactions(transactions) {
         const transactiekost = transactions[transaction].eurFee;
 
         const rowElement = createNode("tr");
-        rowElement.classList.add('bodyRow');
-        const cellElement1 = createNode("td");
-        fillContent(cellElement1, transactienummer);
+        // const cellElement1 = createNode("td");
+        // fillContent(cellElement1, transactienummer);
         const cellElement2 = createNode("td");
         fillContent(cellElement2, getDutchDateFormat(transactiedatum));
         const cellElement3 = createNode("td");
@@ -68,7 +78,7 @@ function retrieveTransactions(transactions) {
         const cellElement8 = createNode("td");
         fillContent(cellElement8, transactiekost);
 
-        appendNode(rowElement, cellElement1)
+        // appendNode(rowElement, cellElement1)
         appendNode(rowElement, cellElement2)
         appendNode(rowElement, cellElement3)
         appendNode(rowElement, cellElement4)
@@ -77,7 +87,6 @@ function retrieveTransactions(transactions) {
         appendNode(rowElement, cellElement7)
         appendNode(rowElement, cellElement8)
 
-        const transactionsTable = document.querySelector("#transactionContent")
         appendNode(transactionsTable, rowElement);
 
     }
@@ -91,7 +100,7 @@ Promise.resolve(
         headers: {'Content-Type': 'application/json', 'Authorization': getToken()}
     })
 )
-    .then(r => r.json())
+    .then(response => response.json())
     .then(transactions => {
         retrieveTransactions(transactions)
     })
