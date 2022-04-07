@@ -41,8 +41,8 @@ export const addLogout = () => {
 }
 
 export const logout = () => {
-    console.log("logout");
     removeToken();
+    localStorage.clear();
     window.location = "../index.html"
 }
 

@@ -2,7 +2,7 @@
 'use strict'
 
 import { getToken, removeToken } from './tokenUtils.js';
-import { includeHTML, addLogout } from './includeHTML.js';
+import { includeHTML, addLogout, logout } from './includeHTML.js';
 import { includeNoOffersBox } from './includeNoOffersBox.js';
 import { includeNoAssetsBox } from './includeNoAssetsBox.js';
 
@@ -36,7 +36,7 @@ Promise.all([
 ]).then(responses => {
     if (responses[0].status === 401){
         alert('Ongeldige sessie. U moet (opnieuw) inloggen.');
-        logout()
+        logout();
     } else if (responses[0].status === 200 && responses[1].status === 200) {
         return Promise.all(responses.map(function (response) {
             return response.json();
@@ -242,9 +242,9 @@ const deleteOffer = async (idOffer) => {
     }
 }
 
-// Logs out the current user and redirects user to landing page
-function logout() {
-    console.log('logout');
-    removeToken();
-    window.location = '../index.html';
-}
+// // Logs out the current user and redirects user to landing page
+// function logout() {
+//     console.log('logout');
+//     removeToken();
+//     window.location = '../index.html';
+// }
