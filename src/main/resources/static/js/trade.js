@@ -7,8 +7,8 @@ Script for trade page Cryptomero
 
 import {includeHTML, includeHTMLgraph, includeHTMLTradeModal, addLogout, logout} from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
-import {addGraphs, maakGrafiek} from "./grafiekenGenerator.js";
-import {addModalDropDown, addModalSubmitButton} from "./doTrade.js";
+import {addGraphs, maakGrafiek, getCryptomeroGrafiek} from "./grafiekenGenerator.js";
+import {addModalDropDown, addModalSubmitButton, zoekKoers} from "./doTrade.js";
 
 const url = new URL(window.location.href)
 
@@ -18,10 +18,23 @@ document.addEventListener('DOMContentLoaded', () => {
     includeHTMLTradeModal()
     addModalDropDown()
     addModalSubmitButton()
+    document.getElementById("btn-trade").addEventListener("click", openModalSetSelection)
 })
 
+const openModalSetSelection = () => {
+    const preSelectCoin = sessionStorage.getItem("assetName")
+    console.log(preSelectCoin)
+    Array.from(document.getElementById("inputGroupSelect01").options).forEach(optionElement => {
+        if (preSelectCoin === optionElement.text) {
+            console.log(optionElement.text)
+            optionElement.setAttribute("selected", "selected")
+            zoekKoers(document.querySelector("#inputGroupSelect01").value)
+        }
+    })
+}
+
 Promise.resolve(
-    fetch('http://localhost:8080/rates/latest/overview', {
+    fetch(`${url.origin}/rates/latest/overview`, {
         method: 'GET',
         headers: {
             'Authorization': getToken(),
@@ -31,7 +44,7 @@ Promise.resolve(
 )
 .then(response => {
     if (response.status === 401) {
-        alert("U bent uitgelogd")
+        alert("Ongeldige sessie. U moet (opnieuw) inloggen.")
         logout()
     } else if (response.status === 200) {
         return response.json();
@@ -43,6 +56,7 @@ Promise.resolve(
     fillTable(data)
     includeHTMLgraph()
     addGraphs()
+    loadFirstGraph()
 })
 .catch((error) => {
     console.error('something is wrong', error);
@@ -81,7 +95,16 @@ function addClickRow(id) {
     const startGraph = document.getElementById(id)
     startGraph.onclick = () => {
         maakGrafiek(id, 7, "day")
+        sessionStorage.removeItem("assetName")
+        sessionStorage.setItem("assetName", id)
+        console.log(sessionStorage.getItem("assetName"))
+
     }
+}
+
+function addclickModal() {
+    const preselectName = sessionStorage.getItem("assetName")
+    console.log(preselectName)
 }
 
 // function getTimepoint(timepoint) {
@@ -92,3 +115,11 @@ function addClickRow(id) {
 //     return date + " " + time
 // }
 
+function loadFirstGraph() {
+    const cryptomuntKeuze = sessionStorage.getItem("assetName")
+    if (cryptomuntKeuze === null) {
+        getCryptomeroGrafiek()
+    } else {
+        maakGrafiek(cryptomuntKeuze, 7, "day")
+    }
+}
