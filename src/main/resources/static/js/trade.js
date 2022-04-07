@@ -15,7 +15,7 @@ import {
 } from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
 import {addGraphs, maakGrafiek, getCryptomeroGrafiek} from "./grafiekenGenerator.js";
-import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, addTradeFieldEventListeners, zoekKoers} from "./doTrade.js";
+import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, addTradeFieldEventListeners, zoekKoers, round} from "./doTrade.js";
 
 const url = new URL(window.location.href)
 
@@ -80,7 +80,7 @@ function fillTable(data) {
 
         const assetName = data[asset].asset.assetName
         // const timepoint = getTimepoint(data[asset].timepoint)
-        const rate = data[asset].rate
+        const rate = round(data[asset].rate)
 
         const rowNode = document.createElement("tr");
         rowNode.setAttribute("id",assetName);
