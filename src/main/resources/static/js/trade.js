@@ -8,7 +8,7 @@ Script for trade page Cryptomero
 import {includeHTML, includeHTMLgraph, includeHTMLTradeModal, addLogout, logout} from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
 import {addGraphs, maakGrafiek, getCryptomeroGrafiek} from "./grafiekenGenerator.js";
-import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, zoekKoers} from "./doTrade.js";
+import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, addTradeFieldEventListeners, zoekKoers} from "./doTrade.js";
 
 const url = new URL(window.location.href)
 
@@ -31,6 +31,7 @@ const openModalSetSelection = () => {
             zoekKoers(document.querySelector("#inputGroupSelect01").value)
         }
     })
+    addTradeFieldEventListeners()
     addTradeButtonsEventListeners()
 }
 
