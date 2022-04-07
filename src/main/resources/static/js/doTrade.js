@@ -36,8 +36,14 @@ function samenstellenOffer(){
     const assetName =  document.querySelector('#inputGroupSelect01').value
     let prijsOffer = document.querySelector('#offerPrijs').value
     let amount =  document.querySelector('#amountAsset').value * 1
-    if (!checkNumber(amount) || !checkNumber(prijsOffer)) {
-        alert("ongeldige invoer")
+    if (!checkNumber(amount)) {
+        alert("ongeldige hoeveelheid munten")
+        document.getElementById('amountAsset').value = null;
+        return 0;
+    }
+    if (!checkNumber(prijsOffer)) {
+        alert("ongeldige prijs")
+        document.getElementById('offerPrijs').value = null;
         return 0;
     }
     if (radiobuttonKoop.checked){
@@ -66,17 +72,12 @@ function storeOffer(){
             body: JSON.stringify(dataOffer)  // moet worden omgezet naar een string
         })
         .then(response => {
-            if (response.status === 201) {
                 response.text().then(function (text) {
                     alert(text)
-                    window.location = '../html/profile.html';
-                })
-            } else {
-                response.text().then(function (text) {
-                    alert(text)
+                    document.getElementById('amountAsset').value = null;
+                    document.getElementById('offerPrijs').value = null;
                 })
                 return;
-            }
         })
     }
 
@@ -86,7 +87,8 @@ function samenstellenDataBankTransactie(){
     const assetName =  document.querySelector('#inputGroupSelect01').value
     let amount =  document.querySelector('#amountAsset').value
     if (!checkNumber(amount)) {
-        alert("ongeldige invoer")
+        alert("ongeldige hoeveelheid munten")
+        document.getElementById('amountAsset').value = null;
         return 0;
     }
     if (radiobuttonKoop.checked){
@@ -115,21 +117,12 @@ function storeBankTransactie(){
             body: JSON.stringify(data)  // moet worden omgezet naar een string
         })
             .then(response => {
-                if (response.status === 201) {
-                    response.text().then(function (text) {
-                        alert(text)
-                        window.location = '../html/profile.html';
-                    })
-                } else {
-                    response.text().then(function (text) {
-                        alert(text)
-                    })
+                response.text().then(function (text) {
+                    alert(text)
+                    document.getElementById('amountAsset').value = null;
+                })
                 return;
-                }
             })
-            .then(data => {
-                console.log(typeof data)
-            });
     }
 
 
