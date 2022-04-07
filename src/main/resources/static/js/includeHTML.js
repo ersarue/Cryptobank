@@ -91,3 +91,12 @@ export const includeHTMLTradeModal = () => {
         return;
     }
 };
+
+export const preventBrowserPrevious = () => {
+    window.addEventListener( "pageshow", function ( event ) {
+        let perfEntries = performance.getEntriesByType("navigation");
+        if (perfEntries[0].type === "back_forward") {
+            location.reload();
+        }
+    });
+}
