@@ -103,10 +103,10 @@ public class OfferService {
                 System.out.println(e.getMessage());
                 int offerId = offerRepository.storeOne(offer);
                 System.out.println(matchList.toString());
-                throw new Exception("Het order is gedeeltelijk verwerkt\n"
+                return "Het order is gedeeltelijk verwerkt\n"
                         +"Er werden " + numberOfPerformedTransactions + " transacties verricht"
                         +"De laatste match kon niet verwerkt worden om de volgende reden:\n" + e.getMessage()
-                        +"Het resulterende order werd opgeslagen.");
+                        +"Het resulterende order werd opgeslagen.";
             }
 
             //todo als het wel lukt - offertabel updaten - offer model updaten

@@ -5,12 +5,21 @@ Script for trade page Cryptomero
 
 'use strict'
 
-import {includeHTML, includeHTMLgraph, includeHTMLTradeModal, addLogout, logout} from "./includeHTML.js";
+import {
+    includeHTML,
+    includeHTMLgraph,
+    includeHTMLTradeModal,
+    addLogout,
+    logout,
+    preventBrowserPrevious
+} from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
 import {addGraphs, maakGrafiek, getCryptomeroGrafiek} from "./grafiekenGenerator.js";
-import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, zoekKoers} from "./doTrade.js";
+import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, addTradeFieldEventListeners, zoekKoers} from "./doTrade.js";
 
 const url = new URL(window.location.href)
+
+preventBrowserPrevious()
 
 document.addEventListener('DOMContentLoaded', () => {
     includeHTML()
@@ -23,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const openModalSetSelection = () => {
     const preSelectCoin = sessionStorage.getItem("assetName")
-    console.log(preSelectCoin)
     Array.from(document.getElementById("inputGroupSelect01").options).forEach(optionElement => {
         if (preSelectCoin === optionElement.text) {
             console.log(optionElement.text)
@@ -31,6 +39,7 @@ const openModalSetSelection = () => {
             zoekKoers(document.querySelector("#inputGroupSelect01").value)
         }
     })
+    addTradeFieldEventListeners()
     addTradeButtonsEventListeners()
 }
 
@@ -79,7 +88,7 @@ function fillTable(data) {
         const cellNode1 = document.createElement("td")
         cellNode1.innerHTML = assetName;
         const cellNode2 = document.createElement("td")
-        cellNode2.innerHTML = rate;
+        cellNode2.innerHTML = "&#8364 " + rate;
         // const cellNode3 = document.createElement("td")
         // cellNode3.innerHTML = timepoint;
 

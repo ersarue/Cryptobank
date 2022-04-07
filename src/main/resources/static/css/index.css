@@ -37,7 +37,12 @@ h2 {
 }
 
 #submit-btn {
-  background: #6009ef;
+  background: #6610f2;
+  border-color: white;
+}
+
+#submit-btn:hover {
+  background-color: #792ff1;
 }
 
 .btn-register{

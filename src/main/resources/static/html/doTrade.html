@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>doTrade</title>
+    <link rel="stylesheet" href="../css/doTrade.css">
 <body>
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -32,7 +33,7 @@
 <!--                        Select buying or selling-->
                         <h6 class="text" id="buyOrSellQuestion">Wil je cryptomunten kopen of verkopen aan de bank?</h6>
                         <div class="btn-group mb-3" role="group2" aria-label="Basic radio toggle button group">
-<!--                            Choose to buy -->
+<!--                            Choose to buy-->
                             <input type="radio" class="btn-check" name="btnradio2" id="btnradio3" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio3">Kopen</label>
 <!--                            Choose to sell-->
@@ -43,22 +44,26 @@
                         <h6 class="text" >Om hoeveel munten gaat het?</h6>
                         <input class="form-control mb-3" id="amountAsset" type="text">
 <!--                        Current coin price-->
-                        <h6 class="text" id=koers">De huidige prijs per hele munt voor de gekozen valuta is:</h6>
-                        <input class="form-control mb-3" id="koersMunt" type="text" value="0.00" readonly>
+                        <h6 class="text" id="koers">De huidige prijs per hele munt voor de gekozen valuta</h6>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">€</span>
+                            <input class="form-control" id="koersMunt" type="text" value="0.00" readonly>
+                        </div>
 <!--                        Bank fee-->
-<!--                        TODO: Add bank fee-->
-                        <h6 class="text" id=fee">Transactiekosten</h6>
-                        <input class="form-control mb-3" type="text" value="0.00" readonly>
+                        <h6 class="text" id="feeLabel">Transactiekosten</h6>
+                        <input class="form-control mb-3" id="feeInput" type="text" value="1,65%" readonly>
 <!--                        Total price-->
-<!--                        TODO: Add total price-->
-                        <h6 class="text" id=total-price">Totaalprijs</h6>
-                        <input class="form-control mb-3" type="text" value="0.00" readonly>
+                        <h6 class="text" id="totalPriceLabel">Totaalprijs</h6>
+                        <div class="input-group mb-3 total-price">
+                            <span class="input-group-text">€</span>
+                            <input class="form-control" id="totalPriceInput" type="text" readonly>
+                        </div>
 <!--                        Price per coin in case of market place trade-->
                         <h6 class="text invisible" id="priceMarketPlaceTitle">
                             Voor welke maximumprijs per hele munt wil je deze cryptomunt kopen?</h6>
                         <div class="input-group mb-3 price-market-place invisible">
                             <span class="input-group-text">€</span>
-                            <input type="text" id="offerPrijs" class="form-control" >
+                            <input type="text" id="offerPrijs" class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">
