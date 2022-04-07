@@ -45,12 +45,10 @@ const getDutchDateFormat = (dateString) => {
 function retrieveTransactions(transactions) {
     const transactionsTable = document.querySelector("#transactionContent")
     for (let transaction in transactions) {
-
-        // const transactienummer = transactions[transaction].idTransaction;
-        console.log(transactions[transaction]);
+        console.log(transactions);
         const transactiedatum = transactions[transaction].transactionTime;
         const gever = transactions[transaction].assetGiver;
-        const geverVolledigeNaam = gever.firstName + " " + gever.lastName;
+        const geverVolledigeNaam = gever.firstName + " " + gever.namePrefix+ " " + gever.lastName;
         const ontvanger = transactions[transaction].assetRecipient
         const ontvangerVolledigeNaam = ontvanger.firstName + " " + ontvanger.lastName;
         const assetnaam = transactions[transaction].asset.assetName;
@@ -59,8 +57,6 @@ function retrieveTransactions(transactions) {
         const transactiekost = transactions[transaction].eurFee;
 
         const rowElement = createNode("tr");
-        // const cellElement1 = createNode("td");
-        // fillContent(cellElement1, transactienummer);
         const cellElement2 = createNode("td");
         fillContent(cellElement2, getDutchDateFormat(transactiedatum));
         const cellElement3 = createNode("td");
@@ -78,7 +74,6 @@ function retrieveTransactions(transactions) {
         const cellElement8 = createNode("td");
         fillContent(cellElement8, transactiekost);
 
-        // appendNode(rowElement, cellElement1)
         appendNode(rowElement, cellElement2)
         appendNode(rowElement, cellElement3)
         appendNode(rowElement, cellElement4)
@@ -88,7 +83,6 @@ function retrieveTransactions(transactions) {
         appendNode(rowElement, cellElement8)
 
         appendNode(transactionsTable, rowElement);
-
     }
 }
 
