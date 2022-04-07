@@ -7,6 +7,8 @@
 
 import {getToken} from "./tokenUtils.js";
 
+const url = new URL(window.location.href)
+
 export const addModalDropDown = () => {
 //als de gebruiker klikt op dropdownmenu wordt de juiste koers opgehaald
     document.querySelector('#inputGroupSelect01').addEventListener('click', () => {
@@ -46,7 +48,7 @@ function samenstellenOffer(){
 //de offer op marktplaats wordt gestored, ER zijn geen checks
 function storeOffer(){
     let dataOffer = samenstellenOffer()
-    fetch('http://localhost:8080/trade/offer', {
+    fetch(`${url.origin}/trade/offer`, {
             method: 'POST',
             headers: {
                 'Authorization': getToken(),
@@ -85,7 +87,7 @@ function samenstellenDataBankTransactie(){
 //de transactie met de bank wordt gestored, ER zijn geen checks
 function storeBankTransactie(){
     let data = samenstellenDataBankTransactie()
-    fetch('http://localhost:8080/trade/bank', {
+    fetch(`${url.origin}/trade/bank`, {
             method: 'POST',
             headers: {
                 'Authorization': getToken(),
@@ -96,9 +98,12 @@ function storeBankTransactie(){
         })
             .then(response => {
                     if (response.status===400){
-                        alert("foutmelding")
+                        response.text().then(function (text) {
+                            alert(text)
+                        })
+                    } else {
+                        return response.json()
                     }
-                    return response.json()
                 }
             )
             .then(data => {
@@ -108,8 +113,8 @@ function storeBankTransactie(){
 
 
 //wordt opgeroepen als klant klikt op dropdownmenu
-function zoekKoers(naamCrypto) {
-    fetch('http://localhost:8080/rates/latest/'+naamCrypto, {
+export const zoekKoers = (naamCrypto) => {
+    fetch(`${url.origin}/rates/latest/`+naamCrypto, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -126,7 +131,7 @@ function zoekKoers(naamCrypto) {
 }
 //zoekt alle 20 crypto's uit de tabel 'rate'.
 Promise.resolve(
-    fetch('http://localhost:8080/rates/latest', {
+    fetch(`${url.origin}/rates/latest`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -150,5 +155,5 @@ function fillDropDownMenu(data) {
         option.text = option.value = assetName;
         dropDownMenu.add(option, 0);
     }
-    document.querySelector("#koersMunt").value=data[0].rate
+    // document.querySelector("#koersMunt").value=data[0].rate
 }

@@ -28,12 +28,7 @@
 <!--INCLUDE partials-->
     <div includehtml="partials/navbar.html"></div>
     <div includehtml="partials/footer.html"></div>
-<!--    START modal handelen-->
-<div id="tradeModal" includehtmltrademodal="doTrade.html"></div>
-    <div id="handelButton-container" class="d-grid gap-2">
-            <button id="btn-trade" type="button" class="btn btn-register" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Handel Nu!</button>
-    </div>
-<!--    END modal handelen-->
+
 <!--    START container for 2 columns-->
     <div id="contentContainer" class="row d-flex .flex-row justify-content-center align-items-start border-0">
 <!--    START First grid column-->
@@ -56,9 +51,15 @@
 
 <!--    START Second grid column-->
         <div class="col-lg-6">
+            <!--    START modal handelen-->
+            <div id="tradeModal" includehtmltrademodal="doTrade.html"></div>
+            <div id="handelButton-container">
+                <button id="btn-trade" type="button" class="d-grid gap-2 col-6 mx-auto" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Handel Nu!</button>
+            </div>
+            <!--    END modal handelen-->
 <!--        START table2-->
             <div id="graph-container" class="cryptomero-table-container">
-                <div id="graphGenerator" includehtmlGraph="grafiekenGenerator.html"></div>
+                <div id="graphGenerator" includehtmlGraph="partials/grafiekenGenerator.html"></div>
             </div>
 <!--    END Second grid column-->
         </div>

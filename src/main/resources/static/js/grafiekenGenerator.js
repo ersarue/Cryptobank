@@ -1,5 +1,5 @@
 // window.addEventListener('load', onLoad)
-function onLoad(){
+export const getCryptomeroGrafiek = () => {
     let xValues = ["","","","","",""];
     let yValues = [0,23,1,19,33,4];
     grafiek(xValues,yValues,0,50)
