@@ -11,8 +11,9 @@
             <div class="modal-content">
                 <form>
                     <div class="modal-header">
+                        <img class="cryptomero-logo" src="../../images/chickie_klein.png" alt="Cryptomero logo">
                         <h5 class="modal-title" id="staticBackdropLabel">Handelen in cryptomunten</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button id="button-close-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
 <!--                        Select coin-->
@@ -22,10 +23,10 @@
                         </div>
 <!--                        Select trade partner-->
                         <h6 class="text" id=radio1Question">Selecteer handelsoptie</h6>
-                        <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group">
+                        <div id="btn-bank-market" class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group">
 <!--                            Choose to trade with bank-->
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="btnradio1">Handel met bank</label>
+                            <label id="btnradio1label" class="btn btn-outline-primary" for="btnradio1">Handel met bank</label>
 <!--                            Choose market place trade-->
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
                             <label class="btn btn-outline-primary" for="btnradio2">Handel op marktplaats</label>
