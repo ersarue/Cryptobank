@@ -46,10 +46,10 @@ function retrieveTransactions(transactions) {
     const transactionsTable = document.querySelector("#transactionContent")
     for (let transaction in transactions) {
         const transactiedatum = transactions[transaction].transactionTime;
-        const gever = transactions[transaction].assetGiver;
-        const geverVolledigeNaam = gever.firstName + " " + gever.namePrefix + " " + gever.lastName;
-        const ontvanger = transactions[transaction].assetRecipient
-        const ontvangerVolledigeNaam = ontvanger.firstName + " " + ontvanger.lastName;
+        const koper = transactions[transaction].assetRecipient
+        const koperVolledigeNaam = koper.firstName + " " + koper.lastName;
+        const verkoper = transactions[transaction].assetGiver;
+        const verkoperVolledigeNaam = verkoper.firstName + " " + verkoper.namePrefix + " " + verkoper.lastName;
         const assetnaam = transactions[transaction].asset.assetName;
         const hoeveelheid = transactions[transaction].assetAmount;
         const bedrag = `€ ${transactions[transaction].eurAmount}`;
@@ -58,12 +58,11 @@ function retrieveTransactions(transactions) {
         const rowElement = createNode("tr");
         const cellElement2 = createNode("td");
         fillContent(cellElement2, getDutchDateFormat(transactiedatum));
-        const cellElement3 = createNode("td");
-        fillContent(cellElement3, geverVolledigeNaam);
-        rowElement.classList.add('gever');
-        const cellElement4 = createNode("td");
-        fillContent(cellElement4, ontvangerVolledigeNaam);
-        rowElement.classList.add('ontvanger');
+
+        const cellElement3 = createNode("td"); // verkoper
+        fillContent(cellElement3, verkoperVolledigeNaam);
+        const cellElement4 = createNode("td"); // koper
+        fillContent(cellElement4, koperVolledigeNaam);
         const cellElement5 = createNode("td");
         fillContent(cellElement5, assetnaam);
         const cellElement6 = createNode("td");
@@ -80,7 +79,6 @@ function retrieveTransactions(transactions) {
         appendNode(rowElement, cellElement6)
         appendNode(rowElement, cellElement7)
         appendNode(rowElement, cellElement8)
-
         appendNode(transactionsTable, rowElement);
     }
 }
@@ -96,6 +94,5 @@ Promise.resolve(
     .then(response => response.json())
     .then(transactions => {
         retrieveTransactions(transactions)
-        console.log(transactions);
     })
     .catch(error => console.error("Something went wrong. Transactions cannot be loaded!", error));
