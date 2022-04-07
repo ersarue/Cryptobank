@@ -125,8 +125,11 @@ export async function zoekKoers(naamCrypto) {
 
 // Rounds the rate amounts to a precise two decimals
 const round = (num) => {
-    const number = Number((Math.abs(num) * 100).toPrecision(15));
-    return Math.round(number) / 100 * Math.sign(num);
+    if (num >= 1){
+        return num.toFixed(2)
+    } else {
+        return num.toPrecision(4)
+    }
 }
 
 //zoekt alle 20 crypto's uit de tabel 'rate'.
