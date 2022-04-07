@@ -36,6 +36,10 @@ function samenstellenOffer(){
     const assetName =  document.querySelector('#inputGroupSelect01').value
     let prijsOffer = document.querySelector('#offerPrijs').value
     let amount =  document.querySelector('#amountAsset').value * 1
+    if (!checkNumber(amount) || !checkNumber(prijsOffer)) {
+        alert("ongeldige invoer")
+        return 0;
+    }
     if (radiobuttonKoop.checked){
         amount = amount * -1
     }
@@ -49,6 +53,9 @@ function samenstellenOffer(){
 //de offer op marktplaats wordt gestored, ER zijn geen checks
 function storeOffer(){
     let dataOffer = samenstellenOffer()
+    if (dataOffer === 0) {
+        return;
+    }
     fetch(`${url.origin}/trade/offer`, {
             method: 'POST',
             headers: {
@@ -58,13 +65,19 @@ function storeOffer(){
             },
             body: JSON.stringify(dataOffer)  // moet worden omgezet naar een string
         })
-            .then(response => {
-                    if (response.status===400){
-                        alert("foutmelding")
-                    }
-                    return response.json()
-                }
-            )
+        .then(response => {
+            if (response.status === 201) {
+                response.text().then(function (text) {
+                    alert(text)
+                    window.location = '../html/profile.html';
+                })
+            } else {
+                response.text().then(function (text) {
+                    alert(text)
+                })
+                return;
+            }
+        })
     }
 
 //er wordt gecheckt of er een koop of verkoop met de bank plaatsvindt
@@ -72,6 +85,10 @@ function samenstellenDataBankTransactie(){
     const radiobuttonKoop = document.querySelector('#btnradio3')
     const assetName =  document.querySelector('#inputGroupSelect01').value
     let amount =  document.querySelector('#amountAsset').value
+    if (!checkNumber(amount)) {
+        alert("ongeldige invoer")
+        return 0;
+    }
     if (radiobuttonKoop.checked){
         amount = amount * -1
     }
@@ -85,6 +102,9 @@ function samenstellenDataBankTransactie(){
 //de transactie met de bank wordt gestored, ER zijn geen checks
 function storeBankTransactie(){
     let data = samenstellenDataBankTransactie()
+    if (data === 0) {
+        return;
+    }
     fetch(`${url.origin}/trade/bank`, {
             method: 'POST',
             headers: {
@@ -95,17 +115,20 @@ function storeBankTransactie(){
             body: JSON.stringify(data)  // moet worden omgezet naar een string
         })
             .then(response => {
-                    if (response.status===400){
-                        response.text().then(function (text) {
-                            alert(text)
-                        })
-                    } else {
-                        return response.json()
-                    }
+                if (response.status === 201) {
+                    response.text().then(function (text) {
+                        alert(text)
+                        window.location = '../html/profile.html';
+                    })
+                } else {
+                    response.text().then(function (text) {
+                        alert(text)
+                    })
+                return;
                 }
-            )
+            })
             .then(data => {
-                console.log(data)
+                console.log(typeof data)
             });
     }
 
@@ -229,4 +252,10 @@ export const addTradeFieldEventListeners = () => {
     coinAmount.addEventListener('blur', () => {
         calculateTotalPrice();
     });
+}
+
+const checkNumber = (input) => {
+    if (isNaN(input) == false && input > 0) {
+        return true;
+    } else { return false; }
 }
