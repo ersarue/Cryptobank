@@ -14,13 +14,13 @@ import java.util.List;
 public class TransactionRepository {
 
     private TransactionDao transactionDao;
-    private CustomerDao customerDao;
+    private CustomerRepository customerRepository;
     private AssetDao assetDao;
 
     @Autowired
-    public TransactionRepository(TransactionDao transactionDao, CustomerDao customerDao, AssetDao assetDao) {
+    public TransactionRepository(TransactionDao transactionDao, CustomerRepository customerRepository, AssetDao assetDao) {
         this.transactionDao = transactionDao;
-        this.customerDao = customerDao;
+        this.customerRepository = customerRepository;
         this.assetDao = assetDao;
     }
 
@@ -66,8 +66,8 @@ public class TransactionRepository {
      * @return              The transaction with its fields set with the corresponding customer and asset objects.
      */
     private Transaction completeTransactionObject(Transaction transaction) {
-        Customer asset_giver = customerDao.findById(transactionDao.findAssetGiverId(transaction));
-        Customer asset_recipient = customerDao.findById(transactionDao.findAssetRecipientId(transaction));
+        Customer asset_giver = customerRepository.findById(transactionDao.findAssetGiverId(transaction));
+        Customer asset_recipient = customerRepository.findById(transactionDao.findAssetRecipientId(transaction));
         Asset asset = assetDao.findByName(transactionDao.findAssetNameOfTransaction(transaction));
 
         transaction.setAssetGiver(asset_giver);
