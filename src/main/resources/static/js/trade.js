@@ -31,7 +31,7 @@ const openModalSetSelection = () => {
             zoekKoers(document.querySelector("#inputGroupSelect01").value)
         }
     })
-    addTradeButtonsEventListener()
+    addTradeButtonsEventListeners()
 }
 
 Promise.resolve(
