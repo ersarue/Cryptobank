@@ -12,6 +12,7 @@ window.addEventListener( 'DOMContentLoaded',  async () => {
     // Include navbar and footer
     includeHTML();
     addLogout();
+    sessionStorage.clear();
     // Load the marketplace offers from the db
     await getOffers();
 });
