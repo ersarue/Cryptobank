@@ -2,21 +2,18 @@
 body {
     background-image: url("../images/transactions.jpeg");
     background-size: cover;
-    /*opacity: 1.1;*/
+    background-repeat: no-repeat;
 }
 
-/*.table-container {*/
-/*    display: flex;*/
-/*    justify-content: left;*/
-/*    text-align: center;*/
-/*}*/
+.table-container {
+    display: flex;
+    justify-content: left;
+    text-align: center;
+    overflow-x: auto;
+}
 
 .card-body {
     text-align: center;
-}
-
-.gever, ontvanger {
-    width: 100%;
 }
 
 #transactionsCatalogue {
@@ -28,12 +25,6 @@ body {
     width: 80%;
 }
 
-.transaction-container {
-    margin-top: 8%;
-    opacity: 0.9;
-    background-color: #6610f2;
-    border-radius: 10px;
-}
 
 
 

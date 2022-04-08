@@ -2,7 +2,7 @@
 
 'use strict'
 
-import {includeHTML, addLogout} from "./includeHTML.js";
+import {includeHTML, addLogout, logout} from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
 
 // logout function
@@ -44,6 +44,21 @@ const getDutchDateFormat = (dateString) => {
 // retrieve transactions data from database
 function retrieveTransactions(transactions) {
     const transactionsTable = document.querySelector("#transactionContent")
+
+    // sort transaction by transaction date
+    transactions.sort(function (a, b) {
+        const x = a.transactionTime;
+        const y = b.transactionTime;
+        if (x < y) {
+            return -1
+        }
+        if (x > y) {
+            return 1
+        }
+        return 0
+    })
+
+    // loop through transactions and create table element and content
     for (let transaction in transactions) {
         const transactiedatum = transactions[transaction].transactionTime;
         const koper = transactions[transaction].assetRecipient
@@ -58,7 +73,6 @@ function retrieveTransactions(transactions) {
         const rowElement = createNode("tr");
         const cellElement2 = createNode("td");
         fillContent(cellElement2, getDutchDateFormat(transactiedatum));
-
         const cellElement3 = createNode("td"); // verkoper
         fillContent(cellElement3, verkoperVolledigeNaam);
         const cellElement4 = createNode("td"); // koper
@@ -91,7 +105,17 @@ Promise.resolve(
         headers: {'Content-Type': 'application/json', 'Authorization': getToken()}
     })
 )
-    .then(response => response.json())
+    .then(response => {
+            if (response.status === 401) {
+                alert("Ongeldige sessie. U moet (opnieuw) inloggen.")
+                logout()
+            } else if (response.status === 200) {
+                return response.json();
+            } else {
+                throw new Error("Er is iets fout gegaan bij het ophalen van historie" + response.status)
+            }
+        }
+    )
     .then(transactions => {
         retrieveTransactions(transactions)
     })
