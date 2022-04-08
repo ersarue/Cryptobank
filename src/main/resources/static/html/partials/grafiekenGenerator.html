@@ -6,12 +6,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script src="../../js/grafiekenGenerator.js" defer></script>
 <body>
-  <div id="naamCrypto"></div>
+    <div id="naamCrypto">(selecteer munt)</div>
   <canvas id="myChart" style="width:100%;max-width:600px" ></canvas>
-  <div id="button-block">
-    <button id="dag" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 1 DAG </button>
-    <button id="week" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 1 WEEK </button>
-    <button id="maand" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 4 WEKEN </button>
+  <div id="title-buttons-container">
+    <div id="title-graphs">koersverloop</div>
+    <div id="button-block">
+      <button id="dag" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 1 DAG </button>
+      <button id="week" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 1 WEEK </button>
+      <button id="maand" class="btn btn-outline-primary btn-block border-1 fa-lg mb-0"> 4 WEKEN </button>
+    </div>
   </div>
 </body>
 </html>

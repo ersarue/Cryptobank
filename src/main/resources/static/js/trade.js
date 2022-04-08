@@ -15,7 +15,7 @@ import {
 } from "./includeHTML.js";
 import {getToken} from "./tokenUtils.js";
 import {addGraphs, maakGrafiek, getCryptomeroGrafiek} from "./grafiekenGenerator.js";
-import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, addTradeFieldEventListeners, zoekKoers} from "./doTrade.js";
+import {addModalDropDown, addModalSubmitButton, addTradeButtonsEventListeners, addTradeFieldEventListeners, zoekKoers, round} from "./doTrade.js";
 
 const url = new URL(window.location.href)
 
@@ -34,7 +34,7 @@ const openModalSetSelection = () => {
     const preSelectCoin = sessionStorage.getItem("assetName")
     Array.from(document.getElementById("inputGroupSelect01").options).forEach(optionElement => {
         if (preSelectCoin === optionElement.text) {
-            console.log(optionElement.text)
+            // console.log(optionElement.text)
             optionElement.setAttribute("selected", "selected")
             zoekKoers(document.querySelector("#inputGroupSelect01").value)
         }
@@ -80,7 +80,7 @@ function fillTable(data) {
 
         const assetName = data[asset].asset.assetName
         // const timepoint = getTimepoint(data[asset].timepoint)
-        const rate = data[asset].rate
+        const rate = round(data[asset].rate)
 
         const rowNode = document.createElement("tr");
         rowNode.setAttribute("id",assetName);
@@ -114,7 +114,7 @@ function addClickRow(id) {
 
 function addclickModal() {
     const preselectName = sessionStorage.getItem("assetName")
-    console.log(preselectName)
+    // console.log(preselectName)
 }
 
 // function getTimepoint(timepoint) {

@@ -10,11 +10,35 @@
     border-color: white;
 }
 
+#button-close-modal {
+    margin-right: auto;
+}
+
+/* START radio buttons */
+.btn-outline-primary {
+    background: white;
+    border-color: #6610f2;
+    color: #6610f2;
+}
+
+.btn-outline-primary:hover {
+    background: #6610f2;
+    border-color: #6610f2;
+    color: white;
+}
+
+.btn-check:checked + .btn-outline-primary {
+    background: #6610f2;
+    border-color: #6610f2;
+    color: white;
+}
+/* START radio buttons */
+
 #actieButton {
-    background: var(--paars);
+    background: #6610f2;
     color: white;
 }
 
 #actieButton:hover {
-    background: var(--hover-paars);
+    background: #6610f2;
 }
