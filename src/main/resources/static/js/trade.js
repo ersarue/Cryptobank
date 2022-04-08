@@ -34,7 +34,7 @@ const openModalSetSelection = () => {
     const preSelectCoin = sessionStorage.getItem("assetName")
     Array.from(document.getElementById("inputGroupSelect01").options).forEach(optionElement => {
         if (preSelectCoin === optionElement.text) {
-            console.log(optionElement.text)
+            // console.log(optionElement.text)
             optionElement.setAttribute("selected", "selected")
             zoekKoers(document.querySelector("#inputGroupSelect01").value)
         }
@@ -114,7 +114,7 @@ function addClickRow(id) {
 
 function addclickModal() {
     const preselectName = sessionStorage.getItem("assetName")
-    console.log(preselectName)
+    // console.log(preselectName)
 }
 
 // function getTimepoint(timepoint) {

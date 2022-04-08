@@ -120,6 +120,7 @@ function storeBankTransactie(){
                 response.text().then(function (text) {
                     alert(text)
                     document.getElementById('amountAsset').value = null;
+                    document.getElementById('totalPriceInput').value = null;
                 })
                 return;
             })
