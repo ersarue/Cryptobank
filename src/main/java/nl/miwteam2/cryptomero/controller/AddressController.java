@@ -13,17 +13,17 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 /**
+ * Controller made for portfolio purposes only. Endpoints are not used in the Cryptomero application.
  * @author Petra Coenen
- * @version 1.6
  */
 
 @RestController
 @RequestMapping("/address")
 public class AddressController {
 
-    private final AddressService addressService;
-
     private final Logger logger = LoggerFactory.getLogger(AddressController.class);
+
+    private AddressService addressService;
 
     @Autowired
     public AddressController(AddressService service) {

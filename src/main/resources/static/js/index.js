@@ -1,5 +1,4 @@
 // Author: Petra Coenen
-
 "use strict";
 
 const url = new URL(window.location.href);
@@ -12,13 +11,13 @@ const passwordInput = document.getElementById('password');
 
 document.addEventListener('DOMContentLoaded', () => {
     // Prevent submission of form if invalid
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('submit', (e) => {
         if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
         } else {
-            event.preventDefault();
-            login();
+            e.preventDefault();
+            login;
         }
         form.classList.add('was-validated');
         }, false);

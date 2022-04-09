@@ -1,6 +1,8 @@
 package nl.miwteam2.cryptomero.repository;
 
 import nl.miwteam2.cryptomero.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,8 @@ import java.util.List;
 @Repository
 public class TransactionRepository {
 
+    private final Logger logger = LoggerFactory.getLogger(TransactionRepository.class);
+
     private TransactionDao transactionDao;
     private CustomerRepository customerRepository;
     private AssetDao assetDao;
@@ -22,6 +26,7 @@ public class TransactionRepository {
         this.transactionDao = transactionDao;
         this.customerRepository = customerRepository;
         this.assetDao = assetDao;
+        logger.info("New TransactionRepository");
     }
 
     public int storeOne(Transaction transaction) {

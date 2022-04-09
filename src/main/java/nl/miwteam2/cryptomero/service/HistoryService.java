@@ -2,6 +2,8 @@ package nl.miwteam2.cryptomero.service;
 
 import nl.miwteam2.cryptomero.domain.Transaction;
 import nl.miwteam2.cryptomero.repository.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,14 @@ import java.util.stream.Stream;
 @Service
 public class HistoryService {
 
+    private final Logger logger = LoggerFactory.getLogger(HistoryService.class);
+
     private TransactionRepository transactionRepository;
 
     @Autowired
     public HistoryService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
+        logger.info("New HistoryService");
     }
 
     /**
