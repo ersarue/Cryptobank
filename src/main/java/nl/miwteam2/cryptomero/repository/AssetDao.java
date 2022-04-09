@@ -52,7 +52,6 @@ public class AssetDao implements GenericDao<Asset> {
         return jdbcTemplate.update(sql, asset.getAssetAbbr(), asset.getAssetName());
     }
 
-    //todo give Asset an id for consistency?
     @Override
     public int deleteOne(int id) {
         return 0;

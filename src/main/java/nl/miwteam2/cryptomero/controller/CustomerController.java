@@ -36,7 +36,7 @@ public class CustomerController {
         }
     }
 
-
+    //TODO remove this method?
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
         try {
@@ -44,23 +44,5 @@ public class CustomerController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-    }
-
-    @GetMapping
-    public List<Customer> getAll(){
-        //Omitted until required
-        return null;
-    }
-
-    @PutMapping
-    public ResponseEntity<?> updateOne(@RequestBody Customer customer){
-        //Omitted until required
-        return null;
-    }
-
-    @DeleteMapping
-    public ResponseEntity<?> deleteOne(@RequestBody int id) {
-        //Omitted until required
-        return null;
     }
 }

@@ -27,10 +27,6 @@ public class Rate {
         return timepoint;
     }
 
-    public void setTimepoint(LocalDateTime timepoint) {
-        this.timepoint = timepoint;
-    }
-
     public double getRate() {
         return rate;
     }
