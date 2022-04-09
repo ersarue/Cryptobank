@@ -7,6 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
+import java.net.URI;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +30,7 @@ class AddressServiceTest {
     private Address addressHaarlem = new Address(4, "Schachgelstraat", 5, "ZW", "3898CJ", "Haarlem");
     private Address addressTiel = new Address(6, "Mareplein", 45, "3489DH", "Tiel");
     private List<Address> allAddresses = new ArrayList<>();
+    private Address addressToStore = new Address("Hooigracht", 15, "3549JH", "Leiden");
 
     public AddressServiceTest() {
         super();
@@ -40,6 +43,14 @@ class AddressServiceTest {
         Mockito.when(daoMock.findById(14)).thenReturn(addressZutphen);
         Mockito.when(daoMock.findById(6)).thenReturn(addressTiel);
         Mockito.when(daoMock.getAll()).thenReturn(allAddresses);
+        Mockito.when(daoMock.storeOne(addressToStore)).thenReturn(0);
+    }
+
+    @Test
+    void storeAddress() {
+        int expected = 0;
+        int actual = serviceUnderTest.storeAddress(new Address("Hooigracht", 15, "3549JH", "Leiden"));
+        assertThat(actual).isNotNull().isEqualTo(expected);
     }
 
     @Test
@@ -61,6 +72,16 @@ class AddressServiceTest {
         Collections.addAll(expected, address1, address2);
         List<Address> actual = serviceUnderTest.getAllAddresses();
         assertThat(actual).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
+    void updateAddress() {
+        // TODO: Implement
+    }
+
+    @Test
+    void deleteAddress() {
+        // TODO: Implement
     }
 
     @Test
@@ -131,5 +152,40 @@ class AddressServiceTest {
     @ValueSource(strings = {"invalidPostalCode","3829 AB", "3284  KD","123KR","4317ERF","2214 D3","4291F9"})
     void isInvalidFormat(String postalCode) {
         assertFalse(serviceUnderTest.isValidFormat(postalCode));
+    }
+
+    @Test
+    void isValidAddress() {
+        // TODO: Implement
+    }
+
+    @Test
+    void getPdokStreetNameCity() {
+        // TODO: Implement
+    }
+
+    @Test
+    void createPdokUrl() {
+        String postalCode = "1234AB";
+        String houseString = "32A";
+        String base_url =
+                "http://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=%s+and+%s&fl=straatnaam,woonplaatsnaam";
+        String expected = String.format(base_url, postalCode, houseString);
+        String actual = serviceUnderTest.createPdokUrl(postalCode, houseString);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
+    void createGetRequest() {
+        String url = "http://url.nl";
+        HttpRequest expected = HttpRequest.newBuilder().GET().header("accept", "application/json")
+                .uri(URI.create(url)).build();
+        HttpRequest actual = serviceUnderTest.createGetRequest(url);
+        assertThat(actual).isNotNull().isEqualTo(expected);
+    }
+
+    @Test
+    void processJsonAddress() {
+        // TODO: Implement
     }
 }
