@@ -1,14 +1,15 @@
 package nl.miwteam2.cryptomero.controller;
 
-import nl.miwteam2.cryptomero.domain.CustomerDto;
-import nl.miwteam2.cryptomero.service.CustomerService;
 import nl.miwteam2.cryptomero.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//controller voor het store van 3000 klanten
+/**
+ * class responsible for storing 3000 customers
+ * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+ */
 
 @RestController
 public class StoreController {

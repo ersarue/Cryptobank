@@ -2,7 +2,6 @@ package nl.miwteam2.cryptomero.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.util.Objects;
 
 /**
@@ -23,7 +22,7 @@ public class BankAccount {
         this.balanceEur = balanceEur;
     }
     /** constructor chaining
-     * geen parameteter voor userAccount
+     * geen parameteer voor userAccount
      */
     public BankAccount(String iban, double balanceEur){
         this.userAccount=null;

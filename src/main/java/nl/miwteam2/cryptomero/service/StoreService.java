@@ -5,15 +5,16 @@ import nl.miwteam2.cryptomero.domain.CustomerDto;
 import nl.miwteam2.cryptomero.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * class responsible for all storing 3000 customers
+ * @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+ */
 @Service
 public class StoreService {
     private CustomerService customerService;
@@ -124,7 +125,6 @@ public class StoreService {
         while (invoer.hasNextLine()) {
             regelsUitBestand.add(invoer.nextLine());
         }
-
         if (regelsUitBestand.size() > 0) {
             for (int i = 0; i < regelsUitBestand.size(); i++) {
                 bsnLijst.add(regelsUitBestand.get(i));
