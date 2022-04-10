@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Endpoints for trade with the bank or with the marketplace
- * @author: Samuel Geurts, studentnr: 500893275 - MIW Cohort 26
- * version 1.0
 */
 
 @RestController
@@ -32,6 +30,12 @@ public class TradeController {
         this.authenticationService = authenticationService;
     }
 
+    /**
+     * takes al data to be able to place an offer in the marketplace
+     * @param tradeOfferDto
+     * @param jwt
+     * @return
+     */
     @PostMapping("/offer")
     public ResponseEntity<?> storeOneOffer(@RequestBody TradeOfferDto tradeOfferDto, @RequestHeader ("Authorization") String jwt) {
         Customer customer = authenticationService.getAuthenticatedCustomer(jwt);
@@ -48,6 +52,12 @@ public class TradeController {
         }
     }
 
+    /**
+     * takes al data to be able to perform a transaction with the bank
+     * @param tradeBankDto
+     * @param jwt transparant token containing customerId
+     * @return
+     */
     @PostMapping("/bank")
     public ResponseEntity<?> tradeWithBank(@RequestBody TradeBankDto tradeBankDto, @RequestHeader ("Authorization") String jwt) {
         Customer customer = authenticationService.getAuthenticatedCustomer(jwt);
@@ -63,7 +73,12 @@ public class TradeController {
         }
     }
 
-    // todo get /trade/getoffers (persoonlijk offer)
+
+    /**
+     * retrieves all offers performed by the customer that is logged in
+     * @param jwt transparant token containing customerId
+     * @return
+     */
     @GetMapping("/getoffers")
     public ResponseEntity<?> getAll(@RequestHeader ("Authorization") String jwt) {
         int accountId = authenticationService.getAuthenticatedIdAccount(jwt);
@@ -79,6 +94,12 @@ public class TradeController {
         }
     }
 
+    /**
+     * delete an offer clicked by the logged in customer
+     * @param offerId
+     * @param jwt transparant token containing customerId
+     * @return
+     */
     // todo delete /trade/deleteoffer (persoonlijk offer deleten)
     @CrossOrigin
     @DeleteMapping("/deleteoffer/{offerId}")
