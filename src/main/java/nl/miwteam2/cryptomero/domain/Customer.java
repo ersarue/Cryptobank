@@ -19,11 +19,7 @@ public class Customer extends UserAccount {
     private BankAccount bankAccount;
     private Map<String,Double> wallet;
 
-    // in de constructor alleen primitieve variabelen
-    // de rootrepo gebruikt setters om de verwijzingen naar andere objecten te setten
-    //public Customer(String email, String password, String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
     public Customer(String firstName, String namePrefix, String lastName, LocalDate dob, String bsn, String telephone) {
-
         this.firstName = firstName;
         this.namePrefix = namePrefix;
         this.lastName = lastName;
@@ -31,6 +27,7 @@ public class Customer extends UserAccount {
         this.bsn = bsn;
         this.telephone = telephone;
     }
+
     public Customer(CustomerDto customerDto){
         this.firstName=customerDto.getFirstName();
         this.namePrefix=customerDto.getNamePrefix();
@@ -42,7 +39,6 @@ public class Customer extends UserAccount {
         this.setEmail(customerDto.getEmail());
         this.setPassword(customerDto.getPassword());
     }
-
 
     public String getFirstName() {
         return firstName;

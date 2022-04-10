@@ -48,7 +48,6 @@ public class CustomerService {
      * @return              The stored customer if storage was successful
      * @throws Exception    If the customer cannot be stored
      */
-
     public Customer storeOne(CustomerDto customerDto) throws Exception {
 
         //Check whether all fields are valid, otherwise throw exception

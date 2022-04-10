@@ -3,6 +3,12 @@ package nl.miwteam2.cryptomero.domain;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+* Represents a transaction completed when a crypto asset is bought or sold. Technically represents two transactions
+* in one: the crypto asset transferred and the amount of euros transferred.
+* @author Petra Coenen & Samuël Geurts
+*/
+
 public class Transaction {
     private int idTransaction;
     private LocalDateTime transactionTime;

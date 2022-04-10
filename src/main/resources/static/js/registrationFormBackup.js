@@ -1,3 +1,5 @@
+// @author Marcel Brachten, studentnr: 500893228 - MIW Cohort 26
+
 const MAX_LENGTH_FIRST_NAME = 10;
 const MAX_LENGTH_NAME_PREFIX = 15;
 const MAX_LENGTH_LAST_NAME = 10;

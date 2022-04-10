@@ -1,7 +1,7 @@
 // Author: Samuel, Stijn, Mink, Petra
 'use strict'
 
-import { getToken, removeToken } from './tokenUtils.js';
+import { getToken } from './tokenUtils.js';
 import { includeHTML, addLogout, logout } from './includeHTML.js';
 import { includeNoOffersBox } from './includeNoOffersBox.js';
 import { includeNoAssetsBox } from './includeNoAssetsBox.js';
@@ -16,8 +16,6 @@ window.addEventListener( 'DOMContentLoaded',  async () => {
     // Load the marketplace offers from the db
     await getOffers();
 });
-
-//todo rate zonder token op te halen?
 
 Promise.all([
     fetch(`${url.origin}/portfolio/assets`, {
@@ -71,7 +69,7 @@ const getOffers = async () => {
             alert('Ongeldige sessie. U moet (opnieuw) inloggen.');
             logout();
         } else {
-            throw new Error('Er is iets fout gegaan bij het ophalen van de offerdata');
+            alert('Er is iets fout gegaan bij het ophalen van de offerdata. Probeer het later nog eens.');
         }
     } catch (e) {
         console.log(e);
@@ -231,7 +229,7 @@ const deleteOffer = async (idOffer) => {
             }
         });
         if (response.status === 200) {
-            console.log('Verwijderen aanbieding gelukt!') // TODO: verwijder
+            console.log('Verwijderen aanbieding gelukt!') // TODO: verwijder/refactor
         } else if (response.status === 401) {
             alert('Ongeldige sessie. U moet (opnieuw) inloggen.')
         } else {
@@ -241,10 +239,3 @@ const deleteOffer = async (idOffer) => {
         console.log(e);
     }
 }
-
-// // Logs out the current user and redirects user to landing page
-// function logout() {
-//     console.log('logout');
-//     removeToken();
-//     window.location = '../index.html';
-// }

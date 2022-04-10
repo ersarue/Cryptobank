@@ -5,7 +5,6 @@ import java.util.Objects;
 /**
 * Represents a customer address.
 * @author Petra Coenen
-* @version 1.3
 */
 
 public class Address {

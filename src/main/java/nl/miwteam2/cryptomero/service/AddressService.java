@@ -22,15 +22,14 @@ import java.util.Map;
 
 /**
  * @author Petra Coenen
- * @version 1.9
  */
 
 @Service
 public class AddressService {
 
-    private final AddressDao addressDao;
-
     private final Logger logger = LoggerFactory.getLogger(AddressService.class);
+
+    private AddressDao addressDao;
 
     @Autowired
     public AddressService(AddressDao dao) {
