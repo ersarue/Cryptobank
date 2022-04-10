@@ -17,7 +17,6 @@ import java.util.Objects;
 
 /**
  * @author Petra Coenen
- * @version 1.3
  */
 
 @Repository
@@ -25,11 +24,11 @@ public class AddressDao implements GenericDao<Address> {
 
     private final Logger logger = LoggerFactory.getLogger(AddressDao.class);
 
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public AddressDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        logger.info("New JdbcAddressDao");
+        logger.info("New AddressDao");
     }
 
     public int storeOne(Address address) {
@@ -73,8 +72,7 @@ public class AddressDao implements GenericDao<Address> {
     }
 
     public int updateOne(Address address) {
-        String sql = "UPDATE address " +
-                "SET street_name = ?, house_no = ?, house_add = ?, postal_code = ?, city = ? " +
+        String sql = "UPDATE address SET street_name = ?, house_no = ?, house_add = ?, postal_code = ?, city = ? " +
                 "WHERE id_address = ?;";
         return jdbcTemplate.update(sql, address.getStreetName(), address.getHouseNo(), address.getHouseAdd(),
                 address.getPostalCode(), address.getCity(), address.getIdAddress());

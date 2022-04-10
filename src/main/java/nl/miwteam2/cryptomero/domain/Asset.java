@@ -20,16 +20,8 @@ public class Asset {
           return assetName;
      }
 
-     public void setAssetName(String assetName) {
-          this.assetName = assetName;
-     }
-
      public String getAssetAbbr() {
           return assetAbbr;
-     }
-
-     public void setAssetAbbr(String assetAbbr) {
-          this.assetAbbr = assetAbbr;
      }
 
      @Override
