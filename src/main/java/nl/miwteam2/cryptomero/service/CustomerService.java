@@ -247,7 +247,6 @@ public class CustomerService {
      * @return              True if the password contains one or more sequences; false if it does not
      */
     public boolean isRepetitive(String password) {
-        //todo alleen zware eisen als het password te kort is
         //checkt herhalingen van 4 de zelfde tekens achter elkaar
         Pattern patChar = Pattern.compile("(.)\\1\\1\\1"); //hhhh mag niet
 

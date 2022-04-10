@@ -41,7 +41,7 @@ class CustomerDaoTest {
 
     @Test
     void storeOne() {
-        //TODO
+
     }
 
     @Test
