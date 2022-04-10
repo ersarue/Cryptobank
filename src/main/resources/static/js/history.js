@@ -11,26 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
     addLogout()
 })
 
-// create an element
-const createNode = (elem) => {
-    return document.createElement(elem);
-};
+const url = new URL(window.location.href);
 
-// append an element to parent
-const appendNode = (parent, child) => {
-    parent.appendChild(child);
-}
-
-// fill content of element
-const fillContent = (elem, content) => {
+// create and append an element to parent and fill content of the element
+const createAndAppendElement = (elem, parent, content) => {
+    elem = document.createElement(elem);
     elem.innerText = content;
-}
+    return parent.appendChild(elem);
+};
 
 // change date time format to Dutch local format
 const getDutchDateFormat = (dateString) => {
     const date = new Date(dateString);
     const options = {
-        weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -41,63 +34,32 @@ const getDutchDateFormat = (dateString) => {
     return date.toLocaleDateString('nl-NL', options);
 }
 
-// retrieve transactions data from database
+// retrieve transactions from database
 function retrieveTransactions(transactions) {
+    transactions.sort((a, b) => new Date(a.transactionTime) - new Date(b.transactionTime));
     const transactionsTable = document.querySelector("#transactionContent")
-
-    // sort transaction by transaction date
-    transactions.sort(function (a, b) {
-        const x = a.transactionTime;
-        const y = b.transactionTime;
-        if (x < y) {
-            return -1
-        }
-        if (x > y) {
-            return 1
-        }
-        return 0
-    })
-
-    // loop through transactions and create table element and content
-    for (let transaction in transactions) {
+    for (let transaction in transactions) { // loop through transactions, create table element and its content
         const transactiedatum = transactions[transaction].transactionTime;
-        const koper = transactions[transaction].assetRecipient
-        const koperVolledigeNaam = koper.firstName + " " + koper.namePrefix + " " + koper.lastName;
         const verkoper = transactions[transaction].assetGiver;
         const verkoperVolledigeNaam = verkoper.firstName + " " + verkoper.namePrefix + " " + verkoper.lastName;
+        const koper = transactions[transaction].assetRecipient
+        const koperVolledigeNaam = koper.firstName + " " + koper.namePrefix + " " + koper.lastName;
         const assetnaam = transactions[transaction].asset.assetName;
         const hoeveelheid = transactions[transaction].assetAmount;
         const bedrag = `€ ${transactions[transaction].eurAmount}`;
         const transactiekost = `€ ${transactions[transaction].eurFee}`;
 
-        const rowElement = createNode("tr");
-        const cellElement2 = createNode("td");
-        fillContent(cellElement2, getDutchDateFormat(transactiedatum));
-        const cellElement3 = createNode("td"); // verkoper
-        fillContent(cellElement3, verkoperVolledigeNaam);
-        const cellElement4 = createNode("td"); // koper
-        fillContent(cellElement4, koperVolledigeNaam);
-        const cellElement5 = createNode("td");
-        fillContent(cellElement5, assetnaam);
-        const cellElement6 = createNode("td");
-        fillContent(cellElement6, hoeveelheid);
-        const cellElement7 = createNode("td");
-        fillContent(cellElement7, bedrag);
-        const cellElement8 = createNode("td");
-        fillContent(cellElement8, transactiekost);
-
-        appendNode(rowElement, cellElement2)
-        appendNode(rowElement, cellElement3)
-        appendNode(rowElement, cellElement4)
-        appendNode(rowElement, cellElement5)
-        appendNode(rowElement, cellElement6)
-        appendNode(rowElement, cellElement7)
-        appendNode(rowElement, cellElement8)
-        appendNode(transactionsTable, rowElement);
+        const rowElement = document.createElement('tr');
+        createAndAppendElement('td', rowElement, getDutchDateFormat(transactiedatum));
+        createAndAppendElement('td', rowElement, verkoperVolledigeNaam);
+        createAndAppendElement('td', rowElement, koperVolledigeNaam);
+        createAndAppendElement('td', rowElement, assetnaam);
+        createAndAppendElement('td', rowElement, hoeveelheid);
+        createAndAppendElement('td', rowElement, bedrag);
+        createAndAppendElement('td', rowElement, transactiekost);
+        transactionsTable.appendChild(rowElement);
     }
 }
-
-const url = new URL(window.location.href)
 
 Promise.resolve(
     await fetch(`${url.origin}/history`, {
@@ -119,4 +81,4 @@ Promise.resolve(
     .then(transactions => {
         retrieveTransactions(transactions)
     })
-    .catch(error => console.error("Something went wrong. Transactions cannot be loaded!", error));
+    .catch(error => console.error("Er is iets fout gegaan. Historie kan niet opgehaald worden!", error));
