@@ -47,24 +47,27 @@ public class TransactionService {
 			isCustomerBuying(trade.getAmountTrade()) ? trade.getCustomer() : bank,
 			assetService.findByName(trade.getAssetNameTrade()), Math.abs(trade.getAmountTrade()),
 			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()),
-			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()*TRANSACTION_FEE), trade.getAssetNameTrade()));
+			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade() * TRANSACTION_FEE), trade.getAssetNameTrade()));
 	if (bank == trade.getCustomer()) { // making sure that client makes trade with bank
 	  throw new Exception("U kunt alleen handelen met de bank of met een andere klant");
 	} else {
-	  if (isCustomerBuying(trade.getAmountTrade())) { // buying from bank
-		if (!isBalanceEnoughToBuy(trade.getCustomer().getBankAccount().getBalanceEur(),
-				calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()))) {
-		  throw new Exception("U kunt niet kopen van de bank wegens onvoldoende saldo");
-		}
-	  } else {  // selling to bank
-		if (!(isAssetInWallet(trade.getAssetNameTrade(), trade.getCustomer().getWallet()) && isAssetEnoughToSell(trade))) {
-		  throw new Exception("U heeft onvoldoende cryptomunten in portefeuille om te verkopen aan de bank");
-		}
-	  }
-	  updateBankAccount(transaction); // update bank account
-	  updateWallet(trade);            // update wallet
-	  storeTransaction(transaction); // store transaction
-		return "Transactie verwerkt";
+	  if (isCustomerBuying(trade.getAmountTrade())) { isCustomerBalanceEnough(trade); // buying from bank
+	  } else { isCustomerAssetEnough(trade); } // selling to bank
+	  storeTransaction(transaction, trade); // store transaction
+	  return "Transactie verwerkt";
+	}
+  }
+
+  private void isCustomerBalanceEnough(TradeBankDto trade) throws Exception {
+	if (!isBalanceEnoughToBuy(trade.getCustomer().getBankAccount().getBalanceEur(),
+			calculateEuroByAmountTrade(Math.abs(trade.getAmountTrade()), trade.getAssetNameTrade()))) {
+	  throw new Exception("U kunt niet kopen van de bank wegens onvoldoende saldo");
+	}
+  }
+
+  private void isCustomerAssetEnough(TradeBankDto trade) throws Exception {
+	if (!(isAssetInWallet(trade.getAssetNameTrade(), trade.getCustomer().getWallet()) && isAssetEnoughToSell(trade))) {
+	  throw new Exception("U heeft onvoldoende cryptomunten in portefeuille om te verkopen aan de bank");
 	}
   }
 
@@ -92,20 +95,20 @@ public class TransactionService {
 	System.out.println("asset_amount: " + transaction.getAssetRecipient().getWallet().get(assetName));
 
 	//get asset balance asset Giver
-	  double assetAmountGiver = 0;
-	  if (walletAssetGiver.containsKey(assetName)) {
-		  assetAmountGiver = walletAssetGiver.get(assetName);
-	  }
+	double assetAmountGiver = 0;
+	if (walletAssetGiver.containsKey(assetName)) {
+	  assetAmountGiver = walletAssetGiver.get(assetName);
+	}
 	double BalanceEurGiver = bankAccountAssetGiver.getBalanceEur(); //BalanceEur assetGiver
 	double BalanceEurRecipient = bankAccountAssetRecipient.getBalanceEur(); //BalanceEur assetGiver
 
-	  if (assetAmountGiver < transaction.getAssetAmount()) {
-		  throw new Exception("De verkoper heeft onvoldoende cryptomunten in portefeuille");
-	  } else if (BalanceEurGiver < transaction.getEurFee() / 2) {
-		  throw new Exception("De verkoper heeft onvoldoende saldo om de transactiekosten te betalen");
-	  } else if (BalanceEurRecipient < transaction.getEurAmount() + transaction.getEurFee() / 2) {
-		  throw new Exception("De koper heeft onvoldoende saldo");
-	  }
+	if (assetAmountGiver < transaction.getAssetAmount()) {
+	  throw new Exception("De verkoper heeft onvoldoende cryptomunten in portefeuille");
+	} else if (BalanceEurGiver < transaction.getEurFee() / 2) {
+	  throw new Exception("De verkoper heeft onvoldoende saldo om de transactiekosten te betalen");
+	} else if (BalanceEurRecipient < transaction.getEurAmount() + transaction.getEurFee() / 2) {
+	  throw new Exception("De koper heeft onvoldoende saldo");
+	}
 
 	System.out.println(5);
 
@@ -115,11 +118,10 @@ public class TransactionService {
 	// change wallet balance Recipient
 	// check of asset al bestaat in wallet van recipient
 	if (walletAssetRecipient.containsKey(assetName)) {
-		walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
+	  walletAssetRecipient.put(assetName, walletAssetRecipient.get(assetName) + transaction.getAssetAmount());
 	} else {
-		walletAssetRecipient.put(assetName, transaction.getAssetAmount());
+	  walletAssetRecipient.put(assetName, transaction.getAssetAmount());
 	}
-
 
 
 	walletDao.update(transaction.getAssetRecipient().getIdAccount(), walletAssetRecipient);
@@ -137,7 +139,9 @@ public class TransactionService {
 	return "Transactie verwerkt";
   }
 
-  private void storeTransaction(Transaction transaction) {
+  private void storeTransaction(Transaction transaction, TradeBankDto trade) {
+	updateBankAccount(transaction); // update bank account
+	updateWallet(trade);            // update wallet
 	transactionRepository.storeOne(transaction);
   }
 
@@ -166,10 +170,9 @@ public class TransactionService {
   private void updateWallet(TradeBankDto trade) {
 	Map<String, Double> wallet = trade.getCustomer().getWallet();
 	if (wallet.containsKey(trade.getAssetNameTrade())) {
-	  wallet.put(trade.getAssetNameTrade(),
-			  (wallet.get(trade.getAssetNameTrade()) - trade.getAmountTrade()));
+	  wallet.put(trade.getAssetNameTrade(), (wallet.get(trade.getAssetNameTrade()) - trade.getAmountTrade()));
 	  if (wallet.get(trade.getAssetNameTrade()) == 0) {
-		  wallet.remove(trade.getAssetNameTrade());
+		wallet.remove(trade.getAssetNameTrade());
 	  }
 	} else {
 	  wallet.put(trade.getAssetNameTrade(), Math.abs(trade.getAmountTrade()));
@@ -177,10 +180,12 @@ public class TransactionService {
 	walletDao.update(trade.getCustomer().getIdAccount(), wallet);
   }
 
-  private boolean isCustomerBuying(double amountTrade) { return amountTrade < 0; }
+  private boolean isCustomerBuying(double amountTrade) {
+	return amountTrade < 0;
+  }
 
   private boolean isBalanceEnoughToBuy(double balance, double amount) {
-	return (balance >= (amount+TRANSACTION_FEE));
+	return (balance >= (amount + TRANSACTION_FEE));
   }
 
   private boolean isAssetEnoughToSell(TradeBankDto trade) {
