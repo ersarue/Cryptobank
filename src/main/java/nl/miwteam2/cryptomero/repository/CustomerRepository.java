@@ -17,21 +17,21 @@ import java.util.Map;
 @Repository
 public class CustomerRepository implements GenericDao<Customer>{
 
-    private JdbcUserAccountDao jdbcUserAccountDao;
-    private JdbcAddressDao jdbcAddressDao;
-    private JdbcCustomerDao jdbcCustomerDao;
-    private JdbcWalletDao jdbcWalletDao;
-    private JdbcBankAccountDao jdbcBankAccountDao;
+    private UserAccountDao userAccountDao;
+    private AddressDao addressDao;
+    private CustomerDao customerDao;
+    private WalletDao walletDao;
+    private BankAccountDao bankAccountDao;
 
     @Autowired
-    public CustomerRepository(JdbcUserAccountDao jdbcUserAccountDao, JdbcAddressDao jdbcAddressDao,
-                          JdbcCustomerDao jdbcCustomerDao, JdbcWalletDao jdbcWalletDao,
-                          JdbcBankAccountDao jdbcBankAccountDao) {
-        this.jdbcUserAccountDao = jdbcUserAccountDao;
-        this.jdbcAddressDao = jdbcAddressDao;
-        this.jdbcCustomerDao = jdbcCustomerDao;
-        this.jdbcWalletDao = jdbcWalletDao;
-        this.jdbcBankAccountDao = jdbcBankAccountDao;
+    public CustomerRepository(UserAccountDao userAccountDao, AddressDao addressDao,
+                              CustomerDao customerDao, WalletDao walletDao,
+                              BankAccountDao bankAccountDao) {
+        this.userAccountDao = userAccountDao;
+        this.addressDao = addressDao;
+        this.customerDao = customerDao;
+        this.walletDao = walletDao;
+        this.bankAccountDao = bankAccountDao;
     }
     /**
      * Retrieve a customer from the database
@@ -41,15 +41,15 @@ public class CustomerRepository implements GenericDao<Customer>{
     public Customer findById(int id) {
 
         //Retrieve Customer, UserAccount, BankAccount and wallet for the given id
-        Customer customer = jdbcCustomerDao.findById(id);
-        UserAccount userAccount = jdbcUserAccountDao.findById(id);
-        BankAccount bankAccount = jdbcBankAccountDao.findById(id);
-        Map<String, Double> wallet = jdbcWalletDao.findById(userAccount.getIdAccount());
+        Customer customer = customerDao.findById(id);
+        UserAccount userAccount = userAccountDao.findById(id);
+        BankAccount bankAccount = bankAccountDao.findById(id);
+        Map<String, Double> wallet = walletDao.findById(userAccount.getIdAccount());
 
         //Retrieve address of this customer
         customer.setIdAccount(userAccount.getIdAccount());
-        int addressId = jdbcCustomerDao.findAddressIdOfCustomer(customer);
-        Address address = jdbcAddressDao.findById(addressId);
+        int addressId = customerDao.findAddressIdOfCustomer(customer);
+        Address address = addressDao.findById(addressId);
 
         //Set all customer fields appropriately
         customer.setEmail(userAccount.getEmail());
@@ -62,26 +62,26 @@ public class CustomerRepository implements GenericDao<Customer>{
     }
 
     public int storeOne(Customer customer) {
-        return jdbcCustomerDao.storeOne(customer);
+        return customerDao.storeOne(customer);
     }
 
     public List<Customer> getAll() {
-        return jdbcCustomerDao.getAll();
+        return customerDao.getAll();
     }
 
     public int updateOne(Customer customer) {
-        return jdbcCustomerDao.updateOne(customer);
+        return customerDao.updateOne(customer);
     }
 
     public int deleteOne(int id) {
-        return jdbcCustomerDao.deleteOne(id);
+        return customerDao.deleteOne(id);
     }
 
     public int findAddressIdOfCustomer(Customer customer) {
-        return jdbcCustomerDao.findAddressIdOfCustomer(customer);
+        return customerDao.findAddressIdOfCustomer(customer);
     }
 
     public boolean isBSNAlreadyInUse(String bsn) {
-        return jdbcCustomerDao.isBSNAlreadyInUse(bsn);
+        return customerDao.isBSNAlreadyInUse(bsn);
     }
 }

@@ -95,6 +95,15 @@ public class AuthenticationService {
         }
     }
 
+    public int getAuthenticatedIdAccount(String authorizationHeader) {
+        try {
+            DecodedJWT jwt = verifyToken(authorizationHeader);
+            return jwt.getClaim("Account").asInt();
+        } catch (JWTVerificationException exception){
+            return 0;
+        }
+    }
+
     /**
      * Extracts the token from the authorizationHeader
      * @param header        An authorization header (string) containing a JSON Web Token (JWT)

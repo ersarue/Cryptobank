@@ -1,0 +1,30 @@
+
+body {
+    background-image: url("../images/transactions.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.table-container {
+    display: flex;
+    justify-content: left;
+    text-align: center;
+    overflow-x: auto;
+}
+
+.card-body {
+    text-align: center;
+}
+
+#transactionsCatalogue {
+    background-color: #F6F6F6;
+    color: #6610f2;
+    margin-top: 60px;
+    margin-bottom: 5%;
+    margin-left: 10%;
+    width: 80%;
+}
+
+
+
+

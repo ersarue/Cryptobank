@@ -48,7 +48,6 @@ public class CustomerService {
      * @return              The stored customer if storage was successful
      * @throws Exception    If the customer cannot be stored
      */
-
     public Customer storeOne(CustomerDto customerDto) throws Exception {
 
         //Check whether all fields are valid, otherwise throw exception
@@ -248,7 +247,6 @@ public class CustomerService {
      * @return              True if the password contains one or more sequences; false if it does not
      */
     public boolean isRepetitive(String password) {
-        //todo alleen zware eisen als het password te kort is
         //checkt herhalingen van 4 de zelfde tekens achter elkaar
         Pattern patChar = Pattern.compile("(.)\\1\\1\\1"); //hhhh mag niet
 
@@ -280,7 +278,7 @@ public class CustomerService {
      * @param bsn           The bsn to be checked
      * @return              Boolean representing whether this condition is met
      */
-    private boolean isValidBsn(String bsn) {
+    public boolean isValidBsn(String bsn) {
         final int MIN_LENGTH = 8;
         final int MAX_LENGTH = 9;
         final int[] FACTORS = {9, 8, 7, 6, 5, 4, 3, 2, -1};
